@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Best Laptops</title>
+    <link rel="Shortcut Icon" type="image/png" href="images/apple-touch-icon.png"/>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        /*Set theme font*/
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        /*Float 5 columns*/
+        .column {
+            float: left;
+            width: 20%;
+            padding: 0 10px;
+        }
+
+        /*Remove xtra left n right margins*/
+        .row {
+            margin: 0 -5px;
+        }
+
+        /*Clear float after columns*/
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /*Responsive columns*/
+        @media screen and (max-width: 600px) {
+            .column {
+                width: 100%;
+                display: block;
+                margin-bottom: 20px;
+            }
+        }
+
+        /*Design card san pham*/
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+            padding: 16px;
+            text-align: center;
+            font-family: arial;
+            background-color: #e8e8e8d5;
+        }
+
+        .price {
+            color: rgb(255, 128, 0);
+            font-size: 22px;
+        }
+
+        .card button {
+            border: none;
+            outline: 0;
+            padding: 12px;
+            color: white;
+            background-color: #4CAF50;
+            text-align: center;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+        }
+
+        .card button:hover {
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body style="background-color: black;">
+    <h2 style="text-align: center;">Choose your best gaming laptops</h2>
+    <div class="row">  
+        <!-- SP 01 -->
+        <div class="column">
+            <div class="card">
+                <img src="images/msi-gaming.jpg" alt="MSI Gaming GF63" style="width: 100%"/>
+                <h1>MSI Gaming GF63</h1>
+                <p class="price">$1,200</p>
+                <a href="products/msi.html" target="_self"><button>Chi tiết</button></a>
+            </div>
+        </div>
+        <!-- SP 02 -->
+        <div class="column">
+            <div class="card">
+                <img src="images/asus-tuf-gaming.jpg" alt="Asus TUF Gaming" style="width: 100%"/>
+                <h1>Asus TUF Gaming</h1>
+                <p class="price">$1,050</p>
+                <a href="products/asus.html" target="_self"><button>Chi tiết</button></a>
+            </div>
+        </div>
+        <!-- SP 03 -->
+        <div class="column">
+            <div class="card">
+                <img src="images/Acer_Nitro_5.png" alt="Acer Nitro 5" style="width: 100%"/>
+                <h1>Acer Nitro 5 Ryzen</h1>
+                <p class="price">$1,199</p>
+                <a href="products/acer.html" target="_self"><button>Chi tiết</button></a>
+            </div>
+        </div>
+        <!-- SP 04 -->
+        <div class="column">
+            <div class="card">
+                <img src="images/gigabyte-gaming-g5.jpg" alt="Gigabyte G5 Gaming" style="width: 100%"/>
+                <h1>Gigabyte G5 Gaming</h1>
+                <p class="price">$1,099</p>
+                
+                <a href="products/gigabyte.html" target="_self"><button>Chi tiết</button></a>
+            </div>
+        </div>
+        <!-- SP 05 -->
+        <div class="column">
+            <div class="card">
+                <img src="images/legion-5-pro.jpg" alt="Lenovo Legion 5 Pro" style="width: 100%"/>
+                <h1>Lenovo Legion 5 Pro</h1>
+                <p class="price">$1,250</p>
+                    <a href="products/lenovo.html" target="_self"><button>Chi tiết</button></a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

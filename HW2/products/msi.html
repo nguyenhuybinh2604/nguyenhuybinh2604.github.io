@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MSI Gaming G63</title>
+    <link rel="Shortcut Icon" type="image/png" href="../images/apple-touch-icon.png"/>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        /*Set theme font*/
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        /*Float 3 columns*/
+        .column {
+            float: left;
+            width: 33.33%;
+            padding: 10px;
+        }
+
+        /*Remove xtra left n right margins*/
+        .row {
+            margin: 0 -5px;
+            display: table;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        /*Clear float after columns*/
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /*Responsive columns*/
+        @media screen and (max-width: 600px) {
+            .column {
+                width: 100%;
+                display: block;
+                margin-bottom: 20px;
+            }
+        }
+
+        .price {
+            color: rgb(255, 128, 0);
+            font-size: 22px;
+        }
+        /*Nut home*/
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .item {
+            display: table-cell;
+            vertical-align: top;
+        }
+        .item img {
+            display: block;
+            width: 100%;
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="../index.html" target="_self" class="button">Home</a>
+    <div class="row">
+        <div class="column">
+            <div class="item">
+                <img src="../images/msi-gaming-1.jpg" alt="msi-gaming-1" style="width: 100%"/>
+            </div>    
+        </div>
+        <div class="column">
+            <div class="item">
+                <img src="../images/msi-gaming-2.png" alt="msi-gaming-2" style="width: 100%"/>
+            </div>
+        </div>
+        <div class="column">
+            <h1 style="text-align: center;">MSI Gaming G5</h1>
+            <p class="price" style="text-align: center;">$1,200</p>
+            <ul>
+                <li>CPU: Intel, Core i7, 10750H</li>
+                <li>GPU: NVIDIA GeForce RTX 1650 Max-Q 4GB; Intel UHD Graphics</li>
+                <li>Màn hình: 16.0 inch, 2560 x 1600 Pixels, IPS, 165Hz, 500 nits</li>
+                <li>RAM: 8GB (1 thanh 8GB), DDR4, 3200 MHz</li>
+                <li>Bộ nhớ: SSD 512 GB</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <h3>Giới thiệu</h3>
+        <ul>
+            <li>MSI Gaming GF63 Thin 10SC-481VN i7 là mẫu laptop sở hữu một cấu hình tự tin cân được các tựa game ở mức
+                hiển thị từ medium cho đến high setting. Thoạt nghe qua khiến nhiều bạn tưởng chiếc máy này sẽ “khoác”
+                lên mình một vẻ ngoài hầm hố, to bản nặng nề nhưng ngược lại, laptop gaming kiểu mới và đặc biệt là dòng
+                MSI GF63 Thin này lại sở hữu lớp vỏ bên ngoài làm bằng nhôm phay xước, tối giản và mỏng nhẹ với chỉ
+                1,8kg.</li>
+            <li>Với những ai đang cần tìm kiếm một chiếc laptop vừa làm việc, chơi game kết hợp cơ động, dễ di chuyển
+                thì đây là cái tên xứng đáng dẫn đầu trong danh sách.</li>
+        </ul>
+        <h3>Ưu điểm</h3>
+        <ul>
+            <li>Mỏng nhẹ dễ mang bên mình và di chuyển</li>
+            <li>Tần số quét 144Hz kết hợp với GPU mang lại trải nghiệm tuyệt vời</li>
+            <li>Giá tốt</li>
+            <li>Một trong số ít dòng laptop gaming mỏng nhẹ, hiệu năng tốt trên thị trường</li>
+        </ul>
+        <h3>Nhược điểm</h3>
+        <ul>
+            <li>Hiệu năng không bằng các laptop to/dày khác khi cùng cấu hình (mức chênh lệch khoảng 10%)</li>
+            <li>Bị giới hạn hiệu năng khi phải hy sinh cho sự mỏng nhẹ, tiện lợi.</li>
+        </ul>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Asus TUF Gaming</title>
+    <link rel="Shortcut Icon" type="image/png" href="../images/apple-touch-icon.png"/>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        /*Set theme font*/
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        /*Float 3 columns*/
+        .column {
+            float: left;
+            width: 33.33%;
+            padding: 10px;
+        }
+
+        /*Remove xtra left n right margins*/
+        .row {
+            margin: 0 -5px;
+        }
+
+        /*Clear float after columns*/
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /*Responsive columns*/
+        @media screen and (max-width: 600px) {
+            .column {
+                width: 100%;
+                display: block;
+                margin-bottom: 20px;
+            }
+        }
+
+        .price {
+            color: rgb(255, 128, 0);
+            font-size: 22px;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .item {
+            display: table-cell;
+            vertical-align: top;
+        }
+
+        .item img {
+            display: block;
+            width: 100%;
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="../index.html" target="_self" class="button">Home</a>
+    <div class="row">
+        <div class="column">
+            <div class="item">
+                <img src="../images/asus-tuf-gaming-1.jpg" alt="asus-tuf-gaming-1" style="width: 100%"/>
+            </div>
+        </div>
+        <div class="column">
+            <div class="item">
+                <img src="../images/asus-tuf-gaming-2.jpg" alt="asus-tuf-gaming-2" style="width: 100%"/>
+            </div>
+        </div>
+        <div class="column">
+            <h1 style="text-align: center;">Asus TUF Gaming</h1>
+            <p class="price" style="text-align: center;">$1,050</p>
+            <ul>
+                <li>CPU: Intel, Core i5, 10300H</li>
+                <li>GPU: NVIDIA GeForce GTX 1650 4GB; Intel UHD Graphics</li>
+                <li>Màn hình: 15.6 inch, 1920 x 1080 Pixels, IPS, 144Hz, Anti-glare LED-backlit</li>
+                <li>RAM: 8GB (1 thanh 8 GB), DDR4, 3200MHz</li>
+                <li>Bộ nhớ: SSD 512 GB</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <h3>Giới thiệu</h3>
+        <ul>
+            <li>Sở hữu mặt lưng hầm hố, nhiều hoạ tiết, đường phây xước gấp đi kèm logo TUF cách điệu sáng bóng bắt mắt.
+                Nếu bạn là một game thủ với mong muốn sở hữu một chiếc laptop trông thật gaming, cơ bắp và mạnh mẽ,
+                thì Asus TUF Gaming HN188W này là một cái tên điển hình đáng tham khảo.</li>
+        </ul>
+        <h3>Ưu điểm</h3>
+        <ul>
+            <li>Wifi 6</li>
+            <li>Giá dễ tiếp cận</li>
+            <li>Trong tầm giá dưới 29 triệu cho màn hình 144hz, chiến game FPS, esports mượt mà</li>
+            <li>Bàn phím LED RGB</li>
+            <li>Window 11, giao diện đẹp mắt</li>
+        </ul>
+        <h3>Nhược điểm</h3>
+        <ul>
+            <li>Màn hình IPS chỉ có 45% NTSC chưa đáp ứng được các tác vụ đồ họa xử lý đồ họa chuẩn</li>
+
+        </ul>
+    </div>
+</body>
+
+</html>

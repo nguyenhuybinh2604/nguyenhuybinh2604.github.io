@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Huy Binh">
+    <title>Các cách tạo web tĩnh với Github</title>
+    <link rel="Shortcut Icon" type="image/png" href="images/head-logo.png">
+    <style>
+        .center {
+            text-align: justify;
+            text-justify: inter-word;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 700px;
+            }
+        IMG.displayed {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            }
+        .verticalLine2 {
+            border-left: 2px solid #00000075;
+            padding-left: 5px;
+            }
+        .font {
+            font-family: Arial, Helvetica, sans-serif;
+            }
+        .linespace {
+            line-height: 200%
+        }
+        </style>
+</head>
+
+<body>
+    <div class="center font">
+      <h1>
+          Các cách tạo web tĩnh với Github   
+      </h1>
+      <p>
+          <span style="color:rgb(175, 174, 180)" title="2021-05-30 00:00:00 +0000 UTC">30/05/2021</span>
+          &nbsp;·&nbsp;
+          <span style="color:rgb(175, 174, 180)">2 phút</span>
+      </p>    
+    </div>  
+    <div class="center font linespace">
+    <p>
+        Bạn có 1 trang web tĩnh (static web chỉ gồm HTML CSS JS) và muốn đẩy lên mạng để chia sẻ cho người khác mà không
+        mất phí? Hãy tận dụng Github - nền tảng lưu trữ, quản lý và chia sẻ mã nguồn mở hàng đầu hiện nay.
+    </p>
+    <p>
+        Ngoài việc lưu trữ và quản lý mã nguồn, Github còn cung cấp một dịch vụ cho phép hosting static web là
+        <a href="https://pages.github.com/"> Github Pages</a>. Source code lưu trữ trực tiếp trên Github và truy cập
+        thông qua tên miền miễn phí là <i> [username].github.io</i>. Ví dụ username trên github của bạn là <i>robinhuy</i> thì
+        bạn sẽ có 1 tên miền miễn phí là <i><a href="https://robinhuy.github.io">https://robinhuy.github.io</a></i>.
+    </p>    
+    <div class="verticalLine2">
+        Nếu bạn chưa biết sử dụng Github hoặc chưa biết cách đẩy code lên Github thì tham khảo bài viết này <a href="https://huydq.dev/blog/cac-cach-day-code-len-github">Các cách đẩy
+            code lên Github</a>.
+      </div>
+    
+    <h2>
+        Cách 1: Tạo repository với tên trùng với tên miền Github Pages
+    </h2>
+    <p>
+        Ví dụ bạn có username là <i>sophshep</i>, vậy chỉ cần tạo 1 public repository với tên là <i>sophshep.github.io</i> và đẩy code
+        web tĩnh lên đó là xong. Chúng ta sẽ có ngay 1 website và truy cập theo đường dẫn giống với vị trí của file HTML
+        trong repository. Chú ý không viết sai chính tả.
+    </p>
+    <img class="displayed" src="images/user-repo@2x.png" alt="Create a new repository">
+    <p>
+        Với tên file là <i>index.html</i> thì khi gõ lên trình duyệt có thể bỏ qua. Ví dụ gõ <i><a href="https://sophshep.github.io/">https://sophshep.github.io/</a></i> và
+        <i><a href="https://sophshep.github.io/index.html">https://sophshep.github.io/index.html</a></i> thì kết quả là như nhau.
+    </p>
+    <h2>
+        Cách 2: Tạo một repository với tên bất kỳ khác tên miền Github Pages
+    </h2>
+    <p>
+        Tạo 1 public repository và đẩy code web tĩnh lên. Sau đó vào mục <b>Settings</b> của repository đó để bật cấu
+        hình Github Pages.
+    </p>
+    <p> 
+        Kéo xuống phần Github Pages, chọn chuyển qua trang cấu hình cho Github Pages.
+    </p>
+    <img class="displayed" src="images/github-pages-settings-1.png" alt="Github pages Settings 1" >
+    <p>
+        Chọn branch mà bạn muốn đẩy code lên (thường là <i>main</i> hoặc <i>master</i>), sau đó bấm <b>Save</b>.
+    </p>
+    <img class="displayed" src="images/github-pages-settings-2.png" alt="Github pages Settings 2">
+    <p>
+        Sau khi cấu hình xong, chúng ta coi như repository hiện tại là một thư mục con của repository
+        <i>https://[username].github.io</i> và truy cập tương tự.
+    </p>
+    <p>
+        Ví dụ tên repository là <i>my-website</i> thì sẽ truy cập địa chỉ là
+        <br><i>https://[username].github.io/my-website/</i> (trong repository có file <i>index.html</i>).</br>
+    </p>
+    <h2>
+        Cách 3: Sử dụng website raw.githack.com
+    </h2>
+    <p>
+        Sử dụng website <a href="https://raw.githack.com">https://raw.githack.com</a> , chúng ta có thể xem kết quả hiển thị của bất kỳ file HTML trong bất kỳ
+        repository nào.
+    </p>
+    <p>
+        Tuy nhiên trang web có thể sẽ bị lỗi hiển thị nếu như bị sai đường dẫn (do đường dẫn bị thay đổi khi xem qua
+        <i>raw.githack.com</i>).
+    </p>
+    <img class="displayed" src="images/raw-githack.png" alt="Raw githack">
+    <p>
+        Ngoài 3 cách trên, nếu bạn còn biết cách nào nữa thì hãy comment chia sẻ xuống dưới nhé.
+    </p>
+    </div>
+</body>
+</html>
