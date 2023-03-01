@@ -2,126 +2,88 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gigabyte Gaming G5</title>
-    <link rel="Shortcut Icon" type="image/png" href="../images/apple-touch-icon.png"/>
+    <link rel="Shortcut Icon" type="image/png" href="../img/apple-touch-icon.png" />
+    <link rel="stylesheet" href="../styles.css">
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        /*Set theme font*/
-        body {
-            font-family: Arial, sans-serif;
-        }
-
         /*Float 3 columns*/
         .column {
-            float: left;
             width: 33.33%;
-            padding: 10px;
-        }
-
-        /*Remove xtra left n right margins*/
-        .row {
-            margin: 0 -5px;
-        }
-
-        /*Clear float after columns*/
-        .row:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-
-        /*Responsive columns*/
-        @media screen and (max-width: 600px) {
-            .column {
-                width: 100%;
-                display: block;
-                margin-bottom: 20px;
-            }
-        }
-
-
-        .price {
-            color: rgb(255, 128, 0);
-            font-size: 22px;
-        }
-
-        .button {
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            padding: 15px 15px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-        }
-
-        .item {
-            display: table-cell;
-            vertical-align: top;
         }
 
         .item img {
-            display: block;
-            width: 100%;
-            height: 300px;
+            object-fit: scale-down;
         }
     </style>
 </head>
 
 <body>
-    <a href="../index.html" target="_self" class="button">Home</a>
+    <a href="../index.html" target="_self"><button>Home</button></a>
     <div class="row">
         <div class="column">
-            <div class="item">
-                <img src="../images/gigabyte-gaming-g5-1.jpg" alt="gigabyte-gaming-g5-1" style="width: 100%"/>
+            <div class="card" style="max-width: 100%; padding: 0; ">
+                <div class="item" style="height: 350px;">
+                    <img src="../img/gigabyte-gaming-g5-1.jpg" alt="gigabyte-gaming-g5-1" />
+                </div>
             </div>
         </div>
         <div class="column">
-            <div class="item">
-                <img src="../images/gigabyte-gaming-g5-2.jpg" alt="gigabyte-gaming-g5-2" style="width: 100%"/>
+            <div class="card" style="max-width: 100%; padding: 0; ">
+                <div class="item" style="height: 350px;">
+                    <img src="../img/gigabyte-gaming-g5-2.jpg" alt="gigabyte-gaming-g5-2" />
+                </div>
             </div>
         </div>
         <div class="column">
-            <h1 style="text-align: center;">Gigabyte Gaming G5</h1>
-            <p class="price" style="text-align: center;">$1,099</p>
-            <ul>
-                <li>CPU: Intel, Core i5, 11400H</li>
-                <li>GPU: NVIDIA GeForce RTX 3050 4GB; Intel UHD Graphics</li>
-                <li>Màn hình: 15.6 inch, 1920 x 1080 Pixels, IPS, 144Hz, 300 nits, Anti-glare LED-backlit</li>
-                <li>RAM: 16 GB (2 thanh 8GB), DDR4, 3200MHz</li>
-                <li>Bộ nhớ: SSD 512 GB</li>
-            </ul>
+            <div class="card" style="max-width: 100%; padding: -10px; background-color: #fff; height: 350px;">
+                <div class="item" style="height: 75px">
+                    <h2 style="padding: 5px;">Gigabyte Gaming G5</h2>
+                </div>
+                <div class="item" style="height: 50px;">
+                    <p class="price">$1,099</p>
+                </div>
+                <div class="item">
+                    <ul style="text-align: left;">
+                        <li>CPU: Intel, Core i5, 11400H.</li>
+                        <li>GPU: NVIDIA GeForce RTX 3050 4GB; Intel UHD Graphics.</li>
+                        <li>Màn hình: 15.6 inch, 1920 x 1080 Pixels, IPS, 144Hz, 300 nits, Anti-glare LED-backlit.</li>
+                        <li>RAM: 16 GB (2 thanh 8GB), DDR4, 3200MHz.</li>
+                        <li>Bộ nhớ: SSD 512 GB.</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">
-        <h3>Giới thiệu</h3>
-        <ul>
-            <li>Sở hữu nhiều lợi thế về một chiếc laptop gaming mạnh mẽ với card đồ họa Nvidia Geforce RTX 3050 đi kèm
-                màn hình tần số quét 144Hz đặc trưng ở các dòng laptop gaming tầm trung. Với màn hình 15.6 inch cho phép
-                người chơi chiến mượt hầu hết tất cả các tựa game, cho phép tương tác cùng lúc 30 tab Chrome mà không
-                gặp trở ngại giật lag. Một chiếc laptop phù hợp với mọi đối tượng người dùng vừa đảm bảo làm việc tốt
-                vừa đáp ứng song song nhu cầu giải trí chơi game.</li>
-        </ul>
-        <h3>Ưu điểm</h3>
-        <ul>
-            <li>Hiệu năng với tốc độ con chip Intel thế hệ 11, hoàn thành nhanh chóng các tác vụ</li>
-            <li>Khả năng xử lý đa nhiệm ấn tượng</li>
-            <li>Cho phép chiến nhiều tựa game ở phân giải full HD cùng với mức cấu hình đồ họa cao nhất</li>
-            <li>Giá cả dễ tiếp cận</li>
-        </ul>
-        <h3>Nhược điểm</h3>
-        <ul>
-            <li>Thời lượng pin bị hạn chế</li>
-        </ul>
+        <div class="column" style="width: 100%;">
+            <div class="card" style="max-width: 100%; padding: -10px; background-color: #fff;">
+                <div class="item" style="text-align: left;">
+                    <h3>Giới thiệu</h3>
+                    <ul>
+                        <li>Sở hữu nhiều lợi thế về một chiếc laptop gaming mạnh mẽ với card đồ họa Nvidia Geforce RTX
+                            3050 đi kèm màn hình tần số quét 144Hz đặc trưng ở các dòng laptop gaming tầm trung. Với màn
+                            hình 15.6 inch cho phép người chơi chiến mượt hầu hết tất cả các tựa game, cho phép tương
+                            tác cùng lúc 30 tab Chrome mà không gặp trở ngại giật lag. Một chiếc laptop phù hợp với mọi
+                            đối tượng người dùng vừa đảm bảo làm việc tốt vừa đáp ứng song song nhu cầu giải trí chơi
+                            game.</li>
+                    </ul>
+                    <h3>Ưu điểm</h3>
+                    <ul>
+                        <li>Hiệu năng với tốc độ con chip Intel thế hệ 11, hoàn thành nhanh chóng các tác vụ.</li>
+                        <li>Khả năng xử lý đa nhiệm ấn tượng.</li>
+                        <li>Cho phép chiến nhiều tựa game ở phân giải full HD cùng với mức cấu hình đồ họa cao nhất.</li>
+                        <li>Giá cả dễ tiếp cận.</li>
+                    </ul>
+                    <h3>Nhược điểm</h3>
+                    <ul>
+                        <li>Thời lượng pin bị hạn chế.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 

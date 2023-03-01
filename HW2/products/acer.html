@@ -6,126 +6,87 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Acer Nitro 5</title>
-    <link rel="Shortcut Icon" type="image/png" href="../images/apple-touch-icon.png"/>
+    <link rel="Shortcut Icon" type="image/png" href="../img/apple-touch-icon.png"/>
+    <link rel="stylesheet" href="../styles.css">
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        /*Set theme font*/
-        body {
-            font-family: Arial, sans-serif;
-        }
-
         /*Float 3 columns*/
         .column {
-            float: left;
             width: 33.33%;
-            padding: 10px;
-        }
-
-        /*Remove xtra left n right margins*/
-        .row {
-            margin: 0 -5px;
-        }
-
-        /*Clear float after columns*/
-        .row:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-
-        /*Responsive columns*/
-        @media screen and (max-width: 600px) {
-            .column {
-                width: 100%;
-                display: block;
-                margin-bottom: 20px;
-            }
-        }
-
-
-        .price {
-            color: rgb(255, 128, 0);
-            font-size: 22px;
-        }
-
-        .button {
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            padding: 15px 15px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-        }
-
-        .item {
-            display: table-cell;
-            vertical-align: top;
         }
         .item img {
-            display: block;
-            width: 100%;
-            height: 300px;
+            object-fit: scale-down;
         }
     </style>
 </head>
 
 <body>
-    <a href="../index.html" target="_self" class="button">Home</a>
+    <a href="../index.html" target="_self"><button>Home</button></a>
     <div class="row">
         <div class="column">
-            <div class="item">
-                <img src="../images/acer-nitro-5-1.jpg" alt="Acer-nitro-5-1" style="width: 100%"/>
+            <div class="card" style="max-width: 100%; padding: 0; ">
+                <div class="item" style="height: 350px;">
+                    <img src="../img/acer-nitro-5-1.jpg" alt="acer-nitro-5-1"/>
+                </div>
             </div>
         </div>
         <div class="column">
-            <div class="item">
-                <img src="../images/acer-nitro-5-2.jpg" alt="Acer-nitro-5-2" style="width: 100%"/>
+            <div class="card" style="max-width: 100%; padding: 0; ">
+                <div class="item" style="height: 350px;">
+                    <img src="../img/acer-nitro-5-2.jpg" alt="acer-nitro-5-2"/>
+                </div>
             </div>
         </div>
         <div class="column">
-            <h1 style="text-align: center;">Acer Nitro 5</h1>
-            <p class="price" style="text-align: center;">$1,199</p>
-            <ul>
-                <li>CPU: AMD, Ryzen 5, 5600H</li>
-                <li>GPU: NVIDIA GeForce GTX 1650 4GB; AMD Radeon Graphics</li>
-                <li>Màn hình: 15.6 inch, 1920 x 1080 Pixels, IPS, 144Hz, IPS LCD LED Backlit, True Tone</li>
-                <li>RAM: 8GB, DDR4, 3200 MHz</li>
-                <li>Bộ nhớ: SSD 512 GB</li>
-            </ul>
-        </div>
+            <div class="card" style="max-width: 100%; padding: -10px; background-color: #fff; height: 350px;">
+                <div class="item" style="height: 75px">
+                    <h2 style="padding: 5px;">MSI Gaming G63</h2>
+                </div>
+                <div class="item" style="height: 50px;">
+                    <p class="price">$1,199</p>
+                </div>
+                <div class="item">
+                    <ul style="text-align: left;">
+                        <li>CPU: AMD, Ryzen 5, 5600H.</li>
+                        <li>GPU: NVIDIA GeForce GTX 1650 4GB; AMD Radeon Graphics.</li>
+                        <li>Màn hình: 15.6 inch, 1920 x 1080 Pixels, IPS, 144Hz, IPS LCD LED Backlit, True Tone.</li>
+                        <li>RAM: 8GB, DDR4, 3200 MHz.</li>
+                        <li>Bộ nhớ: SSD 512 GB.</li>
+                    </ul>
+                </div>
+            </div>           
+        </div>          
     </div>
     <div class="row">
-        <h3>Giới thiệu</h3>
-        <ul>
-            <li>Nếu bạn là tín đồ của các tựa game eSport với mong muốn sở những trải nghiệm “đã mắt, sướng tai” thì
-                không thể bỏ qua cái tên Nitro 5 Gaming AN515-45-R6EV đến từ nhà Acer. Với việc trang bị bộ vi xử lý AMD
-                Ryzen 5 5600H, đi kèm GPU GTX 1650 4GB kết hợp với tần số quét lên đến 144Hz, hứa hẹn sẽ cho mức hiển
-                thị sắc nét, mượt mà sẵn sàng “chiến” game FPS thả ga. Ngoài ra, bàn phím RGB 4 còn tăng trải nghiệm
-                nhập vai khi có thể tự do tùy chỉnh màu sắc cũng hiệu ứng đậm chất cá nhân ngay trên phần mềm Nitro
-                Sense được tích hợp sẵn.</li>
-            <li>Phần mềm âm thanh DTS: X Ultra giúp tái tạo âm thanh 3D và 6 chế độ tùy chỉnh âm thanh trong phần mềm
-                Acer True Harmony được đánh giá là thứ “vũ khí” tiếp theo dễ dàng chinh phục mọi giác quan trong suốt
-                quá trình giải trí, gaming.</li>
-        </ul>
-        <h3>Ưu điểm</h3>
-        <ul>
-            <li>Thiết kế gaming ấn tượng với màu đen chủ đạo</li>
-            <li>Khả năng xử lý đa nhân mạnh mẽ với CPU tiến trình 7nm</li>
-            <li>Hệ thống âm thanh chuẩn gaming</li>
-            <li>Bàn phím RGB phong cách</li>
-        </ul>
-        <h3>Nhược điểm</h3>
-        <ul>
-            <li>Dung lượng pin khá ít ỏi</li>
-            <li>Màu sắc hiển thị không quá rực rỡ và bắt mắt.</li>
-        </ul>
+        <div class="column" style="width: 100%;">
+            <div class="card" style="max-width: 100%; padding: -10px; background-color: #fff;">
+                <div class="item" style="text-align: left;">
+                    <h3>Giới thiệu</h3>
+                    <ul>
+                        <li>Nếu bạn là tín đồ của các tựa game eSport với mong muốn sở những trải nghiệm “đã mắt, sướng tai” thì
+                            không thể bỏ qua cái tên Nitro 5 Gaming AN515-45-R6EV đến từ nhà Acer. Với việc trang bị bộ vi xử lý AMD
+                            Ryzen 5 5600H, đi kèm GPU GTX 1650 4GB kết hợp với tần số quét lên đến 144Hz, hứa hẹn sẽ cho mức hiển
+                            thị sắc nét, mượt mà sẵn sàng “chiến” game FPS thả ga. Ngoài ra, bàn phím RGB 4 còn tăng trải nghiệm
+                            nhập vai khi có thể tự do tùy chỉnh màu sắc cũng hiệu ứng đậm chất cá nhân ngay trên phần mềm Nitro
+                            Sense được tích hợp sẵn.</li>
+                        <li>Phần mềm âm thanh DTS: X Ultra giúp tái tạo âm thanh 3D và 6 chế độ tùy chỉnh âm thanh trong phần mềm
+                            Acer True Harmony được đánh giá là thứ “vũ khí” tiếp theo dễ dàng chinh phục mọi giác quan trong suốt
+                            quá trình giải trí, gaming.</li>
+                    </ul>
+                    <h3>Ưu điểm</h3>
+                    <ul>
+                        <li>Thiết kế gaming ấn tượng với màu đen chủ đạo.</li>
+                        <li>Khả năng xử lý đa nhân mạnh mẽ với CPU tiến trình 7nm.</li>
+                        <li>Hệ thống âm thanh chuẩn gaming.</li>
+                        <li>Bàn phím RGB phong cách.</li>
+                    </ul>
+                    <h3>Nhược điểm</h3>
+                    <ul>
+                        <li>Dung lượng pin khá ít ỏi.</li>
+                        <li>Màu sắc hiển thị không quá rực rỡ và bắt mắt.</li>
+                    </ul>
+                </div>
+            </div> 
+        </div> 
     </div>
 </body>
 
