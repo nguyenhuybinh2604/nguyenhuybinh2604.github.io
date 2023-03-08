@@ -22,29 +22,31 @@
         flex-wrap: wrap;
         justify-content: space-evenly;
     }
-    .block, .namebox, .pricebox {
+    .block, .subblock, .namebox, .pricebox {
         display: flex;
         justify-content: center;
         align-items: center;
     }
     .imgbox, .namebox, .pricebox {
-        width: 100%;
+        min-width: 300px;
+        max-width: 300px;
+        background-color: #fff;
         padding: 5%;
     }
     .block {
         margin-top: 25px;
         margin-bottom: 25px;
-        margin-left: (100% - 1200px)/10;
-        margin-right: (100% - 1200px)/10;
-        flex-direction: column;
-        height: 500px;
-        min-width: 300px;
-        max-width: 300px;
+        margin-left: 1%;
+        margin-right: 1%;
+        flex: 1 0 21%;
+        height: 500px;      
+    }
+    .subblock {
         border-style: solid;
         border-color: gray;
-        background-color: #fff;
+        flex-direction: column;
     }
-    .block:hover {
+    .subblock:hover {
         box-shadow: 5px 5px 5px #CBE4DE;
         cursor: pointer;
     }
@@ -82,99 +84,115 @@
 
     <div class="container">
         <div class="block">
-            <div class="imgbox">
-                <img src="img/astonmartin.png" alt="astonmartin">
-            </div>   
-            <div class="pricebox">
-                <p>$350,000</p>
-            </div> 
-            <div class="namebox">
-                <p>Aston Martin</p>
-            </div>         
+            <div class="subblock">
+                <div class="imgbox">
+                    <img src="img/astonmartin.png" alt="astonmartin">
+                </div>   
+                <div class="pricebox">
+                    <p>$350,000</p>
+                </div> 
+                <div class="namebox">
+                    <p>Aston Martin</p>
+                </div> 
+            </div>        
         </div>
         
         <div class="block">
-            <div class="imgbox">
-                <img src="img/bentley.png" alt="bentley">
-            </div>   
-            <div class="pricebox">
-                <p>$450,000</p>
-            </div> 
-            <div class="namebox">
-                <p>Bentley</p>
-            </div>         
+            <div class="subblock">
+                <div class="imgbox">
+                    <img src="img/bentley.png" alt="bentley">
+                </div>   
+                <div class="pricebox">
+                    <p>$450,000</p>
+                </div> 
+                <div class="namebox">
+                    <p>Bentley</p>
+                </div>       
+            </div>  
         </div>
         
         <div class="block">
-            <div class="imgbox">
-                <img src="img/bmw.png" alt="bmw">
-            </div>   
-            <div class="pricebox">
-                <p>$400,000</p>
-            </div> 
-            <div class="namebox">
-                <p>BMW</p>
-            </div>         
+            <div class="subblock">
+                <div class="imgbox">
+                    <img src="img/bmw.png" alt="bmw">
+                </div>   
+                <div class="pricebox">
+                    <p>$400,000</p>
+                </div> 
+                <div class="namebox">
+                    <p>BMW</p>
+                </div>   
+            </div>      
         </div>
 
         <div class="block">
-            <div class="imgbox">
-                <img src="img/bugatti.jpg" alt="bugatti">
-            </div>   
-            <div class="pricebox">
-                <p>$750,000</p>
-            </div> 
-            <div class="namebox">
-                <p>Bugatti</p>
-            </div>         
+            <div class="subblock">
+                <div class="imgbox">
+                    <img src="img/bugatti.jpg" alt="bugatti">
+                </div>   
+                <div class="pricebox">
+                    <p>$750,000</p>
+                </div> 
+                <div class="namebox">
+                    <p>Bugatti</p>
+                </div>   
+            </div>      
         </div>
 
         <div class="block">
-            <div class="imgbox">
-                <img src="img/ferrari.png" alt="ferrari">
-            </div>   
-            <div class="pricebox">
-                <p>$700,000</p>
-            </div> 
-            <div class="namebox">
-                <p>Ferrari</p>
-            </div>         
+            <div class="subblock">
+                <div class="imgbox">
+                    <img src="img/ferrari.png" alt="ferrari">
+                </div>   
+                <div class="pricebox">
+                    <p>$700,000</p>
+                </div> 
+                <div class="namebox">
+                    <p>Ferrari</p>
+                </div>    
+            </div>     
         </div>
 
         <div class="block">
-            <div class="imgbox">
-                <img src="img/lexus.png" alt="lexus">
-            </div>   
-            <div class="pricebox">
-                <p>$320,000</p>
-            </div> 
-            <div class="namebox">
-                <p>Lexus</p>
-            </div>         
+            <div class="subblock">
+                <div class="imgbox">
+                    <img src="img/lexus.png" alt="lexus">
+                </div>   
+                <div class="pricebox">
+                    <p>$320,000</p>
+                </div> 
+                <div class="namebox">
+                    <p>Lexus</p>
+                </div>  
+            </div>       
         </div>
 
         <div class="block">
-            <div class="imgbox">
-                <img src="img/mercedes.png" alt="mercedes">
-            </div>   
-            <div class="pricebox">
-                <p>$450,000</p>
-            </div> 
-            <div class="namebox">
-                <p>Mercedes</p>
-            </div>         
+            <div class="subblock">
+                <div class="imgbox">
+                    <img src="img/mercedes.png" alt="mercedes">
+                </div>   
+                <div class="pricebox">
+                    <p>$450,000</p>
+                </div> 
+                <div class="namebox">
+                    <p>Mercedes</p>
+                </div> 
+            </div>
         </div>
 
         <div class="block">
-            <div class="imgbox">
-                <img src="img/porsche.png" alt="porsche">
-            </div>   
-            <div class="pricebox">
-                <p>$800,000</p>
-            </div> 
-            <div class="namebox">
-                <p>Porsche</p>
-            </div>         
+            <div class="subblock">
+                <div class="imgbox">
+                    <img src="img/porsche.png" alt="porsche">
+                </div>   
+                <div class="pricebox">
+                    <p>$800,000</p>
+                </div> 
+                <div class="namebox">
+                    <p>Porsche</p>
+                </div>
+            </div>        
         </div>
     </div>
 </body>
