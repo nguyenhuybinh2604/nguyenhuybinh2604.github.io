@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated tags</title>
+    <style>
+        html, body {
+            display: flex;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 3em;
+        }
+
+        @keyframes hieuung-timdap {
+            0% {transform: scale(3.0);}
+            20% {transform: scale(3.6);}
+            40% {transform: scale(3.3);}
+            60% {transform: scale(3.6);}
+
+            100% {transform: scale(3.0);}
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .box {
+            text-transform: uppercase;
+            width: 500px;
+            height: 200px;
+            border-style: solid;
+            border-color: black;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+    <div class="box">
+        start
+    </div>
+    <div class="box">
+        <p>coding</p>
+        <p>teaching</p>
+        <p>learning</p>
+    </div>
+    <div class="box">
+        today
+    </div>
+    </div>
+</body>
+
+</html>

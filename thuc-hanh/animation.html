@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beating heart</title>
+    <style>
+        html, body {
+            display: flex;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes hieuung-timdap {
+            0% {transform: scale(3.0);}
+            20% {transform: scale(3.6);}
+            40% {transform: scale(3.3);}
+            60% {transform: scale(3.6);}
+
+            100% {transform: scale(3.0);}
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #heart {
+            position: relative;
+            width: 100px;
+            height: 90px;
+            margin-top: 10px;
+            animation: hieuung-timdap 1.5s linear 0s infinite;
+            transform: scale(3);
+        }
+
+        #heart::before,
+        #heart::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 52px;
+            height: 80px;
+            border-radius: 50px 50px 0 0;
+            background: red;
+        }
+
+        #heart::before {
+            left: 50px;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+        }
+
+        #heart::after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="heart"></div>
+    </div>
+</body>
+
+</html>
