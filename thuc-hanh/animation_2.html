@@ -7,55 +7,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Animated tags</title>
     <style>
-        html, body {
+        html,
+        body {
             display: flex;
             height: 100%;
             margin: 0;
             padding: 0;
             align-items: center;
             justify-content: center;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 3em;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 2.5em;
+            font-weight: bold;
         }
 
-        @keyframes hieuung-timdap {
-            0% {transform: scale(3.0);}
-            20% {transform: scale(3.6);}
-            40% {transform: scale(3.3);}
-            60% {transform: scale(3.6);}
-
-            100% {transform: scale(3.0);}
-        }
         .container {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            position: relative;
         }
+
         .box {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
             text-transform: uppercase;
-            width: 500px;
-            height: 200px;
-            border-style: solid;
-            border-color: black;
-            overflow: hidden;
+            width: 600px;
+            height: 180px;
+            margin: 90px;
+            color: black;
+        }
+
+        #anibox-1,
+        #anibox-2,
+        #anibox-3 {
+            opacity: 0;
+            top: 180px;
+            position: absolute;
+            align-items: flex-end;
+            color: #fff;
+            animation-name: anibox-appear;
+            animation-duration: 3s;
+            animation-iteration-count: infinite;
+        }
+
+        #anibox-1 {
+            background: brown;
+            overflow-y: hidden;
+            animation-name: anibox-appear, anibox-1-drop;
+        }
+
+        #anibox-2 {
+            background: purple;
+            animation-delay: 1s;
+        }
+
+        #anibox-3 {
+            background: green;
+            animation-delay: 2s;
+        }
+
+        @keyframes anibox-appear {
+            0% {
+                opacity: 100%;
+            }
+
+            33% {
+                opacity: 100%;
+            }
+
+            33.33% {
+                opacity: 0;
+            }
+        }
+        @keyframes anibox-1-drop {
+            0% {height: 0px}
+            15% {height: 180px}
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-    <div class="box">
-        start
-    </div>
-    <div class="box">
-        <p>coding</p>
-        <p>teaching</p>
-        <p>learning</p>
-    </div>
-    <div class="box">
-        today
-    </div>
+        <div class="box">
+            start
+        </div>
+        <div class="box" id="anibox-1">
+            coding
+        </div>
+        <div class="box" id="anibox-2">
+            teaching
+        </div>
+        <div class="box" id="anibox-3">
+            learning
+        </div>
+        <div class="box">
+            today
+        </div>
     </div>
 </body>
 
