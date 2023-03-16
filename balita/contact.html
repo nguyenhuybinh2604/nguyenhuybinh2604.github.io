@@ -5,33 +5,60 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
+    <title>Contact</title>
     <link rel="Shortcut Icon" type="image/png" href="img/favicon.ico" />
     <link rel="stylesheet" href="style.css">
     <style>
-        .abt-block {
+        .contact-block {
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: center;
+            align-items: center;
             min-width: 1000px;
             max-width: 1000px;
             padding: 25px;
+            border: 1px solid black;
+            margin: 0;
         }
 
-        .abt-imgbox {
-            display: block;
-            height: 400px;
-            overflow: hidden;
+        .container {
+            align-content: flex-start;
+        }
+
+        .bottom-button {
+            background: #19A7CE;
+            color: #fff;
+            border-radius: 5px;
+            width: 150px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        input[type=text],
+        select {
             width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
 
-        .abt-imgbox img {
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .abt-description p {
-            text-align: left;
+        input[type=submit] {
             width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type=submit]:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
@@ -60,11 +87,11 @@
                 <li><a href="#">Web Development</a><span>(12)</span></li>
             </ul>
         </div>
-        <h2>Hi there, I'm Meagan Smith</h2>
-        <div class="abt-block">
-            <div class="abt-imgbox">
-                <img src="img/home-1.jpg" alt="car-bw">
-            </div>
+        <div class="contact-block" style="height: 100px;">
+            <h2>Hi there, I'm Meagan Smith</h2>
+        </div>
+
+        <div class="contact-block">
 
             <div class="abt-description">
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis
@@ -72,11 +99,25 @@
                     recusandae provident nostrum voluptatum animi officiis rem iusto ut, labore, fuga rerum, asperiores
                     sunt
                     accusantium natus? Aut, molestiae ex? Fugiat?</p>
-                
+
             </div>
         </div>
+        <div class="contact-block">
 
+            <div class="abt-description">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis
+                    necessitatibus
+                    recusandae provident nostrum voluptatum animi officiis rem iusto ut, labore, fuga rerum, asperiores
+                    sunt
+                    accusantium natus? Aut, molestiae ex? Fugiat?</p>
 
+            </div>
+        </div>
+        <div class="contact-block">
+            <div class="bottom-button">
+                Send Message
+            </div>
+        </div>
     </div>
 </body>
 
