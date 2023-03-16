@@ -28,37 +28,57 @@
         .sidemenu {
             position: fixed;
             display: flex;
-            top: 200px;
+            top: 100px;
             left: 0;
             width: 250px;
-            height: 500px;
-            background: rgba(247, 192, 74, 75%);
-            /* justify-content: center; */
+            height: 400px;
+            background: rgba(247, 192, 74, 50%);
             align-items: flex-start;
-            border: 2px solid black;
         }
 
         .sidemenu ul,
         .sidemenu li {
             list-style: none;
-            border: 2px solid black;
-            width: 250px;
             margin: 0;
             padding: 0;
-
+            transition: 0.2s;
         }
 
         .sidemenu li:hover {
             cursor: pointer;
+            background: rgba(83, 145, 101, 75%);
+        }
+
+        .sidemenu li:hover>a {
+            color: #fff;
+        }
+
+        .sidemenu li:hover>a:not(:only-child):after {
+            content: "";
+            position: absolute;
+            right: 0px;
+            height: 0px;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            border: 8px solid transparent;
+            border-left-color: #fff;
+        }
+
+        .sidemenu li:hover>ul {
+            width: 250px;
         }
 
         .sidemenu a {
+            position: relative;
+            display: block;
             text-decoration: none;
             height: 30px;
-            width: 100%;
-            padding: 0 0 0 20px;
+            line-height: 30px;
+            width: 250px;
+            padding: 0 20px 0 20px;
+            font-size: medium;
             text-align: left;
-            justify-content: flex-start;
             text-transform: capitalize;
             color: #3F497F;
             overflow: hidden;
@@ -66,10 +86,19 @@
             text-overflow: ellipsis;
         }
 
-        .sidemenu .second-level-menu {
+        .sidemenu .second-level-menu,
+        .sidemenu .third-level-menu {
             position: fixed;
+            width: 0;
+            overflow-x: hidden;
             left: 250px;
-            top: 200px;
+            top: 100px;
+            height: 400px;
+            background: rgba(247, 192, 74, 50%);
+        }
+
+        .sidemenu .third-level-menu {
+            left: 500px;
         }
 
         .block,
@@ -162,39 +191,135 @@
 <body>
     <div class="sidemenu">
         <ul>
-            <li>
+            <li class="has-child">
                 <a href="#">món nổi bật</a>
                 <ul class="second-level-menu">
-                    <li><a href="#">trà sữa phô mai tươi</a></li>
-                    <li><a href="#">trà đào dâu tây kem phô mai</a></li>
-                    <li><a href="#">sữa chua mận hạt sen</a></li>
-                    <li><a href="#">trà mận hạt sen</a></li>
-                    <li><a href="#">ô long xoài kem cà phê</a></li>
-                    <li><a href="#">trà đào bưởi hồng trân châu baby</a></li>
-                    <li><a href="#">trà sữa phô mai tươi</a></li>
-                    <li><a href="#">trà sữa phô mai tươi</a></li>
-                    <li><a href="#">trà sữa phô mai tươi</a></li>
-                    <li><a href="#">trà sữa phô mai tươi</a></li>
-                    <li><a href="#">trà sữa phô mai tươi</a></li>
-                    <li><a href="#">trà sữa phô mai tươi</a></li>
-                    <li><a href="#">trà sữa phô mai tươi</a></li>
-                    <li><a href="#">trà sữa phô mai tươi</a></li>
+                    <li class="has-child"><a href="#">trà sữa phô mai tươi</a>
+                        <ul class="third-level-menu">
+                            <li><a href="#">size S</a></li>
+                            <li><a href="#">size M</a></li>
+                            <li><a href="#">size L</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-child"><a href="#">trà đào dâu tây kem phô mai</a>
+                        <ul class="third-level-menu">
+                            <li><a href="#">size S</a></li>
+                            <li><a href="#">size M</a></li>
+                            <li><a href="#">size L</a></li>
+                            <li><a href="#">size XL</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">sữa chua mận hạt sen</a>
+                        <ul class="third-level-menu">
+                            <li><a href="#">size xs</a></li>
+                            <li><a href="#">size S</a></li>
+                            <li><a href="#">size M</a></li>
+                            <li><a href="#">size L</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">trà mận hạt sen</a>
+                        <ul class="third-level-menu">
+                            <li><a href="#">size S</a></li>
+                            <li><a href="#">size M</a></li>
+                            <li><a href="#">size L</a></li>
+                            <li><a href="#">size XL</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">ô long xoài kem cà phê</a>
+                        <ul class="third-level-menu">
+                            <li><a href="#">size S</a></li>
+                            <li><a href="#">size M</a></li>
+                            <li><a href="#">size L</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">trà đào bưởi hồng trân châu baby</a>
+                        <ul class="third-level-menu">
+                            <li><a href="#">size S</a></li>
+                            <li><a href="#">size M</a></li>
+                            <li><a href="#">size L</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </li>
             <li>
                 <a href="#">instant Milk Tea</a>
+                <ul class="second-level-menu">
+                    <li><a href="#">instant milk tea strawberry - set 6 ly</a></li>
+                    <li><a href="#">instant milk tea original - set 6 ly</a></li>
+                    <li><a href="#">instant milk tea strawberry</a></li>
+                    <li><a href="#">instant milk tea original</a></li>
+                </ul>
             </li>
             <li>
                 <a href="#">Trà Sữa</a>
+                <ul class="second-level-menu">
+                    <li><a href="#">trà sữa phô mai tươi</a></li>
+                    <li><a href="#">oolong trân châu baby kèm cafe</a></li>
+                    <li><a href="#">trà xanh</a></li>
+                    <li><a href="#">sữa tươi trân châu baby kèm cafe</a></li>
+                    <li><a href="#">trà xanh sữa vị nhài</a></li>
+                    <li><a href="#">trà sữa matcha</a></li>
+                    <li><a href="#">trà sữa ô long</a></li>
+                    <li><a href="#">ô long thái cực</a></li>
+                    <li><a href="#">hồng trà</a></li>
+                    <li><a href="#">matcha đậu đỏ</a></li>
+                    <li><a href="#">trà sữa chocolate</a></li>
+                    <li><a href="#">trà sữa bạc hà</a></li>
+                    <li><a href="#">trà sữa dâu tây</a></li>
+                </ul>
             </li>
             <li>
                 <a href="#">Fresh Fruit Tea</a>
+                <ul class="second-level-menu">
+                    <li><a href="#">trà đào dâu tây kem phô mai</a></li>
+                    <li><a href="#">trà mận hạt sen</a></li>
+                    <li><a href="#">ô long xoài kem cafe</a></li>
+                    <li><a href="#">trà đào bưởi hồng trân châu baby</a></li>
+                    <li><a href="#">trà xoài bưởi hồng</a></li>
+                    <li><a href="#">probi bưởi trân châu sương mai</a></li>
+                    <li><a href="#">probi xoài trân châu sương mai</a></li>
+                    <li><a href="#">trà xanh xoài</a></li>
+                    <li><a href="#">trà dâu tằm pha lê tuyết</a></li>
+                    <li><a href="#">hồng trà bưởi mật ong</a></li>
+                </ul>
             </li>
             <li>
                 <a href="#">Macchiato Cream Cheese</a>
+                <ul class="second-level-menu">
+                    <li><a href="#">trà xoài bưởi hồng kem phô mai</a></li>
+                    <li><a href="#">choco ngũ cốc kem cafe</a></li>
+                    <li><a href="#">hồng trà ngũ cốc kem cafe</a>
+                        <ul class="third-level-menu">
+                            <li><a href="#">size S</a></li>
+                            <li><a href="#">size M</a></li>
+                            <li><a href="#">size L</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">dâu tằm kem phô mai</a></li>
+                    <li><a href="#">hồng trà kem phô mai</a></li>
+                    <li><a href="#">trà xanh kem phô mai</a></li>
+                    <li><a href="#">matcha kem phô mai</a></li>
+                </ul>
             </li>
             <li>
                 <a href="#">Sữa Chua Dẻo</a>
+                <ul class="second-level-menu">
+                    <li><a href="#">sữa chua mận hạt sen</a>
+                        <ul class="third-level-menu">
+                            <li><a href="#">size S</a></li>
+                            <li><a href="#">size M</a></li>
+                            <li><a href="#">size L</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">sữa chua dâu tằm hoàng kim</a>
+                        <ul class="third-level-menu">
+                            <li><a href="#">size S</a></li>
+                            <li><a href="#">size M</a></li>
+                            <li><a href="#">size L</a></li>
+                            <li><a href="#">size xL</a></li>
+                        </ul>
+                    </li>
+                </ul>
             </li>
         </ul>
     </div>

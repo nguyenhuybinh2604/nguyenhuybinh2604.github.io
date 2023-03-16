@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html, body {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-weight: 200;
+            font-size: xx-large;
+        }
+        .imgbox {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 500px;
+            height: 500px;
+            /* border-style: solid; */
+            /* border-color: black; */
+            position: relative;
+            overflow: hidden;
+        }
+        .imgbox img {
+            object-fit: contain;
+            width: 100%;
+            transition: 0.5s;
+        }
+        .the {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 500px;
+            /* height: 100px; */
+            position: absolute;
+            bottom: 0;
+            background: rgba(62, 84, 172, 75%);
+            color: #fff;
+            overflow-y: hidden;
+            height: 0;
+            transition: 0.2s;
+        }
+        .imgbox:hover .the {
+            height: 100px;
+        }
+        .imgbox:hover img {
+            transform: rotate(20deg) scale(1.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="imgbox">
+        <img src="../bai-tap-ve-nha-07/img/porsche.png" alt="porsche">
+        <div class="the">Xem ngay</div>
+    </div>
+</body>
+</html>
