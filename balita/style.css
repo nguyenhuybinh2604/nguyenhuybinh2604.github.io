@@ -1,0 +1,216 @@
+* {
+    box-sizing: border-box;
+    text-align: center;
+}
+
+html,
+body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-color: #FFF;
+    position: relative;
+}
+
+body {
+    padding-top: 200px;
+}
+
+.topbar,
+.sidemenu,
+.container,
+.card,
+.subblock,
+.imgbox,
+.description,
+.short-description,
+h1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.topbar {
+    position: absolute;
+    flex: 0 0;
+    top: 0;
+    width: 100vw;
+    min-width: 1200px;
+    height: 100px;
+}
+
+#topbar-menu {
+    top: 100px;
+}
+
+.topbar h1 {
+    font-size: 5em;
+}
+
+.sidemenu {
+    position: fixed;
+    top: 200px;
+    right: 0;
+    width: 250px;
+    height: 400px;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.topbar ul,
+.topbar li,
+.sidemenu ul,
+.sidemenu li {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    transition: 0.2s;
+}
+
+.sidemenu ul {
+    flex-direction: column;
+    width: 100%;
+}
+
+.sidemenu li {
+    position: relative;
+    align-items: center;
+    border-bottom: 1px solid rgb(200, 200, 200);
+}
+
+.sidemenu li span {
+    position: absolute;
+    right: 0px;
+    color: #3F497F;
+}
+
+a {
+    display: inline-block;
+    text-decoration: none;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 20px 0 20px;
+    text-transform: capitalize;
+    color: grey;
+}
+
+.sidemenu a {
+    height: 50px;
+    line-height: 50px;
+}
+
+.topbar li:hover a,
+.sidemenu li:hover a {
+    color: black;
+}
+
+.container {
+    position: absolute;
+    flex: 0 0;
+    flex-wrap: wrap;
+    top: 200px;
+    max-width: 100vw;
+    min-width: 1300px;
+    height: 100%;
+    padding-right: 250px;
+    border-top: 1px solid rgb(200, 200, 200);
+}
+
+.card {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 1%;
+    margin-right: 1%;
+    flex: 1 0 31%;
+    height: 500px;
+}
+
+.subblock {
+    row-gap: 25px;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+    min-width: 500px;
+    max-width: 500px;
+    border: 1px solid rgb(200, 200, 200);
+}
+
+.imgbox,
+.imgbox img,
+.short-description,
+.description {
+    width: 100%;
+}
+
+.imgbox {
+    display: block;
+    height: 300px;
+    overflow: hidden;
+}
+
+.imgbox img {
+    height: 100%;
+    object-fit: cover;
+}
+
+.short-description {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: row;
+    height: 50px;
+}
+
+.descr-tag,
+.descr-date,
+.descr-icon {
+    height: 100%;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.descr-tag {
+    background: #19A7CE;
+    color: #fff;
+    border-radius: 10%;
+}
+
+.descr-date {
+    color: rgb(184, 184, 184);
+}
+
+.descr-icon {
+    padding: 0;
+}
+
+.descr-icon img {
+    height: 100%;
+    object-fit: scale-down;
+}
+
+.description {
+    display: -webkit-box;
+    max-width: 400px;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-align: justify;
+}
+.sidemenu li:first-of-type {
+    padding-bottom: 25px;
+}
+.sidemenu li:first-of-type a {
+    color: black;
+}
+.sidemenu li:first-of-type:hover a {
+    color: black;
+    cursor: default;
+}
