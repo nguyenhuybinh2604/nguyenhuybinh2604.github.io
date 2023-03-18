@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact</title>
+    <link rel="Shortcut Icon" type="image/png" href="img/favicon.ico" />
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .contact-block {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            min-width: 1000px;
+            max-width: 1000px;
+            padding: 10px;
+            margin: 0;
+        }
+
+        .container {
+            align-content: flex-start;
+        }
+
+        .bottom-button {
+            background: #19A7CE;
+            color: #fff;
+            border-radius: 5px;
+            width: 150px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        input[type=text],
+        select {
+            width: 300px;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .sub-box {
+            display: flex;
+            flex-direction: column;
+        }
+        #msg {
+            width: 900px;
+            height: 1000px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="topbar">
+        <h1>Balita</h1>
+    </div>
+    <div class="topbar" id="topbar-menu">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#">Travel</a></li>
+            <li><a href="#">Categories</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </div>
+    <div class="container">
+        <div class="sidemenu">
+            <ul>
+                <li><a href="#">Categories</a></li>
+                <li><a href="#">Courses</a><span>(22)</span></li>
+                <li><a href="#">News</a><span>(37)</span></li>
+                <li><a href="#">Design</a><span>(42)</span></li>
+                <li><a href="#">HTML</a><span>(14)</span></li>
+                <li><a href="#">Web Development</a><span>(12)</span></li>
+            </ul>
+        </div>
+        <div class="contact-block" style="height: 100px;">
+            <h2>Hi there, I'm Meagan Smith</h2>
+        </div>
+
+        <div class="contact-block">
+            <div class="sub-box">
+                <label for="lname">Name</label>
+                <input type="text" id="lname" name="lastname" placeholder="Your name..">
+            </div>
+            <div class="sub-box">
+                <label for="lname">Phone</label>
+                <input type="text" id="phone" name="phone" placeholder="Your phone..">
+            </div>
+            <div class="sub-box">
+                <label for="lname">Email</label>
+                <input type="text" id="email" name="email" placeholder="Your email..">
+            </div>
+        </div>
+        <div class="contact-block">
+            <div class="sub-box">
+                <label for="lname">Write Message</label>
+                <input type="text" id="msg" name="msg" placeholder="Your message.." >
+            </div>
+        </div>
+        <div class="contact-block">
+            <div class="bottom-button">
+                Send Message
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
