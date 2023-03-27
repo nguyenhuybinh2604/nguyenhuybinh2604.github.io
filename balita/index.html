@@ -9,17 +9,130 @@
     <link rel="Shortcut Icon" type="image/png" href="img/favicon.ico" />
     <link rel="stylesheet" href="style.css">
     <style>
-        
+        .content .left .card {
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            border: 1px solid rgb(200, 200, 200);
+        }
+
+        .content .left .card img {
+            height: 200px;
+            object-fit: cover;
+            overflow: hidden;
+        }
+
+        .content .left .card .short-description {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-direction: row;
+            column-gap: 10px;
+            height: 50px;
+            padding: 10px;
+        }
+
+        .content .left .card .short-description .descr-tag,
+        .content .left .card .short-description .descr-date,
+        .content .left .card .short-description .middot,
+        .content .left .card .short-description .descr-icon {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content .left .card .short-description .descr-tag a {
+            padding: 0 5px 0 5px;
+            height: 25px;
+            line-height: 25px;
+            text-align: center;
+            background: #1778f2;
+            color: #fff;
+            text-transform: uppercase;
+            border-radius: 5px;
+            transition: 0.1s;
+        }
+
+        .content .left .card .short-description .descr-tag a:hover {
+            filter: brightness(90%);
+        }
+
+        .content .left .card .short-description .descr-date {
+            color: gray;
+        }
+
+        .content .left .card .short-description .descr-icon {
+            padding: 4px;
+        }
+
+        .content .left .card .short-description .descr-icon img {
+            height: 100%;
+            object-fit: scale-down;
+        }
+
+        .content .left .card .description {
+            margin: 10px;
+            margin-top: 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: justify;
+        }
+
+        #page-switch {
+            list-style: none;
+            display: flex;
+            padding: 0;
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+
+        #page-switch li {
+            display: flex;
+            justify-content: center;
+            width: 80px;
+        }
+
+        #page-switch li a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px;
+            width: 40px;
+            color: #1778f2;
+            border-radius: 50%;
+            border: 1px solid grey;
+            transition: 0.2s;
+            font-size: 0.8em;
+        }
+
+        #page-switch li:hover a {
+            color: #fff;
+            background: #1778f2;
+            font-weight: bolder;
+            border: none;
+        }
+
+        #page-switch .is-active {
+            color: #fff;
+            background: #1778f2;
+            font-weight: bolder;
+            border: none;
+        }
     </style>
 </head>
 
 <body>
-    <div class="topbar">
-        <h1>Balita</h1>
+    <div class="container">
+        <h1 id="top-header">Balita</h1>
     </div>
-    <div class="topbar" id="topbar-menu">
-        <ul>
-            <li><a href="index.html">Home</a></li>
+    <div class="container">
+        <ul id="top-menu">
+            <li><a class="is-active" href="index.html">Home</a></li>
             <li><a href="#">Travel</a></li>
             <li><a href="#">Categories</a></li>
             <li><a href="about.html">About</a></li>
@@ -27,118 +140,123 @@
         </ul>
     </div>
     <div class="container">
-        <div class="sidemenu">
-            <ul>
-                <li><a href="#">Categories</a></li>
-                <li><a href="#">Courses</a><span>(22)</span></li>
-                <li><a href="#">News</a><span>(37)</span></li>
-                <li><a href="#">Design</a><span>(42)</span></li>
-                <li><a href="#">HTML</a><span>(14)</span></li>
-                <li><a href="#">Web Development</a><span>(12)</span></li>
-            </ul>
-        </div>
-        <div class="card">
-            <div class="subblock">
-                <div class="imgbox">
+        <div class="content">
+            <div class="left">
+                <div class="card">
                     <img src="img/home-1.jpg" alt="car-bw">
+                    <div class="short-description">
+                        <div class="descr-tag"><a href="#">Car</a></div>
+                        <div class="descr-date">March 15, 2018</div>
+                        <div class="descr-icon"><img src="img/bubble.png" alt="bubble"></div>
+                    </div>
+                    <div class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis
+                        necessitatibus
+                        recusandae provident nostrum voluptatum animi officiis rem iusto ut, labore, fuga rerum,
+                        asperiores
+                        sunt
+                        accusantium natus? Aut, molestiae ex? Fugiat?
+                    </div>
                 </div>
-                <div class="short-description">
-                    <div class="descr-tag">Food</div>
-                    <div class="descr-date">March 15, 2018</div>
-                    <div class="descr-icon"><img src="img/bubble.png" alt="bubble"></div>
-                </div>
-                <div class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis
-                    necessitatibus
-                    recusandae provident nostrum voluptatum animi officiis rem iusto ut, labore, fuga rerum, asperiores
-                    sunt
-                    accusantium natus? Aut, molestiae ex? Fugiat?</div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="subblock">
-                <div class="imgbox">
+                <div class="card">
                     <img src="img/home-2.jpg" alt="city">
+                    <div class="short-description">
+                        <div class="descr-tag"><a href="#">Travel</a></div>
+                        <div class="descr-date">March 15, 2018</div>
+                        <div class="descr-icon"><img src="img/bubble.png" alt="bubble"></div>
+                    </div>
+                    <div class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis
+                        necessitatibus
+                        recusandae provident nostrum voluptatum animi officiis rem iusto ut, labore, fuga rerum,
+                        asperiores
+                        sunt
+                        accusantium natus? Aut, molestiae ex? Fugiat?
+                    </div>
                 </div>
-                <div class="short-description">
-                    <div class="descr-tag">Food</div>
-                    <div class="descr-date">March 15, 2018</div>
-                    <div class="descr-icon"><img src="img/bubble.png" alt="bubble"></div>
-                </div>
-                <div class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis
-                    necessitatibus
-                    recusandae provident nostrum voluptatum animi officiis rem iusto ut, labore, fuga rerum, asperiores
-                    sunt
-                    accusantium natus? Aut, molestiae ex? Fugiat?</div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="subblock">
-                <div class="imgbox">
+                <div class="card">
                     <img src="img/home-3.jpg" alt="things">
+                    <div class="short-description">
+                        <div class="descr-tag"><a href="#">Deco</a></div>
+                        <div class="descr-date">March 15, 2018</div>
+                        <div class="descr-icon"><img src="img/bubble.png" alt="bubble"></div>
+                    </div>
+                    <div class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis
+                        necessitatibus
+                        recusandae provident nostrum voluptatum animi officiis rem iusto ut, labore, fuga rerum,
+                        asperiores
+                        sunt
+                        accusantium natus? Aut, molestiae ex? Fugiat?
+                    </div>
                 </div>
-                <div class="short-description">
-                    <div class="descr-tag">Food</div>
-                    <div class="descr-date">March 15, 2018</div>
-                    <div class="descr-icon"><img src="img/bubble.png" alt="bubble"></div>
-                </div>
-                <div class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis
-                    necessitatibus
-                    recusandae provident nostrum voluptatum animi officiis rem iusto ut, labore, fuga rerum, asperiores
-                    sunt
-                    accusantium natus? Aut, molestiae ex? Fugiat?</div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="subblock">
-                <div class="imgbox">
+                <div class="card">
                     <img src="img/home-4.jpg" alt="car-color">
+                    <div class="short-description">
+                        <div class="descr-tag"><a href="#">Art</a></div>
+                        <div class="descr-date">March 15, 2018</div>
+                        <div class="descr-icon"><img src="img/bubble.png" alt="bubble"></div>
+                    </div>
+                    <div class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis
+                        necessitatibus
+                        recusandae provident nostrum voluptatum animi officiis rem iusto ut, labore, fuga rerum,
+                        asperiores
+                        sunt
+                        accusantium natus? Aut, molestiae ex? Fugiat?
+                    </div>
                 </div>
-                <div class="short-description">
-                    <div class="descr-tag">Food</div>
-                    <div class="descr-date">March 15, 2018</div>
-                    <div class="descr-icon"><img src="img/bubble.png" alt="bubble"></div>
-                </div>
-                <div class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis
-                    necessitatibus
-                    recusandae provident nostrum voluptatum animi officiis rem iusto ut, labore, fuga rerum, asperiores
-                    sunt
-                    accusantium natus? Aut, molestiae ex? Fugiat?</div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="subblock">
-                <div class="imgbox">
+                <div class="card">
                     <img src="img/home-5.jpg" alt="cameras">
+                    <div class="short-description">
+                        <div class="descr-tag"><a href="#">Food</a></div>
+                        <div class="descr-date">March 15, 2018</div>
+                        <div class="descr-icon"><img src="img/bubble.png" alt="bubble"></div>
+                    </div>
+                    <div class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis
+                        necessitatibus
+                        recusandae provident nostrum voluptatum animi officiis rem iusto ut, labore, fuga rerum,
+                        asperiores
+                        sunt
+                        accusantium natus? Aut, molestiae ex? Fugiat?
+                    </div>
                 </div>
-                <div class="short-description">
-                    <div class="descr-tag">Food</div>
-                    <div class="descr-date">March 15, 2018</div>
-                    <div class="descr-icon"><img src="img/bubble.png" alt="bubble"></div>
-                </div>
-                <div class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis
-                    necessitatibus
-                    recusandae provident nostrum voluptatum animi officiis rem iusto ut, labore, fuga rerum, asperiores
-                    sunt
-                    accusantium natus? Aut, molestiae ex? Fugiat?</div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="subblock">
-                <div class="imgbox">
+                <div class="card">
                     <img src="img/home-6.jpg" alt="food">
+
+                    <div class="short-description">
+                        <div class="descr-tag"><a href="#">Interior</a></div>
+                        <div class="descr-date">March 15, 2018</div>
+                        <div class="descr-icon"><img src="img/bubble.png" alt="bubble"></div>
+                    </div>
+                    <div class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis
+                        necessitatibus
+                        recusandae provident nostrum voluptatum animi officiis rem iusto ut, labore, fuga rerum,
+                        asperiores
+                        sunt
+                        accusantium natus? Aut, molestiae ex? Fugiat?
+                    </div>
                 </div>
-                <div class="short-description">
-                    <div class="descr-tag">Food</div>
-                    <div class="descr-date">March 15, 2018</div>
-                    <div class="descr-icon"><img src="img/bubble.png" alt="bubble"></div>
-                </div>
-                <div class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis
-                    necessitatibus
-                    recusandae provident nostrum voluptatum animi officiis rem iusto ut, labore, fuga rerum, asperiores
-                    sunt
-                    accusantium natus? Aut, molestiae ex? Fugiat?</div>
+            </div>
+            <div class="right">
+                <ul id="side-menu">
+                    <li><a href="#">Categories</a></li>
+                    <li><a href="#">Courses</a><span>(22)</span></li>
+                    <li><a href="#">News</a><span>(37)</span></li>
+                    <li><a href="#">Design</a><span>(42)</span></li>
+                    <li><a href="#">HTML</a><span>(14)</span></li>
+                    <li><a href="#">Web Development</a><span>(12)</span></li>
+                </ul>
             </div>
         </div>
+    </div>
+    <div class="container">
+        <ul id="page-switch">
+            <li><a class="is-active" href="#">Prev</a></li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">Next</a></li>
+        </ul>
+    </div>
+    <div class="container">
+        <div id="bottom-banner">Copy right &copy 2023 All rights reserved</div>
     </div>
 </body>
 
