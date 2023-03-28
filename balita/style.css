@@ -181,3 +181,6 @@ h3:hover {
     line-height: 50px;
     text-align: center;
 }
+#bottom-banner:hover {
+    cursor: default;
+}
