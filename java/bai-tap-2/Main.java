@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        // Scanner input = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
         // System.out.println("Mời bạn nhập tên hàng nhập kho:");
         // String tenHang = input.nextLine();
         // System.out.println("Mời bạn nhập ngày tháng năm sinh (yyyy/MM/dd):");
@@ -21,12 +21,16 @@ public class Main {
         // System.out.println("Thời gian nhập hàng là: " + tGianNhapHang);
         // System.out.println("Thời gian là: " + tGian);
 
-        // for (int i = 0; i < 5; i++) {
-        //     System.out.println(i);
-        // }
-        float v1 = 5.6f;
         double v2 = 5.6d;
-        System.out.println(v1==v2);
+        if (v2 > 3) {
+            System.out.println("Kha");
+        }
+        else if (v2 > 5) {
+            System.out.println("Tot");
+        }
+        else {
+            System.out.println("Khac");
+        }
         // System.out.println(v1.equals(v2));
     }
 }
