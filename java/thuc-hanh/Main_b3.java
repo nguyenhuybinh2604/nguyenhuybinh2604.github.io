@@ -1,97 +1,18 @@
 import java.util.Scanner;
-import java.util.Arrays;
 
-publpublic Main() {
-    }
-
-    /**
-     * @param args
-     */
-    ic class Main {
+public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Nhập họ tên (viết hoa hoặc thường) :");
-        String hoTen = sc.nextLine();
-        String[] arrHoTen = hoTen.split(" ");
-        // for (i = 0; i < arrHoTen.length; i++) {
-            // arrHoTen[i] = "txttxt";
-        // }
-        System.out.println(arrHoTen[0] + " " + arrHoTen[1]);
-
-        // 2 dimensions array
-        // System.out.println("Nhập số hàng của mảng: ");
-        // int row = sc.nextInt();
-        // System.out.println("Nhập số cột của mảng: ");
-        // int col = sc.nextInt();
-        // int tongChan = 0;
-        // int tongLe = 0;
-        // int[][] array = new int[row][col];
-        // for (int i = 0; i < row; i++) {
-        // for (int j = 0; j < col; j++) {
-        // System.out.println("Nhập giá trị cho phần tử thứ " + (i + 1) + "-" + (j + 1)
-        // + " : ");
-        // array[i][j] = sc.nextInt();
-        // if (array[i][j] % 2 == 0) {
-     
-
-    @Override
-    public String toString() {
-        return "Main []";
-    }   // tongChan += array[i][j];
-        // } else {
-        // tongLe += array[i][j];
-        // }
-        // ;
-        // }
-        // }
-        // System.out.println("Ma trận vừa nhập: ");
-        // for (int i = 0; i < row; i++) {
-        // for (int j = 0; j < col; j++) {
-        // System.out.print(array[i][j] + " ");
-        // }
-        // System.out.println();
-        // }
-        // System.out.println("Tổng số chẵn = " + tongChan);
-        // System.out.println("Tổng số lẻ = " + tongLe);
-
-        // Mang 1 chieu
-        // System.out.println("Nhập số lượng phần tử của mảng: ");
-        // int n = sc.nextInt();
-        // int tong = 0;
-        // int[] array = new int[n];
-        // for (int i = 0; i < array.length; i++) {
-        // System.out.println("Nhập giá trị cho phần tử thứ " + (i + 1) + " : ");
-        // array[i] = sc.nextInt();
-        // tong += array[i];
-        // }
-
-        // System.out.println("Tổng các phần tử là: " + tong);
-
-        // System.out.println("Hiển thị giá trị đã nhập: ");
-        // for (int i = 0; i < array.length; i++) {
-        // System.out.println("Giá trị của phần tử thứ " + i + " là: " + array[i]);
-        // System.out.println("Lập phương của giá trị thứ " + i + " là: " +
-        // Math.pow((double)array[i], 3.0));
-        // }
-
-        // if (n > 0) {
-        // System.out.println("Trung bình cộng các phần tử là: " + ((double) tong /
-        // (double) n));
-        // } else if (n == 0) {
-        // System.out.println("Số phần tử là 0.");
-        // } else {
-        // System.out.println("Lỗi khác.");
-        // }
-
+       
         //
         // String flag = "Y";
         // int tong = 0;
         // while (flag.equalsIgnoreCase("Y")) {
-        // System.out.println("Hay nhap mot so nguyen: ");
-        // int n = Integer.parseInt(sc.nextLine());
-        // tong += n;
-        // System.out.println("Do you want to continue (Y/N): ");
-        // flag = (String) sc.nextLine();
+        //     System.out.println("Hay nhap mot so nguyen: ");
+        //     int n = Integer.parseInt(sc.nextLine());
+        //     tong += n;
+        //     System.out.println("Do you want to continue (Y/N): ");
+        //     flag = (String) sc.nextLine();
         // }
         // System.out.println("Tong cac so vua nhap: " + tong);
 
