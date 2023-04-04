@@ -1,0 +1,6 @@
+tham so: parameters -> khi khai bao
+doi so: arguments -> khi su dung
+so sanh khac biet Lop (Class) va Doi tuong (Object).
+Object la 01 instance cua Class.
+Static: co the call method tu class khac ma khong can khai bao object thuoc class do.
+Han che su dung static do ton bo nho.

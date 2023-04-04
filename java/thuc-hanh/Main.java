@@ -1,282 +1,141 @@
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
-import java.util.Arrays;
 
-publpublic Main() {
+public class Main {
+    public void vdArray2Chieu_chiaHetCho3() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Nhap so dong cua matrix: ");
+        int soDong = sc.nextInt();
+        System.out.println("Nhap so cot cua matrix: ");
+        int soCot = sc.nextInt();
+        int[][] matrix = new int[soDong][soCot];
+        int soTong = 0;
+        for (int i = 0; i < soDong; i++) {
+            for (int j = 0; j < soCot; j++) {
+                System.out.print("Nhap phan tu thu " + (i + 1) + "-" + (j + 1) + ": ");
+                matrix[i][j] = sc.nextInt();
+                if (matrix[i][j] % 3 == 0) {
+                    soTong += matrix[i][j];
+                }
+            }
+        }
+        System.out.println("Tong cac phan tu chia het cho 3 = " + soTong);
     }
 
-    /**
-     * @param args
-     */
-    ic class Main {
-    public static void main(String[] args) {
+    public void vdArray2Chieu_tinhTong2Matrix() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Nhập họ tên (viết hoa hoặc thường) :");
-        String hoTen = sc.nextLine();
-        String[] arrHoTen = hoTen.split(" ");
-        // for (i = 0; i < arrHoTen.length; i++) {
-            // arrHoTen[i] = "txttxt";
-        // }
-        System.out.println(arrHoTen[0] + " " + arrHoTen[1]);
+        System.out.println("Nhap so dong cua matrix A: ");
+        int soDongA = sc.nextInt();
+        System.out.println("Nhap so cot cua matrix A: ");
+        int soCotA = sc.nextInt();
+        System.out.println("Nhap so dong cua matrix B: ");
+        int soDongB = sc.nextInt();
+        System.out.println("Nhap so cot cua matrix B: ");
+        int soCotB = sc.nextInt();
+        if (soDongA == soDongB && soCotA == soCotB) {
+            int[][] matrixA = new int[soDongA][soCotA];
+            int[][] matrixB = new int[soDongA][soCotA];
+            int[][] matrixTong = new int[soDongA][soCotA];
+            for (int i = 0; i < soDongA; i++) {
+                for (int j = 0; j < soCotA; j++) {
+                    System.out.print("Matran A - Nhap phan tu thu " + (i + 1) + "-" + (j + 1) + ": ");
+                    matrixA[i][j] = sc.nextInt();
+                }
+            }
+            for (int i = 0; i < soDongA; i++) {
+                for (int j = 0; j < soCotA; j++) {
+                    System.out.print("Matran B - Nhap phan tu thu " + (i + 1) + "-" + (j + 1) + ": ");
+                    matrixB[i][j] = sc.nextInt();
+                    matrixTong[i][j] = matrixA[i][j] + matrixB[i][j];
+                }
+            }
+            System.out.println("Ma tran tong la: ");
+            for (int i = 0; i < soDongA; i++) {
+                for (int j = 0; j < soCotA; j++) {
+                    System.out.print(matrixTong[i][j] + "\t");
+                }
+                System.out.println();
+            }
+        } else {
+            System.out.println("02 matrix khong bang nhau.");
+        }
+    }
 
-        // 2 dimensions array
-        // System.out.println("Nhập số hàng của mảng: ");
-        // int row = sc.nextInt();
-        // System.out.println("Nhập số cột của mảng: ");
-        // int col = sc.nextInt();
-        // int tongChan = 0;
-        // int tongLe = 0;
-        // int[][] array = new int[row][col];
-        // for (int i = 0; i < row; i++) {
-        // for (int j = 0; j < col; j++) {
-        // System.out.println("Nhập giá trị cho phần tử thứ " + (i + 1) + "-" + (j + 1)
-        // + " : ");
-        // array[i][j] = sc.nextInt();
-        // if (array[i][j] % 2 == 0) {
-     
+    public void vdInputParse() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Mời bạn nhập tên hàng nhập kho:");
+        String tenHang = input.nextLine();
+        System.out.println("Mời bạn nhập ngày tháng năm sinh (yyyy/MM/dd):");
+        LocalDate ngaySinh = LocalDate.parse(input.nextLine(),
+                DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        System.out.println("Mời bạn nhập thời gian nhập hàng (yyyy/MM/dd HH:mm:ss):");
+        LocalDateTime tGianNhapHang = LocalDateTime.parse(input.nextLine(),
+                DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+        System.out.println("Mời bạn nhập thời gian (HH:mm:ss):");
+        LocalTime tGian = LocalTime.parse(input.nextLine(),
+                DateTimeFormatter.ofPattern("HH:mm:ss"));
+        System.out.println("Tên hàng là: " + tenHang);
+        System.out.println("Sinh nhật là: " + ngaySinh);
+        System.out.println("Thời gian nhập hàng là: " + tGianNhapHang);
+        System.out.println("Thời gian là: " + tGian);
 
-    @Override
-    public String toString() {
-        return "Main []";
-    }   // tongChan += array[i][j];
-        // } else {
-        // tongLe += array[i][j];
-        // }
-        // ;
-        // }
-        // }
-        // System.out.println("Ma trận vừa nhập: ");
-        // for (int i = 0; i < row; i++) {
-        // for (int j = 0; j < col; j++) {
-        // System.out.print(array[i][j] + " ");
-        // }
-        // System.out.println();
-        // }
-        // System.out.println("Tổng số chẵn = " + tongChan);
-        // System.out.println("Tổng số lẻ = " + tongLe);
+        double v2 = 5.6d;
+        if (v2 > 3) {
+            System.out.println("Kha");
+        } else if (v2 > 5) {
+            System.out.println("Tot");
+        } else {
+            System.out.println("Khac");
+        }
+    }
 
-        // Mang 1 chieu
-        // System.out.println("Nhập số lượng phần tử của mảng: ");
-        // int n = sc.nextInt();
-        // int tong = 0;
-        // int[] array = new int[n];
-        // for (int i = 0; i < array.length; i++) {
-        // System.out.println("Nhập giá trị cho phần tử thứ " + (i + 1) + " : ");
-        // array[i] = sc.nextInt();
-        // tong += array[i];
-        // }
+    public static void main(String[] args) {
+        // Main thuchanh = new Main();
+        // thuchanh.vdArray2Chieu_tinhTong2Matrix();
+        // <tenlass> <tenDoiTuong> = new <tenClass- Ham khoi tao Khong / hoac Co tham
+        // so>();
+        // Laptop alienware = new Laptop();
+        // alienware.setModel("Legion 5 pro");
+        // alienware.setPrice(1100);
+        // System.out.println(alienware.getPrice());
+        // Product sanpham1 = new Product("id1", "laptop", 1200);
+        // System.out.println("Ten san pham la: " + sanpham1.getName());
+        // System.out.println("Thue tren san pham la: " + sanpham1.thueNK());
+        // System.out.println(sanpham1.toString());
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Nhap so nhan vien: ");
+        int n = Integer.parseInt(sc.nextLine());
+        Employee[] array = new Employee[n];
+        for (int i=0; i<n; i++) {
+            System.out.print("Nhap id cua nhan vien thu " + (i+1) + ": ");
+            String id = sc.nextLine();
+            System.out.print("Nhap ten cua nhan vien thu " + (i+1) + ": ");
+            String name = sc.nextLine();
+            System.out.print("Nhap dia chi cua nhan vien thu " + (i+1) + ": ");
+            String address = sc.nextLine();
+            System.out.print("Nhap tuoi cua nhan vien thu " + (i+1) + ": ");
+            int age = Integer.parseInt(sc.nextLine());
+            System.out.print("Nhap diem kinh nghiem cua nhan vien thu " + (i+1) + ": ");
+            double experience = Double.parseDouble(sc.nextLine());
+            System.out.print("Nhap noi lam viec cua nhan vien thu " + (i+1) + ": ");
+            String placeWork = sc.nextLine();
+            Employee employee = new Employee(experience, placeWork);
+            array[i] = employee;
+        }
+        System.out.println("Thong tin toan bo nhan vien: ");
+        for (int i=0; i<n; i++) {
+            System.out.println(array[i].toString());
+        }
+        // Employee employee1 = new Employee();    
+        // employee1.setName("Lionel Messi");
+        // employee1.setAddress("Buenos Aires");
+        // employee1.setAge(20);
+        // employee1.setExperience(99);
+        // employee1.setPlaceWork("Paris");
+        // System.out.println(employee1.toString());
 
-        // System.out.println("Tổng các phần tử là: " + tong);
-
-        // System.out.println("Hiển thị giá trị đã nhập: ");
-        // for (int i = 0; i < array.length; i++) {
-        // System.out.println("Giá trị của phần tử thứ " + i + " là: " + array[i]);
-        // System.out.println("Lập phương của giá trị thứ " + i + " là: " +
-        // Math.pow((double)array[i], 3.0));
-        // }
-
-        // if (n > 0) {
-        // System.out.println("Trung bình cộng các phần tử là: " + ((double) tong /
-        // (double) n));
-        // } else if (n == 0) {
-        // System.out.println("Số phần tử là 0.");
-        // } else {
-        // System.out.println("Lỗi khác.");
-        // }
-
-        //
-        // String flag = "Y";
-        // int tong = 0;
-        // while (flag.equalsIgnoreCase("Y")) {
-        // System.out.println("Hay nhap mot so nguyen: ");
-        // int n = Integer.parseInt(sc.nextLine());
-        // tong += n;
-        // System.out.println("Do you want to continue (Y/N): ");
-        // flag = (String) sc.nextLine();
-        // }
-        // System.out.println("Tong cac so vua nhap: " + tong);
-
-        // Vong lap do - while
-        // int i = 1;
-
-        // int tong = 0;
-        // int tich = 1;
-        // int tongSoChan = 0;
-        // System.out.println("Nhap so n:");
-        // int n = sc.nextInt();
-        // do {
-        // tong = tong + i;
-        // if (i != 0) {
-        // tich = tich * i;
-        // }
-        // ;
-        // if (i % 2 == 0) {
-        // tongSoChan = tongSoChan + i;
-        // }
-        // ;
-        // i++;
-        // } while (i <= n);
-        // System.out.println("Tong cua " + n + " so dau tien la: " + tong);
-        // System.out.println("Tich cua " + n + " so dau tien la: " + tich);
-        // System.out.println("Tong cac so chan cua " + n + " so dau tien la: " +
-        // tongSoChan);
-
-        // Vong lap while
-        // int i = 1;
-
-        // int tong = 0;
-        // int tich = 1;
-        // int tongSoChan = 0;
-        // System.out.println("Nhap so n:");
-        // int n = sc.nextInt();
-        // while (i <= n) {
-        // tong = tong + i;
-        // if (i != 0) {
-        // tich = tich * i;
-        // }
-        // ;
-        // if (i % 2 == 0) {
-        // tongSoChan = tongSoChan + i;
-        // }
-        // ;
-        // i++;
-        // }
-        // System.out.println("Tong cua " + n + " so dau tien la: " + tong);
-        // System.out.println("Tich cua " + n + " so dau tien la: " + tich);
-        // System.out.println("Tong cac so chan cua " + n + " so dau tien la: " +
-        // tongSoChan);
-
-        // Vong lap for
-        // int tong = 0;
-        // int tich = 1;
-        // int tongSoChan = 0;
-        // System.out.println("Nhap so n:");
-        // int n = sc.nextInt();
-        // for (int i = 0; i <= n; i++) {
-        // tong = tong + i;
-        // if (i != 0) {
-        // tich = tich * i;
-        // }
-        // ;
-        // if (i % 2 == 0) {
-        // tongSoChan = tongSoChan + i;
-        // }
-        // ;
-        // }
-        // System.out.println("Tong cua " + n + " so dau tien la: " + tong);
-        // System.out.println("Tich cua " + n + " so dau tien la: " + tich);
-        // System.out.println("Tong cac so chan cua " + n + " so dau tien la: " +
-        // tongSoChan);
-
-        // // Bai tap 05 switch calculator
-
-        // System.out.println("Nhap so thu 1:");
-        // double a = Double.parseDouble(sc.nextLine());
-        // System.out.println("Nhap so thu 2:");
-        // double b = Double.parseDouble(sc.nextLine());
-        // System.out.println("Nhap phep tinh ( + , - , * , / ):");
-        // String phepTinh = sc.nextLine();
-        // switch (phepTinh) {
-        // case "+":
-        // System.out.println("Ket qua: " + a + " + " + b + " = " + (a + b));
-        // break;
-        // case "-":
-        // System.out.println("Ket qua: " + a + " - " + b + " = " + (a - b));
-        // break;
-        // case "*":
-        // System.out.println("Ket qua: " + a + " x " + b + " = " + (a * b));
-        // break;
-        // case "/":
-        // if (b != 0) {
-        // System.out.println("Ket qua: " + a + " / " + b + " = " + (a / b));
-        // } else {
-        // System.out.println("Loi chia cho 0.");
-        // };
-        // break;
-        // default:
-        // System.out.println("Khong xac dinh.");
-        // }
-        // ;
-
-        // // Bai tap 04 switch
-
-        // System.out.println("Nhap ten xe oto:");
-        // String n = sc.nextLine();
-        // switch (n) {
-        // case "i10":
-        // System.out.println("Hyundai");
-        // break;
-        // case "i8":
-        // System.out.println("BMW");
-        // break;
-        // case "Camry":
-        // System.out.println("Toyota");
-        // break;
-        // case "E200":
-        // System.out.println("Mercedes");
-        // break;
-        // default:
-        // System.out.println("Khong xac dinh");
-        // }
-        // ;
-
-        // Bai tap 03
-
-        // System.out.println("Nhap so dien su dung trong thang:");
-        // double a = sc.nextDouble();
-        // if (a < 0) {
-        // System.out.println("Ban can nhap so khong am.");
-        // } else if (a >= 0 && a <= 50) {
-        // System.out.println("So tien: " + 1000 * a);
-        // } else {
-        // double sovuot = a - 50;
-        // System.out.println("So tien: " + (1000*50+1200*sovuot));
-        // }
-        // ;
-
-        // Bai tap 02
-
-        // PT bac 2 ax^2+bx+c=0
-        // System.out.println("Nhap gia tri a:");
-        // double a = sc.nextDouble();
-        // System.out.println("Nhap gia tri b:");
-        // double b = sc.nextDouble();
-        // System.out.println("Nhap gia tri c:");
-        // double c = sc.nextDouble();
-        // if (a == 0) {
-        // if (b == 0 && c == 0) {
-        // System.out.println("Vo so nghiem.");
-        // } else if (b == 0 && c != 0) {
-        // System.out.println("Vo nghiem.");
-        // } else {
-        // System.out.println("Ket qua: " + (-c/b));
-        // }
-        // }
-        // else {
-        // double delta = b*b-4*a*c;
-        // if (delta<0) {
-        // System.out.println("Vo nghiem.");
-        // }
-        // else if (delta==0) {
-        // System.out.println("Ket qua: " + (-b/a));
-        // }
-        // else {
-        // System.out.println("Nghiem thu 01: " + (-b-Math.sqrt(delta))/(2*a));
-        // System.out.println("Nghiem thu 02: " + (-b+Math.sqrt(delta))/(2*a));
-        // }
-        // }
-        // ;
-
-        // Bai tap 01
-        // System.out.println("Nhap gia tri a:");
-        // int a = sc.nextInt();
-        // System.out.println("Nhap gia tri b:");
-        // int b = sc.nextInt();
-        // if (a==0 && b==0) {
-        // System.out.println("Vo so nghiem.");
-        // }
-        // else if (a==0 && b!=0) {
-        // System.out.println("Vo nghiem.");
-        // }
-        // else {System.out.println("Ket qua: " + (-(float)b/(float)a));};
     }
 }

@@ -1,0 +1,28 @@
+java: viet 1 lan chay nhieu noi (windows, linux ...)
+
+Question							
+- so sanh java EE va SE
+- khong nen dung java moi nhat. cac version: 08 17 18 19
+- intellJ: phanmem123 ban crack
+- tao project: 
+- khai bao class: public class Main {}
+- nhap <phim tat> psvm  -> public static void main(string[] args) {
+} ---> java luon chay ham main dau tien
+- nhap <phim tat> sout: System.out.println("text");
+- file code: duoi .java. -> java bien dich thanh byte code .class (de JVM hieu va chay).
+- JVM: thanh phan
++ class loader: tim kiem .class va load vao vung nho java
++ data area : vung nho va he thong cap phat cho JVM
++ execution engine: chuyen cac lenh trong .class thanh ngon ngu thuc hien
+- JRE: = JVM + cac thu vien duoc su dung khi runtime.
+- JDK: = JRE + complier (trinh bien dich) + debugger
+- bo nho heap / stack;
+- block: 01 cap {}
+- access modifier
+
+buoi 2:
+bo nho heap:
+string pool: nam trong bo nho heap. neu  khai bao duoi dang literal string -> vao string pool.
+date type: kieu nguyen thuy  vs kieu object
+reference
+auto boxing and unboxing variables

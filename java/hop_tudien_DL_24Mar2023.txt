@@ -1,0 +1,14 @@
+Dua mo ta vao Tu dien du lieu.
+Sau khi chot thuat ngu roi moi xay dung mapping chi tiet.
+6 sheet:
+1. thuat ngu chung: van ban, quy dinh PL. Tham khao lay PC lam chuan. 
+Bo sung Mot so thuat ngu chuyen dung cua TC.
+Neu khong co van ban chinh quy -> Khong dua len thuat ngu.
+Chi tieu: Xac dinh logic du lieu de tinh toan. Co 02 loai chi tieu: a. tu BS, b. tu sao ke.
+Thuat ngu: Dinh nghia chung, khong phai cong thuc tinh toan. Mang tinh dai dien.
+
+2. 04 nhom chi tieu (based tren bo KPIs):
+a. khach hang
+b. tai chinh
+c. chat luong dich vu, quy trinh noi bo
+d. con nguoi, to chuc
