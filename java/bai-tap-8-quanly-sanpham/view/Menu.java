@@ -1,110 +1,115 @@
 package view;
 
+import java.util.List;
 import java.util.Scanner;
-
-import javax.swing.text.html.HTMLDocument.RunElement;
 
 import entity.Product;
 import handle.ProductHandle;
+import handle.InputControl;
 
 public class Menu {
-    public int inputMainMenu(Scanner sc) {
-        int input;
-        do {
-            System.out.println("Nhap lua chon cua ban (1-6): ");
-            System.out.println("1: Xem danh sach san pham.");
-            System.out.println("2: Tim san pham theo ten.");
-            System.out.println("3: Tim san pham theo id.");
-            System.out.println("4: Tim san pham co so luong <n.");
-            System.out.println("5: Tim san pham theo muc gia.");
-            System.out.println("6: Sap xep danh sach san pham.");
-            System.out.println("7: Thoat ra.");
-            
-            // Yeu cau gia tri la so
-            while (!sc.hasNextInt()) {
-                System.out.println("Hay nhap mot so (1-6): ");
-                sc.nextLine();
-            }
-            
-            // Truyen lua chon vao
-            input = Integer.parseInt(sc.nextLine());
-        } while (input < 1 || input > 6);
-        return input;
+    InputControl inputControl = new InputControl();
+    Scanner sc = new Scanner(System.in);
+
+    public int inputMain(Scanner sc) {
+        System.out.println("Nhap lua chon cua ban (1-8):");
+        System.out.println("1: Them san pham.");
+        System.out.println("2: Xem danh sach san pham.");
+        System.out.println("3: Tim san pham theo ten.");
+        System.out.println("4: Tim san pham theo id.");
+        System.out.println("5: Tim san pham co so luong <n.");
+        System.out.println("6: Tim san pham theo muc gia.");
+        System.out.println("7: Sap xep danh sach san pham.");
+        System.out.println("8: Thoat ra.");
+
+        return inputControl.getInput(sc, 1, 8);
     }
 
-public void callMainMenu() {
+    public int inputPrice(Scanner sc) {
+        System.out.println("Chon muc gia can filter (1-4):");
+        System.out.println("1: Duoi 50,000.");
+        System.out.println("2: Tu 50,000 den duoi 100,000.");
+        System.out.println("3: Tu 100,000 tro len.");
+        System.out.println("4: Thoat ra.");
 
+        return inputControl.getInput(sc, 1, 4);
+    }
+
+    public int inputField(Scanner sc) {
+        System.out.println("Lua chon truong de sap xep (1-7):");
+        System.out.println("1: Theo Id.");
+        System.out.println("2: Theo ten.");
+        System.out.println("3: Theo mo ta.");
+        System.out.println("4: Theo don vi tinh.");
+        System.out.println("5: Theo so luong.");
+        System.out.println("6: Theo gia.");
+        System.out.println("7: Thoat ra.");
+
+        return inputControl.getInput(sc, 1, 7);
+    }
+
+    public int inputSortDirection(Scanner sc) {
+        System.out.println("Lua chon thu tu sap xep (1-2):");
+        System.out.println("1: Tang dan.");
+        System.out.println("2: Giam dan.");
+
+        return inputControl.getInput(sc, 1, 2);
+    }
+
+    public void callMainMenu(ProductHandle productHandle, List<Product> products) {
+        int input = inputMain(sc);
+        while (input != 8) {
             // Xu ly tung lua chon
             switch (input) {
                 case 1: {
-                    productHandle.displayAllProducts(products);
+                    productHandle.addRecords(sc, inputControl, products);
                     break;
                 }
                 case 2: {
-                    System.out.println("Nhap ten san pham muon tim:");
-                    String name = sc.nextLine();
-                    productHandle.searchProductByName(products, name);
+                    productHandle.displayAll(products);
                     break;
                 }
                 case 3: {
-                    int id;
-
-                    // Kiem soat gia tri la so khong am
-                    do {
-                        System.out.println("Nhap so id san pham muon tim (>=0): ");
-                        // Yeu cau gia tri la so
-                        while (!sc.hasNextInt()) {
-                            System.out.println("Hay nhap mot so (>=0): ");
-                            sc.nextLine();
-                        }
-                        id = Integer.parseInt(sc.nextLine());
-                    } while (id < 0);
-
-                    productHandle.searchById(products, sc, id);
+                    productHandle.searchByName(sc, products);
                     break;
                 }
                 case 4: {
-                    int n;
-                    // Kiem soat gia tri la so khong am
-                    do {
-                        System.out.println("Nhap so id san pham muon tim (>0): ");
-                        // Yeu cau gia tri la so
-                        while (!sc.hasNextInt()) {
-                            System.out.println("Hay nhap mot so (>0): ");
-                            sc.nextLine();
-                        }
-                        n = Integer.parseInt(sc.nextLine());
-                    } while (n <= 0);
-
-                    productHandle.searchByMaxQuantity(products, n);
+                    productHandle.searchById(sc, inputControl, products);
                     break;
                 }
                 case 5: {
-                    // Nhap vao lua chon 1-4
-                    do {
-                        System.out.println("Nhap lua chon muc gia cua ban (1-6): ");
-                        System.out.println("1: Duoi 50,000.");
-                        System.out.println("2: Tu 50,000 den duoi 100,000.");
-                        System.out.println("3: Tu 100,000 tro len");
-                        System.out.println("4: Thoat ra.");
-                        // Yeu cau gia tri la so
-                        while (!sc.hasNextInt()) {
-                            System.out.println("Hay nhap mot so (1-4): ");
-                            sc.nextLine();
-                        }
-                        input = Integer.parseInt(sc.nextLine());
-                    } while (input < 1 || input > 4);
-
-                    // Call ham tim sp theo lua chon da nhap
-                    productHandle.searchByPrice(products, input);
+                    productHandle.searchByMaxQuantity(sc, inputControl, products);
                     break;
                 }
                 case 6: {
+                    int inputPrice = inputPrice(sc);
+                    while (inputPrice != 4) {
+                        // Thuc hien tim kiem
+                        productHandle.searchByPrice(products, inputPrice);
+                        // Sau khi tim kiem call lai menu chon muc gia
+                        inputPrice = inputPrice(sc);
+                    }
+                    break;
+                }
+                case 7: {
+                    int inputField = inputField(sc);
+                    while (inputField!= 7) {
+                        // Chon thu tu sap xep
+                        int sortDirection = inputSortDirection(sc);
+                        // Thuc hien sap xep
+                        productHandle.sortArray(products, inputField, sortDirection);
+                        // Sau khi sap xep call lai menu chon Field can sap xep
+                        inputField = inputField(sc);
+                    }
+                    break;
+                }
+                case 8: {
+                    //Exit
                     break;
                 }
             }
-
-        } 
-
+            // Call lai main menu
+            input = inputMain(sc);
+        }
     }
 }
