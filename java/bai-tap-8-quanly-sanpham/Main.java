@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import entity.Product;
@@ -25,16 +23,14 @@ public class Main {
         } while (n < 0);
 
         ProductHandle productHandle = new ProductHandle();
-        
-        List<Product> sections = new ArrayList <Product>();
-        
+        Product[] products = new Product[n];
 
         for (int i = 0; i < n; i++) {
             products[i] = productHandle.createProduct(sc, i);
         }
 
-        Menu menu = new Menu();
-        menu.requestInput(sc, productHandle, products);
+        Menu inputControl = new Menu();
+        inputControl.requestInput(sc, productHandle, products);
 
     }
 }

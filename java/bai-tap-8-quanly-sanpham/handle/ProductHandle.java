@@ -44,7 +44,7 @@ public class ProductHandle {
         String unit = sc.nextLine();
 
         // Khoi tao ban ghi student theo tham so
-        Product product = new Product(name, description, quantity, price, unit);
+        Product product = new Product(name, description, unit, quantity, price);
 
         // Tra ve ban ghi
         return product;

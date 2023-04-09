@@ -2,11 +2,13 @@ package view;
 
 import java.util.Scanner;
 
+import javax.swing.text.html.HTMLDocument.RunElement;
+
 import entity.Product;
 import handle.ProductHandle;
 
 public class Menu {
-    public void requestInput(Scanner sc, ProductHandle productHandle, Product[] products) {
+    public int inputMainMenu(Scanner sc) {
         int input;
         do {
             System.out.println("Nhap lua chon cua ban (1-6): ");
@@ -15,7 +17,9 @@ public class Menu {
             System.out.println("3: Tim san pham theo id.");
             System.out.println("4: Tim san pham co so luong <n.");
             System.out.println("5: Tim san pham theo muc gia.");
-            System.out.println("6: Thoat ra.");
+            System.out.println("6: Sap xep danh sach san pham.");
+            System.out.println("7: Thoat ra.");
+            
             // Yeu cau gia tri la so
             while (!sc.hasNextInt()) {
                 System.out.println("Hay nhap mot so (1-6): ");
@@ -24,6 +28,11 @@ public class Menu {
             
             // Truyen lua chon vao
             input = Integer.parseInt(sc.nextLine());
+        } while (input < 1 || input > 6);
+        return input;
+    }
+
+public void callMainMenu() {
 
             // Xu ly tung lua chon
             switch (input) {
@@ -95,7 +104,7 @@ public class Menu {
                 }
             }
 
-        } while (input < 1 || input > 5);
+        } 
 
     }
 }

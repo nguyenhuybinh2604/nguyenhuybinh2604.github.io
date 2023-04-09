@@ -13,13 +13,13 @@ public class Product {
         this.id = ++autoId;
     };
 
-    public Product(String name, String description, int quantity, double price, String unit) {
+    public Product(String name, String description, String unit, int quantity, double price) {
         this.id = ++autoId;
         this.name = name;
         this.description = description;
+        this.unit = unit;
         this.quantity = quantity;
         this.price = price;
-        this.unit = unit;
     }
 
     public int getId() {
@@ -56,9 +56,10 @@ public class Product {
                 " id='" + getId() + "'" +
                 ", name='" + getName() + "'" +
                 ", description='" + getDescription() + "'" +
+                ", unit='" + getUnit() + "'" +
                 ", quantity='" + getQuantity() + "'" +
                 ", price='" + getPrice() + "'" +
-                ", unit='" + getUnit() + "'" +
                 "}";
     }
+
 }
