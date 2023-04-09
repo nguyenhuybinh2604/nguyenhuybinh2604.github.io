@@ -1,5 +1,6 @@
 package handle;
 
+import java.sql.SQLOutput;
 import java.text.Collator;
 import java.util.Collections;
 import java.util.List;
@@ -245,6 +246,7 @@ public class ProductHandle {
                 break;
             }
         }
+        System.out.println("Hoant thanh sap xep.");
     }
 
     public int compareString(String string1, String string2) {
