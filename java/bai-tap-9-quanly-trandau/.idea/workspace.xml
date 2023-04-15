@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="84b688e1-deff-49ca-ace7-9bdabc3848d8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../bai-tap-8-quanly-sanpham/handle/ProductHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/../bai-tap-8-quanly-sanpham/handle/ProductHandle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,17 +50,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
@@ -85,6 +74,7 @@
       <workItem from="1681041296522" duration="9870000" />
       <workItem from="1681056529861" duration="746000" />
       <workItem from="1681312513635" duration="1269000" />
+      <workItem from="1681524080425" duration="456000" />
     </task>
     <servers />
   </component>
