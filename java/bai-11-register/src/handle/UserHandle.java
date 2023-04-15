@@ -41,7 +41,7 @@ public class UserHandle {
         System.out.println("Email hien tai:");
         System.out.println(users.get(index).getEmail());
         System.out.println("Nhap email moi (dang emailaddress@domain.com):");
-        String newEmail = sc.nextLine(); //Doi thanh inputControl
+        String newEmail = inputControl.getEmail(sc); //Doi thanh inputControl
         if (findUser(users, null, newEmail) != null) {
             System.out.println("Email da duoc su dung.");
         } else {

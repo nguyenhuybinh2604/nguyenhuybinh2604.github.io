@@ -29,17 +29,16 @@ public class Menu {
         do {
             // Xu ly tung lua chon
             switch (input) {
-                case 1: {
+                case 1 -> {
                     login(sc, users);
                     break;
                 }
-                case 2: {
+                case 2 -> {
                     register(sc, users);
                     break;
                 }
-                case 3: {
+                case 3 -> {
                     // Exit
-                    //return;
                     exitProgram();
                 }
             }
@@ -110,54 +109,40 @@ public class Menu {
 
     public void loginFailed(Scanner sc, List<User> users) {
         int input;
-        switch (loginStatus) {
-            case "failure_Login_WrongPassword":
-            case "failure_ForgotPassword_WrongEmail": {
-                input = inputLoginFailed(sc);
-                break;
-            }
-            case "failure_Login_WrongUsername": {
-                input = 1;
-                break;
-            }
-            default: {
-                input = 3;
-                break;
-            }
-        }
+        input = inputLoginStatus(loginStatus);
         do {
             // Xu ly tung lua chon
             switch (input) {
-                case 1: {
+                case 1 -> {
                     login(sc, users);
                     break;
                 }
-                case 2: {
+                case 2 -> {
                     forgotPassword(sc, users);
                     break;
                 }
-                case 3: {
+                case 3 -> {
                     // Return to previous method
                     return;
                 }
             }
             // Set option cho menu loginFailed ke tiep
-            switch (loginStatus) {
-                case "failure_Login_WrongPassword":
-                case "failure_ForgotPassword_WrongEmail": {
-                    input = inputLoginFailed(sc);
-                    break;
-                }
-                case "failure_Login_WrongUsername": {
-                    input = 1;
-                    break;
-                }
-                default: {
-                    input = 3;
-                    break;
-                }
-            }
+            input = inputLoginStatus(loginStatus);
         } while (input >= 1 && input <= 3);
+    }
+
+    public int inputLoginStatus(String loginStatus) {
+        switch (loginStatus) {
+            case "failure_Login_WrongPassword", "failure_ForgotPassword_WrongEmail" -> {
+                return inputLoginFailed(sc);
+            }
+            case "failure_Login_WrongUsername" -> {
+                return 1;
+            }
+            default -> {
+                return 3;
+            }
+        }
     }
 
     //Tại mục quên mật khẩu thì có nhập email.
@@ -194,24 +179,23 @@ public class Menu {
         do {
             // Xu ly tung lua chon
             switch (input) {
-                case 1: {
+                case 1 -> {
                     userHandle.changeUsername(sc, users, index);
                     break;
                 }
-                case 2: {
+                case 2 -> {
                     userHandle.changeEmail(sc, users, inputControl, index);
                     break;
                 }
-                case 3: {
+                case 3 -> {
                     userHandle.changePassword(sc, users, inputControl, index);
                     break;
                 }
-                case 4: {
+                case 4 -> {
                     // Log out
                     return;
-                    //break;
                 }
-                case 5: {
+                case 5 -> {
                     // Exit
                     exitProgram();
                 }
