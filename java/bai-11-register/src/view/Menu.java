@@ -70,7 +70,7 @@ public class Menu {
             }
         } else {
             loginStatus = "failure_Login_WrongUsername";
-            System.out.println("Khong tim thay user " + username + ".");
+            System.out.println("Kiem tra lai username. Dang nhap lai.");
         }
     }
 
