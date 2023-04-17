@@ -5,16 +5,21 @@ import entity.User;
 import java.util.List;
 import java.util.Scanner;
 
-
 public class UserHandle {
-    public User findUser(List<User> users, String username, String email) {
+
+    public void addUser(List<User> users, String username, String email, String password) {
+        users.add(new User(username, email, password));
+        System.out.println("Tao user moi thanh cong.");
+    }
+
+    public User findUser(List<User> users, String inputStr, String strType) {
         User returnValue = null;
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getUsername().equals(username)) {
-                returnValue = users.get(i);
+        for (User user : users) {
+            if (strType.equals("username") && user.getUsername().equals(inputStr)) {
+                returnValue = user;
                 break;
-            } else if (users.get(i).getEmail().equals(email)) {
-                returnValue = users.get(i);
+            } else if (strType.equals("email") && user.getEmail().equals(inputStr)) {
+                returnValue = user;
                 break;
             } else {
                 returnValue = null;
@@ -28,7 +33,7 @@ public class UserHandle {
         System.out.println(users.get(index).getUsername());
         System.out.println("Nhap username moi:");
         String newUsername = sc.nextLine();
-        if (findUser(users, newUsername, null) != null) {
+        if (findUser(users, newUsername, "username") != null) {
             System.out.println("Username da duoc su dung.");
         } else {
             //Thay username moi
@@ -42,7 +47,7 @@ public class UserHandle {
         System.out.println(users.get(index).getEmail());
         System.out.println("Nhap email moi (dang emailaddress@domain.com):");
         String newEmail = inputControl.getEmail(sc); //Doi thanh inputControl
-        if (findUser(users, null, newEmail) != null) {
+        if (findUser(users, newEmail, "email") != null) {
             System.out.println("Email da duoc su dung.");
         } else {
             //Thay email moi
@@ -60,5 +65,4 @@ public class UserHandle {
         users.get(index).setPassword(newPassword);
         System.out.println("Password changed.");
     }
-
 }
