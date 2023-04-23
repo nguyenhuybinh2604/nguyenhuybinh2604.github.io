@@ -20,9 +20,17 @@ public class InputData {
             FileInputStream excelFile = new FileInputStream(new File(pathProject + "/src/io/data.xlsx"));
             Workbook workbook = new XSSFWorkbook(excelFile);
             // DataFormatter fmt = new DataFormatter();
+
+            // Xoa list de import lai
+            administrators.clear();
             importAdministrator(workbook, administrators);
+            // Xoa list de import lai
+            managers.clear();
             importManager(workbook, managers);
+            // Xoa list de import lai
+            marketers.clear();
             importMarketer(workbook, marketers);
+
             workbook.close();
             System.out.println("Done importing.");
         } catch (FileNotFoundException e) {
@@ -38,8 +46,8 @@ public class InputData {
         String sheetName = "Administrator";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
-        // Row firstRow = iterator.next();
-        // Cell firstCell = firstRow.getCell(0);
+        Row firstRow = iterator.next();
+        Cell firstCell = firstRow.getCell(0);
         // System.out.println(firstCell.getStringCellValue());
         while (iterator.hasNext()) {
             Row currentRow = iterator.next();
@@ -61,8 +69,8 @@ public class InputData {
         String sheetName = "Manager";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
-        // Row firstRow = iterator.next();
-        // Cell firstCell = firstRow.getCell(0);
+        Row firstRow = iterator.next();
+        Cell firstCell = firstRow.getCell(0);
         // System.out.println(firstCell.getStringCellValue());
         while (iterator.hasNext()) {
             Row currentRow = iterator.next();
@@ -82,8 +90,8 @@ public class InputData {
         String sheetName = "Marketer";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
-        // Row firstRow = iterator.next();
-        // Cell firstCell = firstRow.getCell(0);
+        Row firstRow = iterator.next();
+        Cell firstCell = firstRow.getCell(0);
         // System.out.println(firstCell.getStringCellValue());
         while (iterator.hasNext()) {
             Row currentRow = iterator.next();

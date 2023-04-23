@@ -22,13 +22,13 @@ public class Menu {
 
     public int inputMain() {
         System.out.println("WELCOME TO RONG VIET SECURITIES");
-        System.out.println("1: Load data");
+        System.out.println("1. Load data");
         System.out.println("2. View list of staff");
         System.out.println("3. Update staff info");
         System.out.println("4. Find staff by salary range");
         System.out.println("5. Sort staff by name or income");
         System.out.println("6. View top 5 earners");
-        System.out.println("7: Exit");
+        System.out.println("7. Exit");
 
         return inputControl.getInput(sc, 1, 7);
     }
@@ -74,11 +74,11 @@ public class Menu {
 
     public int inputDisplayInfo() {
         System.out.println("CHOOSE WHO TO DISPLAY:");
-        System.out.println("1: Administrators");
+        System.out.println("1. Administrators");
         System.out.println("2. Managers");
         System.out.println("3. Marketers");
         System.out.println("4. All");
-        System.out.println("5: Return");
+        System.out.println("5. Return");
 
         return inputControl.getInput(sc, 1, 5);
     }
@@ -122,9 +122,9 @@ public class Menu {
 
     public int inputUpdateInfo() {
         System.out.println("CHOOSE WHAT TO DO:");
-        System.out.println("1: Delete staff");
+        System.out.println("1. Delete staff");
         System.out.println("2. Edit info");
-        System.out.println("3: Return");
+        System.out.println("3. Return");
 
         return inputControl.getInput(sc, 1, 3);
     }
@@ -139,7 +139,7 @@ public class Menu {
                     break;
                 }
                 case 2 -> {
-                    staffHandle.editStaff(administrators, managers, marketers);
+                    staffHandle.editStaff(sc, inputControl, administrators, managers, marketers);
                     break;
                 }
                 case 3 -> {
@@ -153,7 +153,7 @@ public class Menu {
     }
 
     public void exitProgram() {
-        System.out.println("Thoat chuong trinh. Tam biet.");
+        System.out.println("Exiting. Goodbye.");
         System.exit(0);
     }
 }
