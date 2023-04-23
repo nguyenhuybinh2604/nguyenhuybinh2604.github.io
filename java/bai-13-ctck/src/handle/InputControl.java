@@ -8,10 +8,10 @@ public class InputControl {
     public int getInput(Scanner sc, Integer min, Integer max) {
         int input;
         do {
-            System.out.println("Hay nhap mot so " + valueRange(String.valueOf(min), String.valueOf(max)) + ":");
+            System.out.println("Please enter a number " + valueRange(String.valueOf(min), String.valueOf(max)) + ":");
             // Yeu cau gia tri la so
             while (!sc.hasNextInt()) {
-                System.out.println("Hay nhap mot so " + valueRange(String.valueOf(min), String.valueOf(max)) + ":");
+                System.out.println("Please enter a number " + valueRange(String.valueOf(min), String.valueOf(max)) + ":");
                 sc.nextLine();
             }
             input = Integer.parseInt(sc.nextLine());
@@ -22,10 +22,10 @@ public class InputControl {
     public double getInput(Scanner sc, Double min, Double max) {
         double input;
         do {
-            System.out.println("Hay nhap mot so " + valueRange(String.valueOf(min), String.valueOf(max)) + ":");
+            System.out.println("Please enter a number " + valueRange(String.valueOf(min), String.valueOf(max)) + ":");
             // Yeu cau gia tri la so
             while (!sc.hasNextDouble()) {
-                System.out.println("Hay nhap mot so " + valueRange(String.valueOf(min), String.valueOf(max)) + ":");
+                System.out.println("Please enter a number " + valueRange(String.valueOf(min), String.valueOf(max)) + ":");
                 sc.nextLine();
             }
             input = Double.parseDouble(sc.nextLine());
@@ -41,7 +41,7 @@ public class InputControl {
         } else if (max.equalsIgnoreCase("null")) {
             return ">=" + min;
         } else {
-            return "tu " + min + " den " + max;
+            return "from " + min + " to " + max;
         }
     }
 
@@ -128,7 +128,7 @@ public class InputControl {
     public String getEmail(Scanner sc) {
         String email = sc.nextLine();
         while (email == null || !emailVerify(email)) {
-            System.out.println("Yeu cau email dang emailaddress@domain.com:");
+            System.out.println("Format of email: emailaddress@domain.com:");
             email = sc.nextLine();
         }
         return email;
@@ -146,7 +146,7 @@ public class InputControl {
     public String getPassword(Scanner sc) {
         String password = sc.nextLine();
         while (password == null || !passwordVerify(password)) {
-            System.out.println("Yeu cau mat khau dai 7-15 ky tu, chua it nhat 01 ky tu in hoa va 01 ky tu dac biet:");
+            System.out.println("Password must be 7-15-character long, contain at least 01 capitalized letter and 01 special character:");
             password = sc.nextLine();
         }
         return password;

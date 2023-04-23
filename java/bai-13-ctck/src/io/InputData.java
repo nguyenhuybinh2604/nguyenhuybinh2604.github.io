@@ -19,11 +19,12 @@ public class InputData {
             String pathProject = System.getProperty("user.dir");
             FileInputStream excelFile = new FileInputStream(new File(pathProject + "/src/io/data.xlsx"));
             Workbook workbook = new XSSFWorkbook(excelFile);
-            //DataFormatter fmt = new DataFormatter();
+            // DataFormatter fmt = new DataFormatter();
             importAdministrator(workbook, administrators);
             importManager(workbook, managers);
             importMarketer(workbook, marketers);
             workbook.close();
+            System.out.println("Done importing.");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.out.println("JavaBank Error: file not found.");
@@ -37,31 +38,32 @@ public class InputData {
         String sheetName = "Administrator";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
-        Row firstRow = iterator.next();
-        Cell firstCell = firstRow.getCell(0);
-        System.out.println(firstCell.getStringCellValue());
+        // Row firstRow = iterator.next();
+        // Cell firstCell = firstRow.getCell(0);
+        // System.out.println(firstCell.getStringCellValue());
         while (iterator.hasNext()) {
             Row currentRow = iterator.next();
             Administrator administrator = new Administrator();
-            administrator.setEmployeeId(currentRow.getCell(0) == null ? "" : currentRow.getCell(0).getStringCellValue());
+            administrator
+                    .setEmployeeId(currentRow.getCell(0) == null ? "" : currentRow.getCell(0).getStringCellValue());
             administrator.setName(currentRow.getCell(1) == null ? "" : currentRow.getCell(1).getStringCellValue());
-            administrator.setAge((int) (currentRow.getCell(2) == null ? 0 : currentRow.getCell(2).getNumericCellValue()));
+            administrator
+                    .setAge((int) (currentRow.getCell(2) == null ? 0 : currentRow.getCell(2).getNumericCellValue()));
             administrator.setAddress(currentRow.getCell(3) == null ? "" : currentRow.getCell(3).getStringCellValue());
-            administrator.setSalaryBasic(currentRow.getCell(4) == null ? 0 : currentRow.getCell(4).getNumericCellValue());
+            administrator
+                    .setSalaryBasic(currentRow.getCell(4) == null ? 0 : currentRow.getCell(4).getNumericCellValue());
             administrators.add(administrator);
         }
-        for (Administrator administrator : administrators) {
-            System.out.println(administrator);
-        }
+
     }
 
     public void importManager(Workbook workbook, List<Manager> managers) {
         String sheetName = "Manager";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
-        Row firstRow = iterator.next();
-        Cell firstCell = firstRow.getCell(0);
-        System.out.println(firstCell.getStringCellValue());
+        // Row firstRow = iterator.next();
+        // Cell firstCell = firstRow.getCell(0);
+        // System.out.println(firstCell.getStringCellValue());
         while (iterator.hasNext()) {
             Row currentRow = iterator.next();
             Manager manager = new Manager();
@@ -73,18 +75,16 @@ public class InputData {
             manager.setSalaryRole(currentRow.getCell(5) == null ? 0 : currentRow.getCell(5).getNumericCellValue());
             managers.add(manager);
         }
-        for (Manager manager : managers) {
-            System.out.println(manager);
-        }
+
     }
 
     public void importMarketer(Workbook workbook, List<Marketer> marketers) {
         String sheetName = "Marketer";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
-        Row firstRow = iterator.next();
-        Cell firstCell = firstRow.getCell(0);
-        System.out.println(firstCell.getStringCellValue());
+        // Row firstRow = iterator.next();
+        // Cell firstCell = firstRow.getCell(0);
+        // System.out.println(firstCell.getStringCellValue());
         while (iterator.hasNext()) {
             Row currentRow = iterator.next();
             Marketer marketer = new Marketer();
@@ -97,8 +97,6 @@ public class InputData {
             marketer.setRateOfBonus(currentRow.getCell(6) == null ? 0 : currentRow.getCell(6).getNumericCellValue());
             marketers.add(marketer);
         }
-        for (Marketer marketer : marketers) {
-            System.out.println(marketer);
-        }
+
     }
 }
