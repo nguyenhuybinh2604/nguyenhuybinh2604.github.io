@@ -48,7 +48,7 @@ public class Main {
                             System.out.println("Hay nhap mot so (0-10):");
                             sc.nextLine();
                         }
-                        diemHtml = Double.parseDouble(sc.nextLine());
+                        diemCss = Double.parseDouble(sc.nextLine());
                     } while (diemCss < 0 || diemCss > 10);
 
                     SinhVienIT sinhvienIT = new SinhVienIT();

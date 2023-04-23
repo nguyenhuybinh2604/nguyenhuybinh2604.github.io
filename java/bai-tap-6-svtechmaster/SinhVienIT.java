@@ -15,7 +15,7 @@ public class SinhVienIT extends SinhVienTechMaster {
 
     @Override
     public double getDiem() {
-        return ((diemJava * 2 + diemHtml + diemCss) / 4);
-    };
-
+        return (((diemJava*2+diemHtml+diemCss) / 4));
+    }
+    ;
 }

@@ -1,0 +1,49 @@
+package view;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Menu {
+    List<Administrator> administrators = new ArrayList<>();
+    List<Manager> managers = new ArrayList<>();
+    List<Marketer> marketers = new ArrayList<>();
+    Scanner sc = new Scanner(System.in);
+    InputControl inputControl = new InputControl();
+
+    public int inputMain(Scanner sc) {
+        System.out.println("WELCOME TO RONG VIET SECURITIES");
+        System.out.println("1: Log in");
+        System.out.println("2. Register");
+        System.out.println("3: Exit");
+
+        return inputControl.getInput(sc, 1, 3);
+    }
+
+    public void callMainMenu(Scanner sc) {
+        int input = inputMain(sc);
+        do {
+            // Xu ly tung lua chon
+            switch (input) {
+                case 1 -> {
+
+                }
+                case 2 -> {
+
+                    break;
+                }
+                case 3 -> {
+                    // Exit
+                    exitProgram();
+                }
+            }
+            // Call lai main menu
+            input = 3;
+        } while (input >= 1 && input <= 3);
+    }
+
+    public void exitProgram() {
+        System.out.println("Thoat chuong trinh. Tam biet.");
+        System.exit(0);
+    }
+}
