@@ -3,6 +3,8 @@ package io;
 import entity.Administrator;
 import entity.Manager;
 import entity.Marketer;
+import service.IEmployee;
+
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -10,6 +12,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -105,6 +108,17 @@ public class InputData {
             marketer.setRateOfBonus(currentRow.getCell(6) == null ? 0 : currentRow.getCell(6).getNumericCellValue());
             marketers.add(marketer);
         }
+    }
+
+    public List<IEmployee> mergeData(List<Administrator> administrators, List<Manager> managers,
+            List<Marketer> marketers) {
+
+        List<IEmployee> combinedResult = new ArrayList<>();
+        combinedResult.addAll(administrators);
+        combinedResult.addAll(managers);
+        combinedResult.addAll(marketers);
+        // Collections.sort(combinedResult, Comparator.comparing(IEmployee::getName));
+        return combinedResult;
 
     }
 }

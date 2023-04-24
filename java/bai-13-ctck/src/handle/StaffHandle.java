@@ -1,135 +1,74 @@
 package handle;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-import entity.Administrator;
-import entity.Employee;
-import entity.Manager;
-import entity.Marketer;
+import service.IEmployee;
+import service.SortByIncome;
+import service.SortByName;
 
 public class StaffHandle {
-    public <EStaff> void displayStaffInfo(List<EStaff> eStaffs) {
-        for (EStaff eStaff : eStaffs) {
-            System.out.println(eStaff);
+
+    public void displayStaffInfo(List<IEmployee> employees) {
+        for (IEmployee iEmployee : employees) {
+            System.out.println(iEmployee);
         }
     }
 
-    public Integer findManager(List<Manager> managers, String employeeId) {
+    public Integer findEmployee(List<IEmployee> employees, String employeeId) {
         Integer returnValue = null;
-        for (Manager manager : managers) {
-            if (manager.getEmployeeId().equals(employeeId)) {
-                returnValue = managers.indexOf(manager);
+        for (IEmployee iEmployee : employees) {
+            if (iEmployee.getEmployeeId().equals(employeeId)) {
+                returnValue = employees.indexOf(iEmployee);
                 break;
             }
         }
         return returnValue;
     }
 
-    // public Integer testFind(List<Employee> employees, String findString) {
-    // Integer returnValue = null;
-    // for (Employee employee : employees) {
-    // if (employee.getEmployeeId().equals(findString)) {
-    // returnValue = employees.indexOf(employee);
-    // break;
-    // }
-    // }
-    // return returnValue;
-    // }
-
-    // public void testVoid (Scanner sc, InputControl inputControl,
-    // List<Administrator> administrators,
-    // List<Manager> managers,
-    // List<Marketer> marketers) {
-    // Integer testInt = testFind(administrators, "admin001");
-    // }
-
-    public Integer findAdministrator(List<Administrator> administrators, String employeeId) {
-        Integer returnValue = null;
-        for (Administrator administrator : administrators) {
-            if (administrator.getEmployeeId().equals(employeeId)) {
-                returnValue = administrators.indexOf(administrator);
-                break;
-            }
+    public void findEmployeebyIncome(Scanner sc, InputControl inputControl, List<IEmployee> employees) {
+        System.out.println("Please enter From value:");
+        double fromValue = inputControl.getInput(sc, 0, null);
+        System.out.println("Please enter To value:");
+        double toValue = inputControl.getInput(sc, 0, null);
+        System.out.println("Employees matching income range from " + fromValue + " to " + toValue + " :");
+        for (IEmployee iEmployee : employees) {
+            if (iEmployee.getIncome() >= fromValue && iEmployee.getIncome() <= toValue)
+                System.out.println(iEmployee);
         }
-        return returnValue;
     }
 
-    public Integer findMarketer(List<Marketer> marketers, String employeeId) {
-        Integer returnValue = null;
-        for (Marketer marketer : marketers) {
-            if (marketer.getEmployeeId().equals(employeeId)) {
-                returnValue = marketers.indexOf(marketer);
-                break;
-            }
-        }
-        return returnValue;
-    }
-
-    public int inputTypeOfEmployee(Scanner sc, InputControl inputControl) {
-        System.out.println("SELECT TYPE OF EMPLOYEE:");
-        System.out.println("1. Administrative");
-        System.out.println("2. Managers");
-        System.out.println("3. Marketers");
-
-        return inputControl.getInput(sc, 1, 3);
-    }
-
-    public void deleteStaff(Scanner sc, InputControl inputControl, List<Administrator> administrators,
-            List<Manager> managers,
-            List<Marketer> marketers) {
-        int typeOfEmployee = inputTypeOfEmployee(sc, inputControl);
+    public void deleteStaff(Scanner sc, InputControl inputControl, List<IEmployee> employees) {
+        // int typeOfEmployee = inputTypeOfEmployee(sc, inputControl);
         System.out.println("Enter employee's Id:");
         String employeeId = sc.nextLine();
-        switch (typeOfEmployee) {
-            case 1: {
-                if (findAdministrator(administrators, employeeId) != null) {
-                    int staffIndex = findAdministrator(administrators, employeeId);
-                    administrators.remove(staffIndex);
-                    System.out.println("Staff Id " + employeeId + " has been removed.");
-                } else
-                    System.out.println("Staff Id not found.");
-                break;
-            }
-            case 2: {
-                if (findManager(managers, employeeId) != null) {
-                    int staffIndex = findManager(managers, employeeId);
-                    managers.remove(staffIndex);
-                    System.out.println("Staff Id " + employeeId + " has been removed.");
-                } else
-                    System.out.println("Staff Id not found.");
-                break;
-            }
-            case 3: {
-                if (findMarketer(marketers, employeeId) != null) {
-                    int staffIndex = findMarketer(marketers, employeeId);
-                    marketers.remove(staffIndex);
-                    System.out.println("Staff Id " + employeeId + " has been removed.");
-                } else
-                    System.out.println("Staff Id not found.");
-                break;
-            }
-        }
+        if (findEmployee(employees, employeeId) != null) {
+            int staffIndex = findEmployee(employees, employeeId);
+            employees.remove(staffIndex);
+            System.out.println("Staff Id " + employeeId + " has been removed.");
+        } else
+            System.out.println("Staff Id not found.");
     }
 
-    public int inputEditedField(Scanner sc, InputControl inputControl, String selectedClass) {
+    public int inputEditedField(Scanner sc, InputControl inputControl, String employeeId) {
         System.out.println("SELECT FIELD TO EDIT:");
         System.out.println("1. Name");
         System.out.println("2. Age");
         System.out.println("3. Address");
         System.out.println("4. Basic salary");
         int maxInput = 0;
-        switch (selectedClass) {
-            case "Administrator": {
+        switch (employeeId.substring(0, employeeId.length() - 3)) {
+            case "admin": {
                 maxInput = 4;
                 break;
             }
-            case "Manager": {
+            case "manager": {
                 System.out.println("5. Role salary");
                 maxInput = 5;
                 break;
             }
-            case "Marketer": {
+            case "marketing": {
                 System.out.println("5. Sales");
                 System.out.println("6. Rate of bonus");
                 maxInput = 6;
@@ -139,107 +78,84 @@ public class StaffHandle {
         return inputControl.getInput(sc, 1, maxInput);
     }
 
-    public void editSelectedField(Scanner sc, InputControl inputControl, List<Administrator> administrators,
-            List<Manager> managers, List<Marketer> marketers, String selectedClass, int staffIndex, int selectedField) {
+    public void editSelectedField(Scanner sc, InputControl inputControl, List<IEmployee> employees, int staffIndex,
+            int selectedField) {
         System.out.println("Enter new value:");
         switch (selectedField) {
             case 1: {
                 String newName = sc.nextLine();
-                if (selectedClass.equals("Administrator"))
-                    administrators.get(staffIndex).setName(newName);
-                else if (selectedClass.equals("Manager"))
-                    managers.get(staffIndex).setName(newName);
-                else
-                    marketers.get(staffIndex).setName(newName);
+                employees.get(staffIndex).setName(newName);
                 break;
             }
             case 2: {
                 int newAge = inputControl.getInput(sc, 1, null);
-                if (selectedClass.equals("Administrator"))
-                    administrators.get(staffIndex).setAge(newAge);
-                else if (selectedClass.equals("Manager"))
-                    managers.get(staffIndex).setAge(newAge);
-                else
-                    marketers.get(staffIndex).setAge(newAge);
+                employees.get(staffIndex).setAge(newAge);
                 break;
             }
             case 3: {
                 String newAddress = sc.nextLine();
-                if (selectedClass.equals("Administrator"))
-                    administrators.get(staffIndex).setAddress(newAddress);
-                else if (selectedClass.equals("Manager"))
-                    managers.get(staffIndex).setAddress(newAddress);
-                else
-                    marketers.get(staffIndex).setAddress(newAddress);
+                employees.get(staffIndex).setAddress(newAddress);
                 break;
             }
             case 4: {
                 double newBasicSalary = inputControl.getInput(sc, 0, null);
-                if (selectedClass.equals("Administrator"))
-                    administrators.get(staffIndex).setSalaryBasic(newBasicSalary);
-                else if (selectedClass.equals("Manager"))
-                    managers.get(staffIndex).setSalaryBasic(newBasicSalary);
-                else
-                    marketers.get(staffIndex).setSalaryBasic(newBasicSalary);
+                employees.get(staffIndex).setSalaryBasic(newBasicSalary);
                 break;
             }
             case 5: {
-                if (selectedClass.equals("Manager")) {
+                String employeeId = employees.get(staffIndex).getEmployeeId();
+                if (employeeId.substring(0, employeeId.length() - 3).equals("manager")) {
                     double newRoleSalary = inputControl.getInput(sc, 0, null);
-                    managers.get(staffIndex).setSalaryRole(newRoleSalary);
+                    employees.get(staffIndex).setSalaryRole(newRoleSalary);
                 } else {
                     int newSales = inputControl.getInput(sc, 0, null);
-                    marketers.get(staffIndex).setSales(newSales);
+                    employees.get(staffIndex).setSales(newSales);
                 }
                 break;
             }
             case 6: {
                 double newRateOfBonus = inputControl.getInput(sc, 0, 1);
-                marketers.get(staffIndex).setRateOfBonus(newRateOfBonus);
+                employees.get(staffIndex).setRateOfBonus(newRateOfBonus);
                 break;
             }
         }
     }
 
-    public void editStaff(Scanner sc, InputControl inputControl, List<Administrator> administrators,
-            List<Manager> managers, List<Marketer> marketers) {
-        int typeOfEmployee = inputTypeOfEmployee(sc, inputControl);
+    public void editStaff(Scanner sc, InputControl inputControl, List<IEmployee> employees) {
+        // int typeOfEmployee = inputTypeOfEmployee(sc, inputControl);
         System.out.println("Enter employee's Id:");
         String employeeId = sc.nextLine();
-        switch (typeOfEmployee) {
-            case 1: {
-                if (findAdministrator(administrators, employeeId) != null) {
-                    int staffIndex = findAdministrator(administrators, employeeId);
-                    int inputEditedField = inputEditedField(sc, inputControl, "Administrator");
-                    editSelectedField(sc, inputControl, administrators, managers, marketers, "Administrator",
-                            staffIndex, inputEditedField);
-                    System.out.println("Staff Id " + employeeId + " has been edited.");
-                } else
-                    System.out.println("Staff Id not found.");
+        if (findEmployee(employees, employeeId) != null) {
+            int staffIndex = findEmployee(employees, employeeId);
+            int inputEditedField = inputEditedField(sc, inputControl, employeeId);
+            editSelectedField(sc, inputControl, employees, staffIndex, inputEditedField);
+            System.out.println("Staff Id " + employeeId + " has been edited.");
+        } else
+            System.out.println("Staff Id not found.");
+    }
+
+    public void sortStaff(Scanner sc, InputControl inputControl, List<IEmployee> employees, String sortField) {
+        switch (sortField) {
+            case "name": {
+                Collections.sort(employees, new SortByName());
+                System.out.println("After sorted by name:");
+                displayStaffInfo(employees);
                 break;
             }
-            case 2: {
-                if (findManager(managers, employeeId) != null) {
-                    int staffIndex = findManager(managers, employeeId);
-                    int inputEditedField = inputEditedField(sc, inputControl, "Manager");
-                    editSelectedField(sc, inputControl, administrators, managers, marketers, "Manager",
-                            staffIndex, inputEditedField);
-                    System.out.println("Staff Id " + employeeId + " has been edited.");
-                } else
-                    System.out.println("Staff Id not found.");
+            case "income": {
+                Collections.sort(employees, new SortByIncome());
+                System.out.println("After sorted by income:");
+                displayStaffInfo(employees);
                 break;
             }
-            case 3: {
-                if (findMarketer(marketers, employeeId) != null) {
-                    int staffIndex = findMarketer(marketers, employeeId);
-                    int inputEditedField = inputEditedField(sc, inputControl, "Marketer");
-                    editSelectedField(sc, inputControl, administrators, managers, marketers, "Marketer",
-                            staffIndex, inputEditedField);
-                    System.out.println("Staff Id " + employeeId + " has been edited.");
-                } else
-                    System.out.println("Staff Id not found.");
-                break;
-            }
+        }
+    }
+
+    public void viewTop5Earners(Scanner sc, InputControl inputControl, List<IEmployee> employees) {
+        Collections.sort(employees, new SortByIncome());
+        System.out.println("Top 05 earners are:");
+        for (int i = 0; i < 5; i++) {
+            System.out.println(employees.get(i));
         }
     }
 }

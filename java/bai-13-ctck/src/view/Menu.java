@@ -10,6 +10,7 @@ import entity.Marketer;
 import handle.InputControl;
 import handle.StaffHandle;
 import io.InputData;
+import service.IEmployee;
 
 public class Menu {
     Scanner sc = new Scanner(System.in);
@@ -19,6 +20,7 @@ public class Menu {
     List<Administrator> administrators = new ArrayList<>();
     List<Manager> managers = new ArrayList<>();
     List<Marketer> marketers = new ArrayList<>();
+    List<IEmployee> allEmployees = new ArrayList<>();
 
     public int inputMain() {
         System.out.println("WELCOME TO RONG VIET SECURITIES");
@@ -40,10 +42,11 @@ public class Menu {
             switch (input) {
                 case 1 -> {
                     inputData.readExcel(administrators, managers, marketers);
+                    allEmployees = inputData.mergeData(administrators, managers, marketers);
                     break;
                 }
                 case 2 -> {
-                    displayStaffInfo();
+                    staffHandle.displayStaffInfo(allEmployees);
                     break;
                 }
                 case 3 -> {
@@ -51,15 +54,15 @@ public class Menu {
                     break;
                 }
                 case 4 -> {
-
+                    staffHandle.findEmployeebyIncome(sc, inputControl, allEmployees);
                     break;
                 }
                 case 5 -> {
-
+                    sortStaff();
                     break;
                 }
                 case 6 -> {
-
+                    staffHandle.viewTop5Earners(sc, inputControl, allEmployees);
                     break;
                 }
                 case 7 -> {
@@ -70,54 +73,6 @@ public class Menu {
             // Call lai main menu
             input = inputMain();
         } while (input >= 1 && input <= 7);
-    }
-
-    public int inputDisplayInfo() {
-        System.out.println("CHOOSE WHO TO DISPLAY:");
-        System.out.println("1. Administrators");
-        System.out.println("2. Managers");
-        System.out.println("3. Marketers");
-        System.out.println("4. All");
-        System.out.println("5. Return");
-
-        return inputControl.getInput(sc, 1, 5);
-    }
-
-    public void displayStaffInfo() {
-        int input = inputDisplayInfo();
-        do {
-            // Xu ly tung lua chon
-            switch (input) {
-                case 1 -> {
-                    System.out.println("List of administrative staff:");
-                    staffHandle.displayStaffInfo(administrators);
-                    break;
-                }
-                case 2 -> {
-                    System.out.println("List of managers:");
-                    staffHandle.displayStaffInfo(managers);
-                    break;
-                }
-                case 3 -> {
-                    System.out.println("List of marketers:");
-                    staffHandle.displayStaffInfo(marketers);
-                    break;
-                }
-                case 4 -> {
-                    System.out.println("List of all staff:");
-                    staffHandle.displayStaffInfo(administrators);
-                    staffHandle.displayStaffInfo(managers);
-                    staffHandle.displayStaffInfo(marketers);
-                    break;
-                }
-                case 5 -> {
-                    // Return
-                    return;
-                }
-            }
-            // Call lai main menu
-            input = inputDisplayInfo();
-        } while (input >= 1 && input <= 5);
     }
 
     public int inputUpdateInfo() {
@@ -135,11 +90,11 @@ public class Menu {
             // Xu ly tung lua chon
             switch (input) {
                 case 1 -> {
-                    staffHandle.deleteStaff(sc, inputControl, administrators, managers, marketers);
+                    staffHandle.deleteStaff(sc, inputControl, allEmployees);
                     break;
                 }
                 case 2 -> {
-                    staffHandle.editStaff(sc, inputControl, administrators, managers, marketers);
+                    staffHandle.editStaff(sc, inputControl, allEmployees);
                     break;
                 }
                 case 3 -> {
@@ -149,6 +104,38 @@ public class Menu {
             }
             // Call lai main menu
             input = inputUpdateInfo();
+        } while (input >= 1 && input <= 3);
+    }
+
+    public int inputSortField() {
+        System.out.println("CHOOSE WHAT TO SORT");
+        System.out.println("1. By name");
+        System.out.println("2. By income");
+        System.out.println("3. Return");
+
+        return inputControl.getInput(sc, 1, 3);
+    }
+
+    public void sortStaff() {
+        int input = inputSortField();
+        do {
+            // Xu ly tung lua chon
+            switch (input) {
+                case 1 -> {
+                    staffHandle.sortStaff(sc, inputControl, allEmployees, "name");
+                    break;
+                }
+                case 2 -> {
+                    staffHandle.sortStaff(sc, inputControl, allEmployees, "income");
+                    break;
+                }
+                case 3 -> {
+                    // Return
+                    return;
+                }
+            }
+            // Call lai main menu
+            input = inputSortField();
         } while (input >= 1 && input <= 3);
     }
 
