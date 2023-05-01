@@ -4,39 +4,16 @@ import java.util.List;
 
 import service.IUser;
 
-public class Staff extends Person implements IUser {
-    private int staffId;
+public class Manager extends Person implements IUser {
     private UserRole userRole;
     private String username;
     private String password;
     private String email;
     private double basicSalary;
     private double rateOfBonus;
-    private UserStatus userStatus;
     private List<Request> requests;
 
-    public Staff() {
-    }
-    public Staff(int staffId, UserRole userRole, String personId, String username, String password, String email,
-    String name, String gender, int age, String address, UserStatus userStatus) {
-        this.staffId = staffId;
-        this.userRole = UserRole.STAFF;
-        this.personId = personId;            
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.name = name;
-        this.gender = gender;
-        this.age = age;
-        this.address = address;
-        this.userStatus = userStatus;
-    }
-    public int getStaffId() {
-        return this.staffId;
-    }
-
-    public void setStaffId(int staffId) {
-        this.staffId = staffId;
+    public Manager() {
     }
 
     @Override
@@ -79,15 +56,6 @@ public class Staff extends Person implements IUser {
         this.email = email;
     }
 
-    // @Override
-    public UserStatus getUserStatus() {
-        return this.userStatus;
-    }
-
-    // @Override
-    public void setUserStatus(UserStatus userStatus) {
-        this.userStatus = userStatus;
-    }
     public double getBasicSalary() {
         return this.basicSalary;
     }
@@ -115,13 +83,11 @@ public class Staff extends Person implements IUser {
     @Override
     public String toString() {
         return "{" +
-                " staffId='" + getStaffId() + "'" +
-                " staffName='" + getName() + "'" +
-                ", username='" + getUsername() + "'" +
+                " username='" + getUsername() + "'" +
+                " name='" + getName() + "'" +
                 ", password='" + getPassword() + "'" +
                 ", basicSalary='" + getBasicSalary() + "'" +
                 ", bonus='" + getRateOfBonus() + "'" +
                 "} \n";
     }
-
 }

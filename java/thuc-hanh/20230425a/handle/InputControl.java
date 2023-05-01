@@ -5,54 +5,31 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class InputControl {
-
     public int getInput(Scanner sc, Integer min, Integer max) {
-        int input = 0;
-        String inputString = "";
-        while (true) {
-            System.out.print("Enter an integer number " + valueRange(String.valueOf(min), String.valueOf(max)) + ": ");
-            inputString = sc.nextLine().trim();
-
-            if (inputString.isEmpty()) {
-                System.out.println("Empty line, please enter an integer number "
-                        + valueRange(String.valueOf(min), String.valueOf(max)) + ": ");
-                continue;
+        int input;
+        do {
+            System.out.println("Please enter a number " + valueRange(String.valueOf(min), String.valueOf(max)) + ":");
+            // Yeu cau gia tri la so
+            while (!sc.hasNextInt()) {
+                System.out.println("Please enter a number " + valueRange(String.valueOf(min), String.valueOf(max)) + ":");
+                sc.nextLine();
             }
-
-            try {
-                input = Integer.parseInt(inputString);
-                if (stopCondition(String.valueOf(min), String.valueOf(max), input, null))
-                    break;
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input, please enter a valid integer number "
-                        + valueRange(String.valueOf(min), String.valueOf(max)) + ": ");
-            }
-        }
+            input = Integer.parseInt(sc.nextLine());
+        } while (!stopCondition(String.valueOf(min), String.valueOf(max), input, null));
         return input;
     }
 
     public double getInput(Scanner sc, Double min, Double max) {
-        double input = 0.0;
-        String inputString = "";
-        while (true) {
-            System.out.print("Enter a double number " + valueRange(String.valueOf(min), String.valueOf(max)) + ": ");
-            inputString = sc.nextLine().trim();
-
-            if (inputString.isEmpty()) {
-                System.out.println("Empty line, please enter a double number "
-                        + valueRange(String.valueOf(min), String.valueOf(max)) + ": ");
-                continue;
+        double input;
+        do {
+            System.out.println("Please enter a number " + valueRange(String.valueOf(min), String.valueOf(max)) + ":");
+            // Yeu cau gia tri la so
+            while (!sc.hasNextDouble()) {
+                System.out.println("Please enter a number " + valueRange(String.valueOf(min), String.valueOf(max)) + ":");
+                sc.nextLine();
             }
-
-            try {
-                input = Double.parseDouble(inputString);
-                if (stopCondition(String.valueOf(min), String.valueOf(max), null, input))
-                    break;
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input, please enter a valid double number "
-                        + valueRange(String.valueOf(min), String.valueOf(max)) + ": ");
-            }
-        }
+            input = Double.parseDouble(sc.nextLine());
+        } while (!stopCondition(String.valueOf(min), String.valueOf(max), null, input));
         return input;
     }
 
@@ -69,9 +46,8 @@ public class InputControl {
     }
 
     public boolean stopCondition(String minStr, String maxStr, Integer inputInt, Double inputDouble) {
-        // inputDouble truyen vao null -> dang input so integer
         if (inputDouble == null) {
-            // Convert 02 so min max truyen vao thanh Int
+            //Convert 02 so min max truyen vao thanh Int
             Integer min = 0;
             Integer max = 0;
             try {
@@ -86,8 +62,7 @@ public class InputControl {
             } catch (NumberFormatException e) {
                 max = null;
             }
-            // Tra ve true neu input nam trong range min max
-            // min max deu null -> khong gioi han gia tri -> mac dinh la true
+            //Tra ve true neu input nam trong range min max
             if (min == null && max == null) {
                 return true;
             } else if (min == null) {
@@ -109,9 +84,8 @@ public class InputControl {
                     return false;
                 }
             }
-            // inputInt null -> dang input so double
-        } else if (inputInt == null) {
-            // Convert 02 so min max truyen vao thanh Double
+        } else {
+            //Convert 02 so min max truyen vao thanh Double
             Double min = 0.0;
             Double max = 0.0;
             try {
@@ -126,7 +100,7 @@ public class InputControl {
             } catch (NumberFormatException e) {
                 max = null;
             }
-            // Tra ve true neu input nam trong range min max
+            //Tra ve true neu input nam trong range min max
             if (min == null && max == null) {
                 return true;
             } else if (min == null) {
@@ -148,8 +122,7 @@ public class InputControl {
                     return false;
                 }
             }
-        } else
-            return false;
+        }
     }
 
     public String getEmail(Scanner sc) {
@@ -163,8 +136,7 @@ public class InputControl {
 
     public boolean emailVerify(String email) {
         if (email != null) {
-            Pattern emailFormat = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
-                    Pattern.CASE_INSENSITIVE);
+            Pattern emailFormat = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
             Matcher hasFormat = emailFormat.matcher(email);
             return hasFormat.matches();
         } else
@@ -174,15 +146,13 @@ public class InputControl {
     public String getPassword(Scanner sc) {
         String password = sc.nextLine();
         while (password == null || !passwordVerify(password)) {
-            System.out.println(
-                    "Password must be 7-15-character long, contain at least 01 capitalized letter and 01 special character:");
+            System.out.println("Password must be 7-15-character long, contain at least 01 capitalized letter and 01 special character:");
             password = sc.nextLine();
         }
         return password;
     }
 
-    // password dài từ 7 đến 15 ký tự, chứa ít nhất 1 ký tự in hoa, 1 ký tự đặc biệt
-    // (. , - _ ;)
+    //    password dài từ 7 đến 15 ký tự, chứa ít nhất 1 ký tự in hoa, 1 ký tự đặc biệt (. , - _ ;)
     public boolean passwordVerify(String password) {
         if (password.length() >= 7 && password.length() <= 15) {
             Pattern capitalized = Pattern.compile("[A-Z]");
@@ -195,14 +165,5 @@ public class InputControl {
 
         } else
             return false;
-    }
-
-    public String getNonEmptyString(Scanner sc) {
-        String returnString = sc.nextLine().trim();
-        while (returnString.isEmpty()) {
-            System.out.print("Enter a non-empty string: ");
-            returnString = sc.nextLine().trim();
-        }
-        return returnString;
     }
 }

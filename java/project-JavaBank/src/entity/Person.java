@@ -1,28 +1,22 @@
 package entity;
 
-public class Person {
-    private String id;
-    private String name;
-    private int age;
-    private String address;
-
+public abstract class Person {
+    protected String personId;
+    protected String name;
+    protected String gender;
+    protected int age;
+    protected String address;
 
     public Person() {
+
     }
 
-    public Person(String id, String name, int age, String address) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-        this.address = address;
+    public String getPersonId() {
+        return this.personId;
     }
 
-    public String getId() {
-        return this.id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public void setPersonId(String personId) {
+        this.personId = personId;
     }
 
     public String getName() {
@@ -31,6 +25,14 @@ public class Person {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getGender() {
+        return this.gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public int getAge() {
@@ -52,11 +54,12 @@ public class Person {
     @Override
     public String toString() {
         return "{" +
-            " id='" + getId() + "'" +
-            ", name='" + getName() + "'" +
-            ", age='" + getAge() + "'" +
-            ", address='" + getAddress() + "'" +
-            "}";
+                " personId='" + getPersonId() + "'" +
+                ", name='" + getName() + "'" +
+                ", gender='" + getGender() + "'" +
+                ", age='" + getAge() + "'" +
+                ", address='" + getAddress() + "'" +
+                "}";
     }
 
 }

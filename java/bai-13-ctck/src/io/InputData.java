@@ -112,7 +112,6 @@ public class InputData {
 
     public List<IEmployee> mergeData(List<Administrator> administrators, List<Manager> managers,
             List<Marketer> marketers) {
-
         List<IEmployee> combinedResult = new ArrayList<>();
         combinedResult.addAll(administrators);
         combinedResult.addAll(managers);

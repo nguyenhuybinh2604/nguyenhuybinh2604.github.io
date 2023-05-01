@@ -1,0 +1,65 @@
+public <T extends User> void importPerson(Workbook workbook, Map<String, T> users) {
+    String sheetName = "Person";
+    Sheet datatypeSheet = workbook.getSheet(sheetName);
+    Iterator<Row> iterator = datatypeSheet.iterator();
+    Row firstRow = iterator.next();
+    Cell firstCell = firstRow.getCell(0);
+    while (iterator.hasNext()) {
+        Row currentRow = iterator.next();
+        String personId = currentRow.getCell(0).getStringCellValue();
+        if (personId != null) {
+            for (T user : users.values()) {
+                if (user.getPersonId().equals(personId)) {
+                    user.setName(currentRow.getCell(1) == null ? "" : currentRow.getCell(1).getStringCellValue());
+                    user.setSex(currentRow.getCell(2) == null ? "" : currentRow.getCell(2).getStringCellValue());
+                    user.setAge((int) (currentRow.getCell(3) == null ? 0 : currentRow.getCell(3).getStringCellValue()));
+                    user.setAddress(currentRow.getCell(4) == null ? "" : currentRow.getCell(4).getStringCellValue());
+                    break;
+                }
+            }
+        }
+    }
+}
+
+
+
+public <T extends User> void importUsers(Workbook workbook, Map<String, Object> users, Class<T> clazz, String sheetName) {
+    Sheet datatypeSheet = workbook.getSheet(sheetName);
+    Iterator<Row> iterator = datatypeSheet.iterator();
+    Row firstRow = iterator.next();
+    Cell firstCell = firstRow.getCell(0);
+    while (iterator.hasNext()) {
+        Row currentRow = iterator.next();
+        T user = null;
+        try {
+            user = clazz.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        if (user != null) {
+            user.setPersonId(currentRow.getCell(1) == null ? "" : currentRow.getCell(1).getStringCellValue());
+            user.setUsername(currentRow.getCell(2) == null ? "" : currentRow.getCell(2).getStringCellValue());
+            user.setPassword(currentRow.getCell(3) == null ? "" : currentRow.getCell(3).getStringCellValue());
+            user.setEmail(currentRow.getCell(4) == null ? "" : currentRow.getCell(4).getStringCellValue());
+            if (user instanceof Customer) {
+                Customer customer = (Customer) user;
+                customer.setUserRole(UserRole.CUSTOMER);
+                customer.setCustomerId((int) (currentRow.getCell(0) == null ? 0 : currentRow.getCell(0).getNumericCellValue()));
+                String creditRatingStr = currentRow.getCell(5) == null ? "" : currentRow.getCell(5).getStringCellValue();
+                customer.setCreditRating(customer.toCreditRating(creditRatingStr));
+            } else if (user instanceof Staff) {
+                Staff staff = (Staff) user;
+                staff.setUserRole(UserRole.STAFF);
+                staff.setStaffId((int) (currentRow.getCell(0) == null ? 0 : currentRow.getCell(0).getNumericCellValue()));
+                staff.setBasicSalary(currentRow.getCell(5) == null ? 0 : currentRow.getCell(5).getNumericCellValue());
+                staff.setRateOfBonus(currentRow.getCell(6) == null ? 0 : currentRow.getCell(6).getNumericCellValue());
+            } else if (user instanceof Manager) {
+                Manager manager = (Manager) user;
+                manager.setUserRole(UserRole.MANAGER);
+                manager.setBasicSalary(currentRow.getCell(4) == null ? 0 : currentRow.getCell(4).getNumericCellValue());
+                manager.setRateOfBonus(currentRow.getCell(5) == null ? 0 : currentRow.getCell(5).getNumericCellValue());
+            }
+            users.put(user.getUsername(), user);
+        }
+    }
+}

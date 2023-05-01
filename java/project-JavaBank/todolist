@@ -1,0 +1,78 @@
+1. Setup login system by role  -> done 30.04
+a. Customer
+b. Staff
+c. Manager
+
+
+2. User Register -> done 01.05
+a. Customer
+private String customerId; -> auto assigned (max CusId)
+    private List<Product> products; -> blank
+    private List<Request> requests; -> blank
+    private List<Transaction> transactions; -> blank
+    private CreditRating creditRating; -> staff assigns
+    private UserRole userRole; -> auto assigned (CUSTOMER)
+    private String username;-> user input, nonblank, unique
+    private String password;-> user input, nonblank
+    protected String personId; -> user input, nonblank, unique
+    protected String name; -> user input, nonblank
+    protected String sex; -> user input, nonblank
+    protected int age; -> user input, nonblank
+    protected String address; -> user input, nonblank
+    protected String email; -> user input, nonblank, unique
+b. Staff
+this.staffId = staffId;
+        this.userRole = userRole;-> auto assigned (STAFF)
+        this.username = username;-> user input, nonblank, unique
+        this.password = password;-> user input, nonblank
+        this.basicSalary = basicSalary;-> manager assigns
+        this.rateOfBonus = rateOfBonus;-> manager assigns
+        protected String personId; -> user input, nonblank, unique
+    protected String name; -> user input, nonblank
+    protected String sex; -> user input, nonblank
+    protected int age; -> user input, nonblank
+    protected String address; -> user input, nonblank
+    protected String email; -> user input, nonblank, unique
+    UserStatus -> INACTIVE by default (manager approves -> change to active)
+c. Manager --> system pre-sets up
+private UserRole userRole;-> auto assigned (MANAGER)
+    private String username;-> user input, nonblank, unique
+    private String password;-> user input, nonblank
+    private double basicSalary;-> auto assigned (200% x avgsalary(staff))
+    private double rateOfBonus;-> auto assigned (5% bank income)
+
+
+5. Sample data preparation + Input data.
+loans
+protected String productId; -> auto generates
+    protected LocalDate valueDate;-> user input, nonblank
+    protected LocalDate maturityDate;-> user input, nonblank (account -> blank)
+    protected String currency;-> user input, nonblank
+    protected String customerId;-> auto assigned
+    protected String staffId;-> manager assigns
+    protected double interestRate;
+    protected double balance;-> user input
+    protected double convertedBalance; -> auto assigned
+
+Customer functions:
+    public int inputCustomer() {
+        System.out.println("SELECT AN OPTION");
+        System.out.println("1. View info");
+        System.out.println("2. Add balance");
+        System.out.println("3. Apply for loans");
+        System.out.println("4. Open savings");
+        System.out.println("5. Foreign exchange");
+        System.out.println("6. Fund transfer");
+        System.out.println("7. Transaction history");
+        System.out.println("8. Edit personal info");
+        System.out.println("9. Return");
+        System.out.println("0. Exit");
+
+        return inputControl.getInput(sc, 0, 9);
+    }
+
+accounts
+savings
+transactions
+6. Form list of products all users. -> khong can thiet vi nhu the tao ra double ban sao ke
+7. hoan thien cac phan trinh bay
