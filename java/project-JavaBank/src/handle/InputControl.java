@@ -1,5 +1,9 @@
 package handle;
 
+import entity.CreditRating;
+import entity.ProductStatus;
+import entity.ProductType;
+
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -204,5 +208,68 @@ public class InputControl {
             returnString = sc.nextLine().trim();
         }
         return returnString;
+    }
+
+    // return credit rating from a str
+    public CreditRating toCreditRating(String ratingStr) {
+        switch (ratingStr) {
+            case "A" -> {
+                return CreditRating.A;
+            }
+            case "B" -> {
+                return CreditRating.B;
+            }
+            case "C" -> {
+                return CreditRating.C;
+            }
+            default -> {
+                return CreditRating.UNKNOWN;
+            }
+        }
+    }
+    // return credit rating from a str
+    public String toCreditRatingStr(CreditRating creditRating) {
+        switch (creditRating) {
+            case A -> {
+                return "A";
+            }
+            case B -> {
+                return "B";
+            }
+            case C -> {
+                return "C";
+            }
+            default -> {
+                return "";
+            }
+        }
+    }
+    // return product type from a str
+    public ProductType toProductType(String productTypeStr) {
+        switch (productTypeStr) {
+            case "LOAN" -> {
+                return ProductType.LOAN;
+            }
+            case "SAVING" -> {
+                return ProductType.SAVING;
+            }
+            case "ACCOUNT" -> {
+                return ProductType.ACCOUNT;
+            }
+            default -> {
+                return ProductType.UNKNOWN;
+            }
+        }
+    }
+
+    public ProductStatus toProductStatus(String productStatusStr) {
+        switch (productStatusStr) {
+            case "ACTIVE":
+                return ProductStatus.ACTIVE;
+            case "INACTIVE":
+                return ProductStatus.INACTIVE;
+            default:
+                return ProductStatus.LOCKED;
+        }
     }
 }

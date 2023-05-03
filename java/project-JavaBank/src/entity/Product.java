@@ -3,34 +3,63 @@ package entity;
 import java.time.LocalDate;
 
 public abstract class Product {
-
+    protected int customerId;
+    protected Integer staffId;
+    protected LocalDate valueDate;
+    protected LocalDate maturityDate;
+    protected Integer tenor;
+    protected String currency;
+    protected double balance;
+    protected double convertedBalance;
+    protected double interestRate;
+    protected ProductStatus productStatus;
+    protected ProductType productType;
 
     public Product() {
     }
 
-    public Product(LocalDate valueDate, LocalDate maturityDate, String currency, String customerId,
-            String staffId, double interestRate, double balance, double convertedBalance) {
-    
-        this.valueDate = valueDate;
-        this.maturityDate = maturityDate;
-        this.currency = currency;
+    public Product(int customerId, Integer staffId, LocalDate valueDate, LocalDate maturityDate, Integer tenor, String currency,
+                   double balance, double convertedBalance,
+                   double interestRate, ProductStatus productStatus, ProductType productType) {
         this.customerId = customerId;
         this.staffId = staffId;
-        this.interestRate = interestRate;
+        this.valueDate = valueDate;
+        this.maturityDate = maturityDate;
+        this.tenor = tenor;
+        this.currency = currency;
         this.balance = balance;
         this.convertedBalance = convertedBalance;
+        this.interestRate = interestRate;
+        this.productStatus = productStatus;
+        this.productType = productType;
     }
 
-    public abstract String getProductId();
+    public abstract int getProductId();
 
-    public abstract void setProductId(String productId);
+    public abstract void setProductId(int productId);
+
+    public int getCustomerId() {
+        return this.customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
+
+    public Integer getStaffId() {
+        return this.staffId;
+    }
+
+    public void setStaffId(Integer staffId) {
+        this.staffId = staffId;
+    }
 
     public LocalDate getValueDate() {
         return this.valueDate;
     }
 
     public void setValueDate(LocalDate valueDate) {
-        this.valueDate = valueDate;
+        if (valueDate != null) this.valueDate = valueDate;
     }
 
     public LocalDate getMaturityDate() {
@@ -38,7 +67,15 @@ public abstract class Product {
     }
 
     public void setMaturityDate(LocalDate maturityDate) {
-        this.maturityDate = maturityDate;
+        if (maturityDate != null) this.maturityDate = maturityDate;
+    }
+
+    public Integer getTenor() {
+        return this.tenor;
+    }
+
+    public void setTenor(Integer tenor) {
+        this.tenor = tenor;
     }
 
     public String getCurrency() {
@@ -47,30 +84,6 @@ public abstract class Product {
 
     public void setCurrency(String currency) {
         this.currency = currency;
-    }
-
-    public String getCustomerId() {
-        return this.customerId;
-    }
-
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-
-    public String getStaffId() {
-        return this.staffId;
-    }
-
-    public void setStaffId(String staffId) {
-        this.staffId = staffId;
-    }
-
-    public double getInterestRate() {
-        return this.interestRate;
-    }
-
-    public void setInterestRate(double interestRate) {
-        this.interestRate = interestRate;
     }
 
     public double getBalance() {
@@ -89,18 +102,29 @@ public abstract class Product {
         this.convertedBalance = convertedBalance;
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-                " productId='" + getProductId() + "'" +
-                ", valueDate='" + getValueDate() + "'" +
-                ", maturityDate='" + getMaturityDate() + "'" +
-                ", currency='" + getCurrency() + "'" +
-                ", customerId='" + getCustomerId() + "'" +
-                ", interestRate='" + getInterestRate() + "'" +
-                ", balance='" + getBalance() + "'" +
-                ", convertedBalance='" + getConvertedBalance() + "'" +
-                "}";
+    public double getInterestRate() {
+        return this.interestRate;
     }
 
+    public void setInterestRate(double interestRate) {
+        this.interestRate = interestRate;
+    }
+
+    public ProductStatus getProductStatus() {
+        return this.productStatus;
+    }
+
+    public void setProductStatus(ProductStatus productStatus) {
+        this.productStatus = productStatus;
+    }
+
+    public ProductType getProductType() {
+        return this.productType;
+    }
+
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
+    }
+
+    public abstract String toString();
 }

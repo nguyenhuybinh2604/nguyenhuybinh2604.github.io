@@ -55,12 +55,14 @@ protected String productId; -> auto generates
     protected double convertedBalance; -> auto assigned
 
 Customer functions:
-    public int inputCustomer() {
+    public int inputCustomer() { if user active
         System.out.println("SELECT AN OPTION");
-        System.out.println("1. View info");
+        System.out.println("1. View info"); -> can view, if not active -> view basic info only
         System.out.println("2. Add balance");
+                            3. Open accounts
         System.out.println("3. Apply for loans");
         System.out.println("4. Open savings");
+
         System.out.println("5. Foreign exchange");
         System.out.println("6. Fund transfer");
         System.out.println("7. Transaction history");
@@ -73,6 +75,10 @@ Customer functions:
 
 accounts
 savings
-transactions
-6. Form list of products all users. -> khong can thiet vi nhu the tao ra double ban sao ke
-7. hoan thien cac phan trinh bay
+02.05 done importing all products
+02.05 : link all products to customers done
+03.05 datainput after data import update status of products (pass maturity -> inactive)
+transactions log
+6. Form list of products all users done, each is a link to main product list
+7. Generate rates, convertedBalance, maturityDate (at product creation & loan activation!)
+x. hoan thien cac phan trinh bay

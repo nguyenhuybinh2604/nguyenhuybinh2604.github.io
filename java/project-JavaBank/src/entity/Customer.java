@@ -11,7 +11,7 @@ public class Customer extends Person implements IUser {
     private String password;
     private String email;
     private CreditRating creditRating;
-    private List<IProduct> products;
+    private List<Product> products;
     private List<Request> requests;
     private List<Transaction> transactions;
 
@@ -85,33 +85,15 @@ public class Customer extends Person implements IUser {
         return this.creditRating;
     }
 
-    // return credit rating from a str
-    public CreditRating toCreditRating(String ratingStr) {
-        switch (ratingStr) {
-            case "A": {
-                return CreditRating.A;
-            }
-            case "B": {
-                return CreditRating.B;
-            }
-            case "C": {
-                return CreditRating.C;
-            }
-            default: {
-                return CreditRating.UNKNOWN;
-            }
-        }
-    }
-
     public void setCreditRating(CreditRating creditRating) {
         this.creditRating = creditRating;
     }
 
-    public List<IProduct> getProducts() {
+    public List<Product> getProducts() {
         return this.products;
     }
 
-    public void setProducts(List<IProduct> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
 

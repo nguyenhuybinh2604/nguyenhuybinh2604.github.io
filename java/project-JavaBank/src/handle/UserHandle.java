@@ -16,7 +16,8 @@ public class UserHandle {
         String username = inputControl.getNonEmptyString(sc);
         if (users.containsKey(username)) {
             IUser user = (IUser) users.get(username);
-            if (user.getUserRole() == userRole) {
+            if (user.getUserRole() == userRole) { // to ensure the username entered here match the userrole at the menu
+                //eg. customer cant log in using staff username
                 System.out.println("Enter password:");
                 String password = sc.nextLine(); // no need to check password format at login
                 if (user.getPassword().equals(password)) {
@@ -90,12 +91,16 @@ public class UserHandle {
                 Customer customer = new Customer(id, userRole, personId, username, password, email, name, gender,
                         age, address);
                 users.put(username, customer);
+                System.out.println("Customer's user has been registered");
+                break;
             }
             case STAFF: {
                 Staff staff = new Staff(id, userRole, personId, username, password, email, name, gender, age, address,
                         UserStatus.INACTIVE);
                 users.put(username, staff);
                 // them code add staff register to manager's request
+                System.out.println("Staff's user has been submitted for register");
+                break;
             }
         }
     }
@@ -124,26 +129,17 @@ public class UserHandle {
 
     private int getNextId(Map<String, Object> users, UserRole userRole) {
         int maxId = 0;
-        switch (userRole) {
-            case CUSTOMER: {
-                for (Map.Entry<String, Object> entry : users.entrySet()) {
-                    int id = ((Customer) entry.getValue()).getCustomerId();
-                    if (id > maxId) {
-                        maxId = id;
-                    }
-                }
-                return ++maxId;
+        for (Map.Entry<String, Object> entry : users.entrySet()) {
+            if (users.entrySet().getClass().getSimpleName().equals("Customer") && userRole == UserRole.CUSTOMER) {
+                int id = ((Customer) entry.getValue()).getCustomerId();
+                if (id > maxId) maxId = id;
             }
-            case STAFF: {
-                for (Map.Entry<String, Object> entry : users.entrySet()) {
-                    int id = ((Staff) entry.getValue()).getStaffId();
-                    if (id > maxId) {
-                        maxId = id;
-                    }
-                }
-                return ++maxId;
+            else if (users.entrySet().getClass().getSimpleName().equals("Staff") && userRole == UserRole.STAFF) {
+                int id = ((Staff) entry.getValue()).getStaffId();
+                if (id > maxId) maxId = id;
             }
         }
-        return 0;
+        return ++maxId;
     }
+
 }

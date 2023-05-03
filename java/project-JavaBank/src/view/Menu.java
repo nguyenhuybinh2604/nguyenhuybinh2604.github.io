@@ -1,18 +1,29 @@
 package view;
 
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
-import entity.UserRole;
+import entity.*;
+import handle.CustomerHandle;
 import handle.InputControl;
+import handle.ProductHandle;
 import handle.UserHandle;
+import io.InputData;
 
 public class Menu {
     Scanner sc = new Scanner(System.in);
     InputControl inputControl = new InputControl();
     UserHandle userHandle = new UserHandle();
-    String loginStatus = "";
-    String activeUsername = "";
+    CustomerHandle customerHandle = new CustomerHandle();
+    ProductHandle productHandle = new ProductHandle();
+    Map<String, Object> users = new HashMap<>();
+    List<Product> products = new ArrayList<>();
+    List<InterestRate> interestRates = new ArrayList<>();
+    List<ExchangeRate> exchangeRates = new ArrayList<>();
+    List<Request> requests = new ArrayList<>();
+    List<Transaction> transactions = new ArrayList<>();
+    InputData inputData = new InputData();
+    String loginStatus;
+    String activeUsername;
 
     public int inputMain() {
         System.out.println("WELCOME TO JAVABANK");
@@ -24,22 +35,20 @@ public class Menu {
         return inputControl.getInput(sc, 0, 3);
     }
 
-    public void callMainMenu(Map<String, Object> users) {
+    public void callMainMenu() {
+        // initial data import
+        inputData.readExcel(inputControl, users, products, interestRates, exchangeRates, requests, transactions);
         int input = inputMain();
         do {
-            // Xu ly tung lua chon
             switch (input) {
                 case 1 -> {
-                    callStartMenu(users, UserRole.CUSTOMER);
-                    break;
+                    callStartMenu(UserRole.CUSTOMER);
                 }
                 case 2 -> {
-                    callStartMenu(users, UserRole.STAFF);
-                    break;
+                    callStartMenu(UserRole.STAFF);
                 }
                 case 3 -> {
-                    callStartMenu(users, UserRole.MANAGER);
-                    break;
+                    callStartMenu(UserRole.MANAGER);
                 }
                 case 0 -> {
                     // Exit
@@ -70,7 +79,7 @@ public class Menu {
         return inputControl.getInput(sc, 0, maxOption);
     }
 
-    public void callStartMenu(Map<String, Object> users, UserRole userRole) {
+    public void callStartMenu(UserRole userRole) {
         int input = inputStart(userRole);
         do {
             // reset login status at begin of each loop
@@ -103,11 +112,11 @@ public class Menu {
                         && !loginStatus.contains("loginFailureWrongUserRole"));
             } else if (input == 2 && userRole != UserRole.MANAGER)
                 userHandle.register(sc, inputControl, users, userRole);
-            else if (input == 2 && userRole == UserRole.MANAGER)
+            else if (input == 2 && userRole == UserRole.MANAGER) // leave uncut to show logic
                 return;
             else if (input == 3 && userRole != UserRole.MANAGER)
                 return;
-            else if (input == 3 && userRole == UserRole.MANAGER) {
+            else if (input == 3 && userRole == UserRole.MANAGER) {// leave uncut to show logic
                 // Exit
                 exitProgram();
             } else if (input == 0) {
@@ -168,75 +177,86 @@ public class Menu {
 
     public void loginSuccess(UserRole userRole, String username) {
         switch (userRole) {
-            case CUSTOMER: {
+            case CUSTOMER -> {
                 callCustomerMenu(username);
-                break;
             }
-            case STAFF: {
+            case STAFF -> {
                 callStaffMenu(username);
-                break;
             }
-            case MANAGER: {
+            case MANAGER -> {
                 callManagerMenu(username);
-                break;
             }
         }
     }
 
-    public int inputCustomer() {
-        System.out.println("SELECT AN OPTION");
+    public int inputCustomer(String username) {
+        System.out.println("WELCOME " + username + ". SELECT AN OPTION");
         System.out.println("1. View info");
         System.out.println("2. Add balance");
-        System.out.println("3. Apply for loans");
-        System.out.println("4. Open savings");
-        System.out.println("5. Foreign exchange");
-        System.out.println("6. Fund transfer");
-        System.out.println("7. Transaction history");
-        System.out.println("8. Edit personal info");
-        System.out.println("9. Return");
+        System.out.println("3. Open account");
+        System.out.println("4. Apply for loans");
+        System.out.println("5. Open savings");
+        System.out.println("6. Foreign exchange");
+        System.out.println("7. Fund transfer");
+        System.out.println("8. Transaction history");
+        System.out.println("9. Edit personal info");
+        System.out.println("10. Return");
         System.out.println("0. Exit");
 
-        return inputControl.getInput(sc, 0, 9);
+        return inputControl.getInput(sc, 0, 10);
     }
 
     public void callCustomerMenu(String username) {
-        int input = inputCustomer();
+        int input = inputCustomer(username);
         do {
-            // Xu ly tung lua chon
             switch (input) {
                 case 1 -> {
                     // View customer info
-                    break;
+                    customerHandle.viewInfo(users, username);
                 }
                 case 2 -> {
                     // add balance
-                    break;
+                    productHandle.addBalance(sc, inputControl, users, exchangeRates, username);
                 }
                 case 3 -> {
-                    // borrow
-                    break;
+                    // open account
+                    productHandle.newAccount(sc, users, products, interestRates, username);
                 }
                 case 4 -> {
-                    // open savings
-                    break;
+                    // borrow
+                    productHandle.newLoan(sc, inputControl, users, products, interestRates, username);
                 }
                 case 5 -> {
-                    // foreign exchange
-                    break;
+                    // open savings
+                    productHandle.newSaving(sc, inputControl, users, products, exchangeRates, interestRates, username);
                 }
                 case 6 -> {
-                    // fund transfer
-                    break;
+                    // foreign exchange
+                    productHandle.foreignExchange(sc, inputControl, users, products, exchangeRates, username);
                 }
                 case 7 -> {
-                    // view transaction history
-                    break;
+                    // fund transfer
+                    productHandle.fundTransfer(sc, inputControl, users, products, exchangeRates, username);
                 }
                 case 8 -> {
-                    // Edit personal info
-                    return;
+                    // view transaction history
                 }
                 case 9 -> {
+                    // Edit personal info
+                    int inputEditInfo = inputEditCustomerInfo();
+                    do {
+                        switch (inputEditInfo) {
+                            case 8:
+                                return;
+                            case 10:
+                                exitProgram();
+                            default:
+                                customerHandle.editInfo(sc, inputControl, users, inputEditInfo, username);
+                        }
+                        inputEditInfo = inputEditCustomerInfo();
+                    } while (inputEditInfo >= 0 && inputEditInfo <= 8);
+                }
+                case 10 -> {
                     // Return to previous menu
                     return;
                 }
@@ -246,12 +266,27 @@ public class Menu {
                 }
             }
             // Call input options
-            input = inputCustomer();
+            input = inputCustomer(username);
         } while (input >= 0 && input <= 9);
     }
 
-    public int inputStaff() {
-        System.out.println("SELECT AN OPTION");
+    public int inputEditCustomerInfo() {
+        System.out.println("SELECT WHAT YOU WANT TO EDIT");
+        System.out.println("1. Personal Id");
+        System.out.println("2. Email address");
+        System.out.println("3. Password");
+        System.out.println("4. Name");
+        System.out.println("5. Gender");
+        System.out.println("6. Age");
+        System.out.println("7. Address");
+        System.out.println("8. Return");
+        System.out.println("0. Exit");
+
+        return inputControl.getInput(sc, 0, 8);
+    }
+
+    public int inputStaff(String username) {
+        System.out.println("WELCOME " + username + ". SELECT AN OPTION");
         System.out.println("1. View customer info");
         System.out.println("2. Approve loan request(s)");
         System.out.println("3. Update credit rating");
@@ -262,7 +297,7 @@ public class Menu {
     }
 
     public void callStaffMenu(String username) {
-        int input = inputStaff();
+        int input = inputStaff(username);
         do {
             switch (input) {
                 case 1 -> {
@@ -274,7 +309,7 @@ public class Menu {
                     break;
                 }
                 case 3 -> {
-                    // update credit rating
+                    // update credit rating, view customers with missing rating
                     break;
                 }
                 case 4 -> {
@@ -287,23 +322,24 @@ public class Menu {
                 }
             }
             // Call input options
-            input = inputStaff();
+            input = inputStaff(username);
         } while (input >= 0 && input <= 4);
     }
 
-    public int inputManager() {
-        System.out.println("SELECT AN OPTION");
+    public int inputManager(String username) {
+        System.out.println("WELCOME " + username + ". SELECT AN OPTION");
         System.out.println("1. View bank info");
-        System.out.println("2. Customer management"); // all customers at this role
-        System.out.println("3. Staff management");
-        System.out.println("4. Return");
+        System.out.println("2. Customer management"); // all customers at this role, view customer requests, assign staff to products with missing staffId
+        System.out.println("3. Staff management"); // set salaries, bonuses, approve customer rating change requests ...
+        System.out.println("4. System setup"); // exchange rates, currencies, interest rates structure
+        System.out.println("5. Return");
         System.out.println("0. Exit");
 
         return inputControl.getInput(sc, 0, 4);
     }
 
     public void callManagerMenu(String username) {
-        int input = inputManager();
+        int input = inputManager(username);
         do {
             switch (input) {
                 case 1 -> {
@@ -325,17 +361,22 @@ public class Menu {
                     // Return to previous menu
                     return;
                 }
+                case 5 -> {
+                    // Return to previous menu
+                    return;
+                }
                 case 0 -> {
                     // Exit
                     exitProgram();
                 }
             }
             // Call input options
-            input = inputManager();
+            input = inputManager(username);
         } while (input >= 0 && input <= 4);
     }
 
     public void exitProgram() {
+        // call data export to excel --> can redesign to run after each completed transaction
         System.out.println("Exiting. Goodbye.");
         System.exit(0);
     }
