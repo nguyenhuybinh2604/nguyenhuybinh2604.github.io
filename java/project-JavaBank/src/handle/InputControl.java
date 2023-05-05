@@ -1,8 +1,6 @@
 package handle;
 
-import entity.CreditRating;
-import entity.ProductStatus;
-import entity.ProductType;
+import entity.*;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -212,64 +210,79 @@ public class InputControl {
 
     // return credit rating from a str
     public CreditRating toCreditRating(String ratingStr) {
-        switch (ratingStr) {
-            case "A" -> {
-                return CreditRating.A;
-            }
-            case "B" -> {
-                return CreditRating.B;
-            }
-            case "C" -> {
-                return CreditRating.C;
-            }
-            default -> {
-                return CreditRating.UNKNOWN;
-            }
-        }
+        return switch (ratingStr) {
+            case "A" -> CreditRating.A;
+            case "B" -> CreditRating.B;
+            case "C" -> CreditRating.C;
+            default -> CreditRating.UNKNOWN;
+        };
     }
+
     // return credit rating from a str
     public String toCreditRatingStr(CreditRating creditRating) {
-        switch (creditRating) {
-            case A -> {
-                return "A";
-            }
-            case B -> {
-                return "B";
-            }
-            case C -> {
-                return "C";
-            }
-            default -> {
-                return "";
-            }
-        }
+        return switch (creditRating) {
+            case A -> "A";
+            case B -> "B";
+            case C -> "C";
+            default -> "";
+        };
     }
+
     // return product type from a str
     public ProductType toProductType(String productTypeStr) {
-        switch (productTypeStr) {
-            case "LOAN" -> {
-                return ProductType.LOAN;
-            }
-            case "SAVING" -> {
-                return ProductType.SAVING;
-            }
-            case "ACCOUNT" -> {
-                return ProductType.ACCOUNT;
-            }
-            default -> {
-                return ProductType.UNKNOWN;
-            }
-        }
+        return switch (productTypeStr) {
+            case "LOAN" -> ProductType.LOAN;
+            case "SAVING" -> ProductType.SAVING;
+            case "ACCOUNT" -> ProductType.ACCOUNT;
+            default -> ProductType.UNKNOWN;
+        };
+    }
+
+    // return str product type
+    public String toProductTypeStr(ProductType productType) {
+        return switch (productType) {
+            case LOAN -> "LOAN";
+            case SAVING -> "SAVING";
+            case ACCOUNT -> "ACCOUNT";
+            default -> "";
+        };
     }
 
     public ProductStatus toProductStatus(String productStatusStr) {
-        switch (productStatusStr) {
-            case "ACTIVE":
-                return ProductStatus.ACTIVE;
-            case "INACTIVE":
-                return ProductStatus.INACTIVE;
-            default:
-                return ProductStatus.LOCKED;
-        }
+        return switch (productStatusStr) {
+            case "ACTIVE" -> ProductStatus.ACTIVE;
+            case "INACTIVE" -> ProductStatus.INACTIVE;
+            case "LOCKED" -> ProductStatus.LOCKED;
+            default -> ProductStatus.UNKNOWN;
+        };
+    }
+
+    public String toProductStatusStr(ProductStatus productStatus) {
+        return switch (productStatus) {
+            case ACTIVE -> "ACTIVE";
+            case INACTIVE -> "INACTIVE";
+            case LOCKED -> "LOCKED";
+            default -> "";
+        };
+    }
+
+    // return product type from a str
+    public UserStatus toUserStatus(String userStatusStr) {
+        return switch (userStatusStr) {
+            case "ACTIVE" -> UserStatus.ACTIVE;
+            case "LOCKED" -> UserStatus.LOCKED;
+            case "INACTIVE" -> UserStatus.INACTIVE;
+            default -> UserStatus.UNKNOWN;
+        };
+    }
+
+    // return str user status
+    public String toUserStatusStr(UserStatus userStatus) {
+        return switch (userStatus) {
+            case ACTIVE -> "ACTIVE";
+            case LOCKED -> "LOCKED";
+            case INACTIVE -> "INACTIVE";
+            default -> "";
+        };
     }
 }

@@ -1,9 +1,9 @@
 package handle;
 
 import entity.*;
-import org.apache.poi.xssf.binary.XSSFBUtils;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 public class ProductHandle {
     public void newAccount(Scanner sc, Map<String, Object> users, List<Product> products,
                            List<InterestRate> interestRates, String username) {
+        // show currently supported CCY
         System.out.println("Choose a currency:");
         String currency = sc.nextLine();
         if (findCurrency(interestRates, ProductType.ACCOUNT, currency) != null) {
@@ -47,8 +48,9 @@ public class ProductHandle {
                 .filter(o -> o.getProductType() == ProductType.ACCOUNT)
                 .collect(Collectors.toMap(Product::getProductId, o -> o));
         if (productMap.size() > 0) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             for (Map.Entry<Integer, Product> entry : productMap.entrySet()) {
-                System.out.println(entry.getValue());
+                System.out.println(entry.getValue().toString(inputControl, formatter));
             }
             System.out.println("Select the account Id to add balance:");
             int accountId = inputControl.getInput(sc, 1, null);
@@ -77,9 +79,10 @@ public class ProductHandle {
         if (productMap.size() > 0) {
             // print all senders' accounts, if any
             int i = 0;
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             for (Map.Entry<Integer, Product> entry : productMap.entrySet()) {
                 if (entry.getValue().getCustomerId() == sender.getCustomerId()) {
-                    System.out.println(entry.getValue());
+                    System.out.println(entry.getValue().toString(inputControl, formatter));
                     i++;
                 }
             }
@@ -170,7 +173,6 @@ public class ProductHandle {
                     System.out.println(displayTenors(interestRates, ProductType.LOAN, currency));
                     int tenor = inputControl.getInput(sc, 1, null);
                     if (findTenor(interestRates, ProductType.LOAN, currency, tenor) != 0) {
-                        // auto calculate matdate basing on tenor
                         System.out.println("Enter borrowing amount:");
                         double balance = inputControl.getInput(sc, 0, null); // converted Balance calculate on loan approval
                         String creditRatingStr = inputControl.toCreditRatingStr(customer.getCreditRating());
@@ -303,7 +305,6 @@ public class ProductHandle {
                 .map(InterestRate::getEffectDate)
                 .max(LocalDate::compareTo)
                 .orElse(null);
-
         if (latestEffectDate != null) { //case when exchange rate table happens to be null -> return 0
             List<InterestRate> filteredInterestRates = interestRates.stream()
                     .filter(o -> o.getEffectDate().isEqual(latestEffectDate))
@@ -319,8 +320,8 @@ public class ProductHandle {
     }
 
     // find latest interest rate by product type, currency, tenor and credit rating
-    private Double getInterestRate(List<InterestRate> interestRates, ProductType productType, String currency,
-                                   Integer tenor, String creditRatingStr) {
+    public Double getInterestRate(List<InterestRate> interestRates, ProductType productType, String currency,
+                                  Integer tenor, String creditRatingStr) {
         // get latest effectDate
         LocalDate latestEffectDate = interestRates.stream()
                 .map(InterestRate::getEffectDate)
@@ -329,31 +330,27 @@ public class ProductHandle {
         if (latestEffectDate != null) {
             List<InterestRate> filteredInterestRates = new ArrayList<>();
             switch (productType) {
-                case ACCOUNT -> { //avoid credit rating str && tenor which are null
-                    filteredInterestRates = interestRates.stream()
-                            .filter(o -> o.getEffectDate().isEqual(latestEffectDate))
-                            .filter(o -> o.getProductType().equals(productType))
-                            .filter(o -> o.getCurrency().equals(currency))
-                            .collect(Collectors.toList());
-                }
+                case ACCOUNT -> //avoid credit rating str && tenor which are null
+                        filteredInterestRates = interestRates.stream()
+                                .filter(o -> o.getEffectDate().isEqual(latestEffectDate))
+                                .filter(o -> o.getProductType().equals(productType))
+                                .filter(o -> o.getCurrency().equals(currency))
+                                .collect(Collectors.toList());
                 case LOAN -> // Interest rate can only be defined with a determined credit rating
-                        {
-                            filteredInterestRates = interestRates.stream()
-                                    .filter(o -> o.getEffectDate().isEqual(latestEffectDate))
-                                    .filter(o -> o.getProductType().equals(productType))
-                                    .filter(o -> o.getCurrency().equals(currency))
-                                    .filter(o -> o.getTenor().equals(tenor))
-                                    .filter(o -> o.getCreditRatingStr().equals(creditRatingStr))
-                                    .collect(Collectors.toList());
-                        }
-                case SAVING -> { //avoid credit rating str which is null
-                    filteredInterestRates = interestRates.stream()
-                            .filter(o -> o.getEffectDate().isEqual(latestEffectDate))
-                            .filter(o -> o.getProductType().equals(productType))
-                            .filter(o -> o.getCurrency().equals(currency))
-                            .filter(o -> o.getTenor().equals(tenor))
-                            .collect(Collectors.toList());
-                }
+                        filteredInterestRates = interestRates.stream()
+                                .filter(o -> o.getEffectDate().isEqual(latestEffectDate))
+                                .filter(o -> o.getProductType().equals(productType))
+                                .filter(o -> o.getCurrency().equals(currency))
+                                .filter(o -> o.getTenor().equals(tenor))
+                                .filter(o -> o.getCreditRatingStr().equals(creditRatingStr))
+                                .collect(Collectors.toList());
+                case SAVING -> //avoid credit rating str which is null
+                        filteredInterestRates = interestRates.stream()
+                                .filter(o -> o.getEffectDate().isEqual(latestEffectDate))
+                                .filter(o -> o.getProductType().equals(productType))
+                                .filter(o -> o.getCurrency().equals(currency))
+                                .filter(o -> o.getTenor().equals(tenor))
+                                .collect(Collectors.toList());
             }
             // Iterate through the filtered list
             for (InterestRate interestRate : filteredInterestRates)
@@ -364,7 +361,7 @@ public class ProductHandle {
     }
 
     // find currency in list of currencies (int rate table)
-    private double getExchangeRate(List<ExchangeRate> exchangeRates, String fromCurrency, String toCurrency) {
+    public double getExchangeRate(List<ExchangeRate> exchangeRates, String fromCurrency, String toCurrency) {
         // get latest effectDate
         LocalDate latestEffectDate = exchangeRates.stream()
                 .map(ExchangeRate::getEffectDate)
@@ -423,13 +420,11 @@ public class ProductHandle {
                     .filter(o -> o.getProductType() == productType)
                     .filter(o -> o.getCurrency().equals(currency))
                     .collect(Collectors.toList());
-
             // get distinct tenors
             List<Integer> distinctTenor = filteredInterestRates.stream()
                     .map(InterestRate::getTenor)
                     .distinct()
                     .collect(Collectors.toList());
-
             // print the distinct tenors
             if (distinctTenor.size() > 0)
                 return distinctTenor.toString();

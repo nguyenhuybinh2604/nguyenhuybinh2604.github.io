@@ -1,6 +1,9 @@
 package entity;
 
+import handle.InputControl;
+
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public abstract class Product {
     protected int customerId;
@@ -126,5 +129,6 @@ public abstract class Product {
         this.productType = productType;
     }
 
-    public abstract String toString();
+    public abstract String toString(InputControl inputControl, DateTimeFormatter formatter);
+
 }

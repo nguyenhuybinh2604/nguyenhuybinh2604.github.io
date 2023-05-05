@@ -16,18 +16,24 @@ public class UserHandle {
         String username = inputControl.getNonEmptyString(sc);
         if (users.containsKey(username)) {
             IUser user = (IUser) users.get(username);
-            if (user.getUserRole() == userRole) { // to ensure the username entered here match the userrole at the menu
-                //eg. customer cant log in using staff username
-                System.out.println("Enter password:");
-                String password = sc.nextLine(); // no need to check password format at login
-                if (user.getPassword().equals(password)) {
-                    return "loginSuccess_" + username;
+            //only continue with ACTIVE users
+            if (user.getUserStatus() == UserStatus.ACTIVE) {
+                if (user.getUserRole() == userRole) { // to ensure the username entered here match the userrole at the menu
+                    //eg. customer cant log in using staff username
+                    System.out.println("Enter password:");
+                    String password = sc.nextLine(); // no need to check password format at login
+                    if (user.getPassword().equals(password)) {
+                        return "loginSuccess_" + username;
+                    } else {
+                        return "loginFailureWrongPassword_" + username;
+                    }
                 } else {
-                    return "loginFailureWrongPassword_" + username;
+                    System.out.println("Wrong username");
+                    return "loginFailureWrongUserRole";
                 }
             } else {
-                System.out.println("Wrong username");
-                return "loginFailureWrongUserRole";
+                System.out.println("User locked. Contact manager");
+                return "loginFailureUserLocked";
             }
         } else {
             System.out.println("Wrong username");
@@ -36,6 +42,7 @@ public class UserHandle {
     }
 
     public String forgotPassword(Scanner sc, InputControl inputControl, Map<String, Object> users, String username) {
+        // add code to allow interaction with only ACTIVE users
         System.out.println("Enter recovery email for " + username + ":");
         String email = inputControl.getNonEmptyString(sc);
         if (((IUser) users.get(username)).getEmail().equals(email)) {
@@ -87,20 +94,18 @@ public class UserHandle {
         String password = inputControl.getPassword(sc);
         int id = getNextId(users, userRole);
         switch (userRole) {
-            case CUSTOMER: {
-                Customer customer = new Customer(id, userRole, personId, username, password, email, name, gender,
-                        age, address);
+            case CUSTOMER -> {
+                Customer customer = new Customer(id, personId, username, password, email, name, gender,
+                        age, address, UserStatus.ACTIVE);
                 users.put(username, customer);
                 System.out.println("Customer's user has been registered");
-                break;
             }
-            case STAFF: {
-                Staff staff = new Staff(id, userRole, personId, username, password, email, name, gender, age, address,
-                        UserStatus.INACTIVE);
+            case STAFF -> {
+                Staff staff = new Staff(id, personId, username, password, email, name, gender, age, address,
+                        UserStatus.LOCKED);
                 users.put(username, staff);
                 // them code add staff register to manager's request
                 System.out.println("Staff's user has been submitted for register");
-                break;
             }
         }
     }
@@ -133,8 +138,7 @@ public class UserHandle {
             if (users.entrySet().getClass().getSimpleName().equals("Customer") && userRole == UserRole.CUSTOMER) {
                 int id = ((Customer) entry.getValue()).getCustomerId();
                 if (id > maxId) maxId = id;
-            }
-            else if (users.entrySet().getClass().getSimpleName().equals("Staff") && userRole == UserRole.STAFF) {
+            } else if (users.entrySet().getClass().getSimpleName().equals("Staff") && userRole == UserRole.STAFF) {
                 int id = ((Staff) entry.getValue()).getStaffId();
                 if (id > maxId) maxId = id;
             }

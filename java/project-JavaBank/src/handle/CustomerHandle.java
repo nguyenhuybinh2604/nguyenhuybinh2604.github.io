@@ -1,43 +1,124 @@
 package handle;
 
-import entity.Customer;
+import entity.*;
+import service.IUser;
 
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class CustomerHandle {
-    public void viewInfo(Map<String, Object> users, String username) {
+    public void overview(SummaryHandle summaryHandle, Map<String, Object> users, String username) {
         Customer customer = (Customer) users.get(username);
-        System.out.printf("%-6s%-30s%-30s%-15s\n", "IDs", "Name", "Username", "Credit rating");
-        System.out.printf("%-6d%-30s%-30s%-15s\n", customer.getCustomerId(), customer.getName(), customer.getUsername(), customer.getCreditRating());
-        System.out.println(customer.getProducts());
+        int customerId = customer.getCustomerId();
+        // get only products belong to the customer
+        List<Product> filteredProducts = customer.getProducts().stream()
+                .filter(o -> o.getProductStatus() != ProductStatus.INACTIVE) //chi lay active & locked
+                .collect(Collectors.toList());
+        // Pivoted Sum
+        Map<Integer, Summary> result = summaryHandle.byCustomer(filteredProducts);
+        // calculate total array
+        Summary total = summaryHandle.getTotal(result);
+        System.out.println("Summary for customer No." + customerId + " - " + customer.getName() + ":");
+        // display total array data
+        summaryHandle.displaySummary(total);
+    }
+
+    public void viewProducts(InputControl inputControl, Map<String, Object> users, ProductType productType, String username) {
+        Customer customer = (Customer) users.get(username);
+        List<Product> filteredProducts = customer.getProducts().stream()
+                .filter(o -> o.getProductType() == productType)
+                .filter(o -> o.getProductStatus() != ProductStatus.INACTIVE) //chi lay active & locked
+                .collect(Collectors.toList());
+        if (filteredProducts.size() > 0) {
+            System.out.printf("%-10s%-10s%12s%12s%10s%10s%30s%30s%8s%10s%10s\n", "IDs", "Staff IDs",
+                    "Value Date", "Maturity", "Tenor (M)", "Currency", "Balance",
+                    "Balance in VND", "IR", "Status", "Type");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            for (Product product : filteredProducts)
+                System.out.println(product.toString(inputControl, formatter));
+        } else System.out.println("No record");
     }
 
     public void editInfo(Scanner sc, InputControl inputControl, Map<String, Object> users, int input, String username) {
-
-
         switch (input) {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-                return;
-            case 9:
-                exi
-                protected String personId; ->user input, nonblank, unique
-
-                protected String email; ->user input, nonblank, unique
-
-                private String password;->user input, nonblank
-                protected String name; ->user input, nonblank
-                protected String sex; ->user input, nonblank
-                protected int age; ->user input, nonblank
-                protected String address; ->user input, nonblank
+            case 1 -> {
+                System.out.println("Enter new personal Id:");
+                String newPersonId = inputControl.getNonEmptyString(sc);
+                if (findPersonId(users, newPersonId) == null || !((Person) users.get(username)).getPersonId().equals(newPersonId)) {
+                    ((Person) users.get(username)).setPersonId(newPersonId);
+                    System.out.println("New personal Id has been set");
+                } else System.out.println("Id is used. Try another Id");
+            }
+            case 2 -> {
+                System.out.println("Enter new email:");
+                String newEmail = inputControl.getEmail(sc);
+                if (findEmail(users, newEmail) == null || !((IUser) users.get(username)).getEmail().equals(newEmail)) {
+                    ((IUser) users.get(username)).setEmail(newEmail);
+                    System.out.println("New email has been set");
+                } else System.out.println("Email is used. Try another email");
+            }
+            case 3 -> {
+                System.out.println("Enter new password (7-15 characters, at least 01 capitalized and 01 special characters):");
+                String newPassword = inputControl.getPassword(sc);
+                ((IUser) users.get(username)).setPassword(newPassword);
+                System.out.println("New password has been set");
+            }
+            case 4 -> {
+                System.out.println("Enter new name:");
+                String newName = inputControl.getNonEmptyString(sc);
+                ((Person) users.get(username)).setName(newName);
+                System.out.println("New name has been set");
+            }
+            case 5 -> {
+                System.out.println("Enter new gender:");
+                String newGender = inputControl.getNonEmptyString(sc);
+                ((Person) users.get(username)).setGender(newGender);
+                System.out.println("New gender has been set");
+            }
+            case 6 -> {
+                System.out.println("Enter new age (>=15):");
+                int newAge = inputControl.getInput(sc, 15, null);
+                ((Person) users.get(username)).setAge(newAge);
+                System.out.println("New age has been set");
+            }
+            case 7 -> {
+                System.out.println("Enter new address:");
+                String newAddress = sc.nextLine(); //nullable, without specific control
+                ((Person) users.get(username)).setAddress(newAddress);
+                System.out.println("New address has been set");
+            }
         }
     }
 
+    //
+    private String findPersonId(Map<String, Object> users, String personId) {
+        for (Object user : users.values()) {
+            if (((Person) user).getPersonId().equals(personId)) {
+                return personId;
+            }
+        }
+        return null;
+    }
+
+    private String findEmail(Map<String, Object> users, String email) {
+        for (Object user : users.values()) {
+            if (((IUser) user).getEmail().equals(email)) {
+                return email;
+            }
+        }
+        return null;
+    }
+
+    public String findCustomer(Map<String, Object> users, int customerId) {
+        for (Object user : users.values()) {
+            if (user.getClass().getSimpleName().equals("Customer")
+                    && ((Customer) user).getCustomerId() == customerId) {
+                return ((Customer) user).getUsername();
+            }
+        }
+        return null;
+    }
 }

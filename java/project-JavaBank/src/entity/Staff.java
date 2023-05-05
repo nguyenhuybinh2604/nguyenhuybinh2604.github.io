@@ -17,11 +17,12 @@ public class Staff extends Person implements IUser {
 
     public Staff() {
     }
-    public Staff(int staffId, UserRole userRole, String personId, String username, String password, String email,
-    String name, String gender, int age, String address, UserStatus userStatus) {
+
+    public Staff(int staffId, String personId, String username, String password, String email,
+                 String name, String gender, int age, String address, UserStatus userStatus) {
         this.staffId = staffId;
         this.userRole = UserRole.STAFF;
-        this.personId = personId;            
+        this.personId = personId;
         this.username = username;
         this.password = password;
         this.email = email;
@@ -31,6 +32,7 @@ public class Staff extends Person implements IUser {
         this.address = address;
         this.userStatus = userStatus;
     }
+
     public int getStaffId() {
         return this.staffId;
     }
@@ -79,15 +81,16 @@ public class Staff extends Person implements IUser {
         this.email = email;
     }
 
-    // @Override
+    @Override
     public UserStatus getUserStatus() {
         return this.userStatus;
     }
 
-    // @Override
+    @Override
     public void setUserStatus(UserStatus userStatus) {
         this.userStatus = userStatus;
     }
+
     public double getBasicSalary() {
         return this.basicSalary;
     }

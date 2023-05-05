@@ -7,6 +7,7 @@ import service.IUser;
 public class Customer extends Person implements IUser {
     private int customerId;
     private UserRole userRole;
+    private UserStatus userStatus;
     private String username;
     private String password;
     private String email;
@@ -18,11 +19,11 @@ public class Customer extends Person implements IUser {
     public Customer() {
     }
 
-    public Customer(int customerId, UserRole userRole, String personId, String username, String password, String email,
-            String name, String gender, int age, String address) {
+    public Customer(int customerId, String personId, String username, String password, String email,
+                    String name, String gender, int age, String address, UserStatus userStatus) {
         this.customerId = customerId;
         this.userRole = UserRole.CUSTOMER;
-        this.personId = personId;            
+        this.personId = personId;
         this.username = username;
         this.password = password;
         this.email = email;
@@ -30,6 +31,7 @@ public class Customer extends Person implements IUser {
         this.gender = gender;
         this.age = age;
         this.address = address;
+        this.userStatus = userStatus;
     }
 
     public int getCustomerId() {
@@ -80,6 +82,16 @@ public class Customer extends Person implements IUser {
         this.email = email;
     }
 
+    @Override
+    public UserStatus getUserStatus() {
+        return this.userStatus;
+    }
+
+    @Override
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
+    }
+
     // get a rating from existing records
     public CreditRating getCreditRating() {
         return this.creditRating;
@@ -111,6 +123,25 @@ public class Customer extends Person implements IUser {
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
+    }
+
+    public double getOutstandingLoanBalance() {
+        double returnValue = 0;
+        for (Product product : products) {
+            if (product.getProductStatus() == ProductStatus.ACTIVE && product.getProductType() == ProductType.LOAN)
+                returnValue = returnValue + product.getConvertedBalance();
+        }
+        return returnValue;
+    }
+
+    public double getOutstandingDepositBalance() {
+        double returnValue = 0;
+        for (Product product : products) {
+            if (product.getProductStatus() == ProductStatus.ACTIVE &&
+                    (product.getProductType() == ProductType.SAVING || product.getProductType() == ProductType.ACCOUNT))
+                returnValue = returnValue + product.getConvertedBalance();
+        }
+        return returnValue;
     }
 
     @Override

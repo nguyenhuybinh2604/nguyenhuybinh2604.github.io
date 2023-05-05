@@ -1,6 +1,9 @@
 package entity;
 
+import handle.InputControl;
+
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Loan extends Product {
     private int loanId;
@@ -35,17 +38,12 @@ public class Loan extends Product {
     }
 
     @Override
-    public String toString() {
-        return "{" +
-                " loanId='" + getProductId() + "'" +
-                ", customerId='" + getCustomerId() + "'" +
-                ", staffId='" + getStaffId() + "'" +
-                ", valueDate='" + getValueDate() + "'" +
-                ", maturityDate='" + getMaturityDate() + "'" +
-                ", currency='" + getCurrency() + "'" +
-                ", balance='" + getBalance() + "'" +
-                ", convertedBalance='" + getConvertedBalance() + "'" +
-                ", interestRate='" + getInterestRate() + "'" +
-                "} \n";
+    public String toString(InputControl inputControl, DateTimeFormatter formatter) {
+        String valDate = valueDate == null ? "" : valueDate.format(formatter);
+        String matDate = maturityDate == null ? "" : valueDate.format(formatter);
+        return String.format("%-10d%-10d%12s%12s%,10d%10s%,30.2f%,30.2f%,7.2f%%%10s%10s", loanId, staffId,
+                valDate, matDate, tenor, currency, balance,
+                convertedBalance, interestRate*100, inputControl.toProductStatusStr(productStatus),
+                inputControl.toProductTypeStr(productType));
     }
 }

@@ -6,6 +6,7 @@ import service.IUser;
 
 public class Manager extends Person implements IUser {
     private UserRole userRole;
+    private UserStatus userStatus;
     private String username;
     private String password;
     private String email;
@@ -54,6 +55,16 @@ public class Manager extends Person implements IUser {
     @Override
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public UserStatus getUserStatus() {
+        return this.userStatus;
+    }
+
+    @Override
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
     }
 
     public double getBasicSalary() {

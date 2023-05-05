@@ -35,10 +35,10 @@ public class InputData {
             importCustomer(workbook, inputControl, users);
 
             // get staff records
-            importStaff(workbook, users);
+            importStaff(inputControl, workbook, users);
 
             // get manager records
-            importManager(workbook, users);
+            importManager(inputControl, workbook, users);
 
             // get person records and match with users
             importPerson(workbook, users);
@@ -88,13 +88,15 @@ public class InputData {
             customer.setUsername(currentRow.getCell(2) == null ? null : currentRow.getCell(2).getStringCellValue());
             customer.setPassword(currentRow.getCell(3) == null ? null : currentRow.getCell(3).getStringCellValue());
             customer.setEmail(currentRow.getCell(4) == null ? null : currentRow.getCell(4).getStringCellValue());
-            String creditRatingStr = currentRow.getCell(5) == null ? null : currentRow.getCell(5).getStringCellValue();
+            String creditRatingStr = currentRow.getCell(5) == null ? "" : currentRow.getCell(5).getStringCellValue();
             customer.setCreditRating(inputControl.toCreditRating(creditRatingStr));
+            String userStatusStr = currentRow.getCell(6) == null ? "" : currentRow.getCell(6).getStringCellValue();
+            customer.setUserStatus(inputControl.toUserStatus(userStatusStr));
             users.put(customer.getUsername(), customer);
         }
     }
 
-    public void importStaff(Workbook workbook, Map<String, Object> users) {
+    public void importStaff(InputControl inputControl, Workbook workbook, Map<String, Object> users) {
         String sheetName = "Staff";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
@@ -111,11 +113,13 @@ public class InputData {
             staff.setEmail(currentRow.getCell(4) == null ? null : currentRow.getCell(4).getStringCellValue());
             staff.setBasicSalary(currentRow.getCell(5) == null ? 0 : currentRow.getCell(5).getNumericCellValue());
             staff.setRateOfBonus(currentRow.getCell(6) == null ? 0 : currentRow.getCell(6).getNumericCellValue());
+            String userStatusStr = currentRow.getCell(7) == null ? "" : currentRow.getCell(7).getStringCellValue();
+            staff.setUserStatus(inputControl.toUserStatus(userStatusStr));
             users.put(staff.getUsername(), staff);
         }
     }
 
-    public void importManager(Workbook workbook, Map<String, Object> users) {
+    public void importManager(InputControl inputControl, Workbook workbook, Map<String, Object> users) {
         String sheetName = "Manager";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
@@ -131,6 +135,8 @@ public class InputData {
             manager.setEmail(currentRow.getCell(3) == null ? null : currentRow.getCell(3).getStringCellValue());
             manager.setBasicSalary(currentRow.getCell(4) == null ? 0 : currentRow.getCell(4).getNumericCellValue());
             manager.setRateOfBonus(currentRow.getCell(5) == null ? 0 : currentRow.getCell(5).getNumericCellValue());
+            String userStatusStr = currentRow.getCell(6) == null ? "" : currentRow.getCell(6).getStringCellValue();
+            manager.setUserStatus(inputControl.toUserStatus(userStatusStr));
             users.put(manager.getUsername(), manager);
         }
     }
@@ -249,6 +255,7 @@ public class InputData {
             loan.setInterestRate(currentRow.getCell(9) == null ? 0 : currentRow.getCell(9).getNumericCellValue());
             String productStatusStr = currentRow.getCell(10) == null ? null : currentRow.getCell(10).getStringCellValue();
             loan.setProductStatus(inputControl.toProductStatus(productStatusStr));
+            //check maturitydate -> if matureed -> producstatus to INACTIVE
             products.add(loan);
         }
     }
@@ -275,6 +282,7 @@ public class InputData {
             saving.setInterestRate(currentRow.getCell(9) == null ? 0 : currentRow.getCell(9).getNumericCellValue());
             String productStatusStr = currentRow.getCell(10) == null ? null : currentRow.getCell(10).getStringCellValue();
             saving.setProductStatus(inputControl.toProductStatus(productStatusStr));
+            //check maturitydate -> if matureed -> producstatus to INACTIVE
             products.add(saving);
         }
     }

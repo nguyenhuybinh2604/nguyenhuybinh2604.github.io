@@ -1,161 +1,124 @@
-//package handle;
-//
-//import java.util.Collections;
-//import java.util.List;
-//import java.util.Scanner;
-//
-//import service.IUser;
-////import service.SortByIncome;
-////import service.SortByName;
-//
-//public class StaffHandle {
-//
-//    public void displayStaffInfo(List<IUser> employees) {
-////        for (IUser iEmployee : employees) {
-////            System.out.println(iEmployee);
-////        }
-//    }
-//
-//    public Integer findEmployee(List<IUser> employees, String employeeId) {
-//        Integer returnValue = null;
-////        for (IUser iEmployee : employees) {
-////            if (iEmployee.getEmployeeId().equals(employeeId)) {
-////                returnValue = employees.indexOf(iEmployee);
-////                break;
-////            }
-////        }
-//        return returnValue;
-//    }
-//
-//    public void findEmployeebyIncome(Scanner sc, InputControl inputControl, List<IUser> employees) {
-////        System.out.println("Please enter From value:");
-////        double fromValue = inputControl.getInput(sc, 0, null);
-////        System.out.println("Please enter To value:");
-////        double toValue = inputControl.getInput(sc, 0, null);
-////        System.out.println("Employees matching income range from " + fromValue + " to " + toValue + " :");
-////        for (IUser iEmployee : employees) {
-////            if (iEmployee.getIncome() >= fromValue && iEmployee.getIncome() <= toValue)
-////                System.out.println(iEmployee);
-////        }
-//    }
-//
-//    public void deleteStaff(Scanner sc, InputControl inputControl, List<IUser> employees) {
-//        // int typeOfEmployee = inputTypeOfEmployee(sc, inputControl);
-//        System.out.println("Enter employee's Id:");
-//        String employeeId = sc.nextLine();
-//        if (findEmployee(employees, employeeId) != null) {
-//            int staffIndex = findEmployee(employees, employeeId);
-//            employees.remove(staffIndex);
-//            System.out.println("Staff Id " + employeeId + " has been removed.");
-//        } else
-//            System.out.println("Staff Id not found.");
-//    }
-//
-//    public int inputEditedField(Scanner sc, InputControl inputControl, String employeeId) {
-//        System.out.println("SELECT FIELD TO EDIT:");
-//        System.out.println("1. Name");
-//        System.out.println("2. Age");
-//        System.out.println("3. Address");
-//        System.out.println("4. Basic salary");
-//        int maxInput = 0;
-//        switch (employeeId.substring(0, employeeId.length() - 3)) {
-//            case "admin": {
-//                maxInput = 4;
-//                break;
-//            }
-//            case "manager": {
-//                System.out.println("5. Role salary");
-//                maxInput = 5;
-//                break;
-//            }
-//            case "marketing": {
-//                System.out.println("5. Sales");
-//                System.out.println("6. Rate of bonus");
-//                maxInput = 6;
-//                break;
-//            }
-//        }
-//        return inputControl.getInput(sc, 1, maxInput);
-//    }
-//
-//    public void editSelectedField(Scanner sc, InputControl inputControl, List<IUser> employees, int staffIndex,
-//            int selectedField) {
-////        System.out.println("Enter new value:");
-////        switch (selectedField) {
-////            case 1: {
-////                String newName = sc.nextLine();
-////                employees.get(staffIndex).setName(newName);
-////                break;
-////            }
-////            case 2: {
-////                int newAge = inputControl.getInput(sc, 1, null);
-////                employees.get(staffIndex).setAge(newAge);
-////                break;
-////            }
-////            case 3: {
-////                String newAddress = sc.nextLine();
-////                employees.get(staffIndex).setAddress(newAddress);
-////                break;
-////            }
-////            case 4: {
-////                double newBasicSalary = inputControl.getInput(sc, 0, null);
-////                employees.get(staffIndex).setSalaryBasic(newBasicSalary);
-////                break;
-////            }
-////            case 5: {
-////                String employeeId = employees.get(staffIndex).getEmployeeId();
-////                if (employeeId.substring(0, employeeId.length() - 3).equals("manager")) {
-////                    double newRoleSalary = inputControl.getInput(sc, 0, null);
-////                    employees.get(staffIndex).setSalaryRole(newRoleSalary);
-////                } else {
-////                    int newSales = inputControl.getInput(sc, 0, null);
-////                    employees.get(staffIndex).setSales(newSales);
-////                }
-////                break;
-////            }
-////            case 6: {
-////                double newRateOfBonus = inputControl.getInput(sc, 0, 1);
-////                employees.get(staffIndex).setRateOfBonus(newRateOfBonus);
-////                break;
-////            }
-////        }
-//    }
-//
-//    public void editStaff(Scanner sc, InputControl inputControl, List<IUser> employees) {
-////        // int typeOfEmployee = inputTypeOfEmployee(sc, inputControl);
-////        System.out.println("Enter employee's Id:");
-////        String employeeId = sc.nextLine();
-////        if (findEmployee(employees, employeeId) != null) {
-////            int staffIndex = findEmployee(employees, employeeId);
-////            int inputEditedField = inputEditedField(sc, inputControl, employeeId);
-////            editSelectedField(sc, inputControl, employees, staffIndex, inputEditedField);
-////            System.out.println("Staff Id " + employeeId + " has been edited.");
-////        } else
-////            System.out.println("Staff Id not found.");
-//    }
-//
-//    public void sortStaff(Scanner sc, InputControl inputControl, List<IUser> employees, String sortField) {
-//        switch (sortField) {
-////            case "name": {
-////                Collections.sort(employees, new SortByName());
-////                System.out.println("After sorted by name:");
-////                displayStaffInfo(employees);
-////                break;
-////            }
-////            case "income": {
-////                Collections.sort(employees, new SortByIncome());
-////                System.out.println("After sorted by income:");
-////                displayStaffInfo(employees);
-////                break;
-////            }
-////        }
-//    }
-//
-//    public void viewTop5Earners(Scanner sc, InputControl inputControl, List<IUser> employees) {
-////        Collections.sort(employees, new SortByIncome());
-////        System.out.println("Top 05 earners are:");
-////        for (int i = 0; i < 5; i++) {
-////            System.out.println(employees.get(i));
-////        }
-//    }
-//}
+package handle;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import entity.*;
+
+public class StaffHandle {
+
+    public void overview(SummaryHandle summaryHandle, Map<String, Object> users, List<Product> products, String staffUsername) {
+        Staff staff = (Staff) users.get(staffUsername);
+        int staffId = staff.getStaffId();
+        // get all products assigned to the staff
+        List<Product> filteredProducts = products.stream()
+                .filter(o -> o.getStaffId() != null)
+                .filter(o -> o.getStaffId() == staffId)
+                .filter(o -> o.getProductStatus() != ProductStatus.INACTIVE) //chi lay active & locked
+                .collect(Collectors.toList());
+        // Pivoted Sum
+        Map<Integer, Summary> result = summaryHandle.byCustomer(filteredProducts);
+        // calculate total array
+        Summary total = summaryHandle.getTotal(result);
+        System.out.println("Summary for staff No." + staffId + " - " + staff.getName() + ":");
+        System.out.printf("%-50s%,33d\n", "Number of customers:", result.size());
+        // display total array data
+        summaryHandle.displaySummary(total);
+    }
+
+    public void viewListOfCustomers(InputControl inputControl, SummaryHandle summaryHandle, CustomerHandle customerHandle,
+                                    Map<String, Object> users, List<Product> products, String staffUsername) {
+        Staff staff = (Staff) users.get(staffUsername);
+        int staffId = staff.getStaffId();
+        // get all products assigned to the staff
+        List<Product> filteredProducts = products.stream()
+                .filter(o -> o.getStaffId() != null)
+                .filter(o -> o.getStaffId() == staffId)
+                .filter(o -> o.getProductStatus() != ProductStatus.INACTIVE) //chi lay active & locked
+                .collect(Collectors.toList());
+        // Pivoted Sum
+        Map<Integer, Summary> result = summaryHandle.byCustomer(filteredProducts);
+        summaryHandle.displayDetail(inputControl, customerHandle, users, result);
+    }
+
+    //only if customer already has credit rating, if not return to update Rating
+    public void approveLoans(Scanner sc, InputControl inputControl, CustomerHandle customerHandle,
+                             ProductHandle productHandle, Map<String, Object> users, List<Product> products,
+                             List<InterestRate> interestRates, List<ExchangeRate> exchangeRates, String staffUsername) {
+        Staff staff = (Staff) users.get(staffUsername);
+        int staffId = staff.getStaffId();
+        // get all locked loans assigned to the staff
+        Map<Integer, Product> productMap = products.stream()
+                .filter(o -> o.getStaffId() != null)
+                .filter(o -> o.getStaffId() == staffId)
+                .filter(o -> o.getProductType() == ProductType.LOAN)
+                .filter(o -> o.getProductStatus() == ProductStatus.LOCKED)
+                .collect(Collectors.toMap(Product::getProductId, o -> o));
+        if (productMap.size() > 0) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            //list all related loans with LOCKED status, choose one
+            for (Product product : productMap.values()) {
+                System.out.println(product.toString(inputControl, formatter));
+            }
+            System.out.println("Select a loan Id:");
+            int loanId = inputControl.getInput(sc, 1, null);
+            if (productMap.containsKey(loanId)) {
+                Product product = productMap.get(loanId);
+                //check whether if bank has enough money
+                int customerId = product.getCustomerId();
+                String customerUsername = customerHandle.findCustomer(users, customerId);
+                if (customerUsername != null) {
+                    Customer customer = (Customer) users.get(customerUsername);
+                    CreditRating creditRating = customer.getCreditRating();
+                    if (creditRating != CreditRating.UNKNOWN) {
+                        System.out.println("SELECT AN OPTION");
+                        System.out.println("1. Approve loan");
+                        System.out.println("2. Decline loan");
+                        int input = inputControl.getInput(sc, 1, 2);
+                        switch (input) {
+                            // approves -> turn ACTIVE, update all loan properties
+                            case 1 -> {
+                                LocalDate valueDate = LocalDate.now();
+                                product.setValueDate(valueDate);
+                                LocalDate maturityDate = valueDate.plusMonths(product.getTenor());
+                                product.setMaturityDate(maturityDate);
+                                double interestRate = productHandle.getInterestRate(interestRates, ProductType.LOAN,
+                                        product.getCurrency(), product.getTenor(), inputControl.toCreditRatingStr(creditRating));
+                                product.setInterestRate(interestRate);
+                                double exchangeRate = productHandle.getExchangeRate(exchangeRates, product.getCurrency(), "VND");
+                                product.setConvertedBalance(product.getBalance() * exchangeRate);
+                                product.setProductStatus(ProductStatus.ACTIVE);
+                                // log a message to customer
+                            }
+                            // declines -> set proposed loan as INACTIVE
+                            case 2 -> {
+                                // log a message to customer
+                                product.setProductStatus(ProductStatus.INACTIVE);
+                            }
+                        }
+                    } else System.out.println("Customer has not been rated. Update credit rating");
+                } else System.out.println("Customer not found");
+            } else System.out.println("Loan Id not found");
+        } else System.out.println("No loan on waiting list");
+    }
+
+    public void updateRating(Scanner sc, InputControl inputControl, CustomerHandle customerHandle, Map<String, Object> users) {
+        System.out.println("Select customer Id:");
+        int customerId = inputControl.getInput(sc, 1, null);
+        // check if customerId exists
+        if (customerHandle.findCustomer(users, customerId) != null) {
+            Customer customer = (Customer) users.get(customerHandle.findCustomer(users, customerId));
+            System.out.println("Enter new credit rating (A, B, C):");
+            String newRating = inputControl.getNonEmptyString(sc);
+            if (newRating.equalsIgnoreCase("A") || newRating.equalsIgnoreCase("B")
+                    || newRating.equalsIgnoreCase("C")) {
+                //create request to manager to update rating
+//                customer.setCreditRating(inputControl.toCreditRating(newRating.toUpperCase(Locale.ROOT)));
+                System.out.println("Rating submitted for approval");
+            } else System.out.println("Must choose A, B or C");
+        } else System.out.println("Customer Id not found");
+    }
+
+}
