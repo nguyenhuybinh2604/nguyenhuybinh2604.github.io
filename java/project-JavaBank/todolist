@@ -87,4 +87,8 @@ x. hoan thien cac phan trinh bay:
 - FX: currency pairs not available
 
 x/ important: borrow on interbank market (manager function) + set prices + add product type INTERBANK T T
- / why return straight to user menu???
+ / why return straight to user menu??? -> done
+x/ if staff got no products: -> done
+x/ does new product assigned linked to staff & customers?
+x/ staff rating update: only customers with related products -> done
+x/ data export -> done (remaining transaction & messages)

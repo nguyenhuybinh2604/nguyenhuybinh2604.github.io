@@ -1,5 +1,5 @@
 package entity;
 
-public class Request {
+public class Message {
     
 }

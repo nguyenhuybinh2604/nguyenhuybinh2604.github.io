@@ -2,6 +2,9 @@ package handle;
 
 import entity.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -199,6 +202,24 @@ public class InputControl {
             return false;
     }
 
+    public LocalDate getLocalDate(Scanner sc, DateTimeFormatter fmt) {
+
+        // Prompt the user to enter a date in the expected format
+        LocalDate date = null;
+        while (date == null) {
+            String input = sc.nextLine();
+
+            try {
+                // Parse the user input as a LocalDate object
+                date = LocalDate.parse(input, fmt);
+            } catch (DateTimeParseException e) {
+                // Handle the exception if the user input is invalid
+                System.out.println("Invalid date. Enter a date in the dd/MM/yyyy format:");
+            }
+        }
+        return date;
+    }
+
     public String getNonEmptyString(Scanner sc) {
         String returnString = sc.nextLine().trim();
         while (returnString.isEmpty()) {
@@ -214,7 +235,7 @@ public class InputControl {
             case "A" -> CreditRating.A;
             case "B" -> CreditRating.B;
             case "C" -> CreditRating.C;
-            default -> CreditRating.UNKNOWN;
+            default -> CreditRating.NA;
         };
     }
 
@@ -224,7 +245,7 @@ public class InputControl {
             case A -> "A";
             case B -> "B";
             case C -> "C";
-            default -> "";
+            default -> "UNKNOWN";
         };
     }
 
@@ -234,7 +255,7 @@ public class InputControl {
             case "LOAN" -> ProductType.LOAN;
             case "SAVING" -> ProductType.SAVING;
             case "ACCOUNT" -> ProductType.ACCOUNT;
-            default -> ProductType.UNKNOWN;
+            default -> ProductType.NA;
         };
     }
 
@@ -253,7 +274,7 @@ public class InputControl {
             case "ACTIVE" -> ProductStatus.ACTIVE;
             case "INACTIVE" -> ProductStatus.INACTIVE;
             case "LOCKED" -> ProductStatus.LOCKED;
-            default -> ProductStatus.UNKNOWN;
+            default -> ProductStatus.NA;
         };
     }
 
@@ -272,7 +293,7 @@ public class InputControl {
             case "ACTIVE" -> UserStatus.ACTIVE;
             case "LOCKED" -> UserStatus.LOCKED;
             case "INACTIVE" -> UserStatus.INACTIVE;
-            default -> UserStatus.UNKNOWN;
+            default -> UserStatus.NA;
         };
     }
 

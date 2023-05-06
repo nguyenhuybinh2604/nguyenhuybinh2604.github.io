@@ -13,7 +13,7 @@ public class Customer extends Person implements IUser {
     private String email;
     private CreditRating creditRating;
     private List<Product> products;
-    private List<Request> requests;
+    private List<Message> messages;
     private List<Transaction> transactions;
 
     public Customer() {
@@ -109,12 +109,12 @@ public class Customer extends Person implements IUser {
         this.products = products;
     }
 
-    public List<Request> getRequests() {
-        return this.requests;
+    public List<Message> getRequests() {
+        return this.messages;
     }
 
-    public void setRequests(List<Request> requests) {
-        this.requests = requests;
+    public void setRequests(List<Message> requests) {
+        this.messages = requests;
     }
 
     public List<Transaction> getTransactions() {

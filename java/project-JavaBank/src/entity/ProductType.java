@@ -4,5 +4,15 @@ public enum ProductType {
     ACCOUNT,
     LOAN,
     SAVING,
-    UNKNOWN
+    NA;
+
+    @Override
+    public String toString() {
+        return switch (this) {
+            case ACCOUNT -> "ACCOUNT";
+            case LOAN -> "LOAN";
+            case SAVING -> "SAVING";
+            default -> "NA";
+        };
+    }
 }

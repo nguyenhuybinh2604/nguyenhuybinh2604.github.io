@@ -12,7 +12,7 @@ public class Manager extends Person implements IUser {
     private String email;
     private double basicSalary;
     private double rateOfBonus;
-    private List<Request> requests;
+    private List<Message> requests;
 
     public Manager() {
     }
@@ -83,11 +83,11 @@ public class Manager extends Person implements IUser {
         this.rateOfBonus = rateOfBonus;
     }
 
-    public List<Request> getRequests() {
+    public List<Message> getRequests() {
         return this.requests;
     }
 
-    public void setRequests(List<Request> requests) {
+    public void setRequests(List<Message> requests) {
         this.requests = requests;
     }
 

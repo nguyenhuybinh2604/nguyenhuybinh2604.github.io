@@ -13,32 +13,40 @@ public class CustomerHandle {
     public void overview(SummaryHandle summaryHandle, Map<String, Object> users, String username) {
         Customer customer = (Customer) users.get(username);
         int customerId = customer.getCustomerId();
-        // get only products belong to the customer
-        List<Product> filteredProducts = customer.getProducts().stream()
-                .filter(o -> o.getProductStatus() != ProductStatus.INACTIVE) //chi lay active & locked
-                .collect(Collectors.toList());
-        // Pivoted Sum
-        Map<Integer, Summary> result = summaryHandle.byCustomer(filteredProducts);
-        // calculate total array
-        Summary total = summaryHandle.getTotal(result);
-        System.out.println("Summary for customer No." + customerId + " - " + customer.getName() + ":");
-        // display total array data
-        summaryHandle.displaySummary(total);
+        if (customer.getProducts().size() > 0) {
+
+            // get only products belong to the customer
+            List<Product> filteredProducts = customer.getProducts().stream()
+                    .filter(o -> o.getProductStatus() != ProductStatus.INACTIVE) //chi lay active & locked
+                    .collect(Collectors.toList());
+
+            // Pivoted Sum
+            Map<Integer, Summary> result = summaryHandle.byCustomer(filteredProducts);
+
+            // calculate total array
+            Summary total = summaryHandle.getTotal(result);
+            System.out.println("Summary for customer No." + customerId + " - " + customer.getName() + ":");
+
+            // display total array data
+            summaryHandle.displaySummary(total);
+        } else System.out.println("No record");
     }
 
     public void viewProducts(InputControl inputControl, Map<String, Object> users, ProductType productType, String username) {
         Customer customer = (Customer) users.get(username);
-        List<Product> filteredProducts = customer.getProducts().stream()
-                .filter(o -> o.getProductType() == productType)
-                .filter(o -> o.getProductStatus() != ProductStatus.INACTIVE) //chi lay active & locked
-                .collect(Collectors.toList());
-        if (filteredProducts.size() > 0) {
-            System.out.printf("%-10s%-10s%12s%12s%10s%10s%30s%30s%8s%10s%10s\n", "IDs", "Staff IDs",
-                    "Value Date", "Maturity", "Tenor (M)", "Currency", "Balance",
-                    "Balance in VND", "IR", "Status", "Type");
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            for (Product product : filteredProducts)
-                System.out.println(product.toString(inputControl, formatter));
+        if (customer.getProducts().size() > 0) {
+            List<Product> filteredProducts = customer.getProducts().stream()
+                    .filter(o -> o.getProductType() == productType)
+                    .filter(o -> o.getProductStatus() != ProductStatus.INACTIVE)
+                    .collect(Collectors.toList());
+            if (filteredProducts.size() > 0) {
+                System.out.printf("%-10s%-10s%12s%12s%10s%10s%30s%30s%8s%10s%10s\n", "IDs", "Staff IDs",
+                        "Value Date", "Maturity", "Tenor (M)", "Currency", "Balance",
+                        "Balance in VND", "IR", "Status", "Type");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                for (Product product : filteredProducts)
+                    System.out.println(product.toString(inputControl, formatter));
+            } else System.out.println("No record");
         } else System.out.println("No record");
     }
 
@@ -95,28 +103,34 @@ public class CustomerHandle {
 
     //
     private String findPersonId(Map<String, Object> users, String personId) {
-        for (Object user : users.values()) {
-            if (((Person) user).getPersonId().equals(personId)) {
-                return personId;
+        if (users.size() > 0) {
+            for (Object user : users.values()) {
+                if (((Person) user).getPersonId().equals(personId)) {
+                    return personId;
+                }
             }
         }
         return null;
     }
 
     private String findEmail(Map<String, Object> users, String email) {
-        for (Object user : users.values()) {
-            if (((IUser) user).getEmail().equals(email)) {
-                return email;
+        if (users.size() > 0) {
+            for (Object user : users.values()) {
+                if (((IUser) user).getEmail().equals(email)) {
+                    return email;
+                }
             }
         }
         return null;
     }
 
     public String findCustomer(Map<String, Object> users, int customerId) {
-        for (Object user : users.values()) {
-            if (user.getClass().getSimpleName().equals("Customer")
-                    && ((Customer) user).getCustomerId() == customerId) {
-                return ((Customer) user).getUsername();
+        if (users.size() > 0) {
+            for (Object user : users.values()) {
+                if (user.getClass().getSimpleName().equals("Customer")
+                        && ((Customer) user).getCustomerId() == customerId) {
+                    return ((Customer) user).getUsername();
+                }
             }
         }
         return null;

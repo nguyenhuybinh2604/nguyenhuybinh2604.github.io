@@ -13,7 +13,7 @@ public class Staff extends Person implements IUser {
     private double basicSalary;
     private double rateOfBonus;
     private UserStatus userStatus;
-    private List<Request> requests;
+    private List<Message> requests;
 
     public Staff() {
     }
@@ -107,11 +107,11 @@ public class Staff extends Person implements IUser {
         this.rateOfBonus = rateOfBonus;
     }
 
-    public List<Request> getRequests() {
+    public List<Message> getRequests() {
         return this.requests;
     }
 
-    public void setRequests(List<Request> requests) {
+    public void setRequests(List<Message> requests) {
         this.requests = requests;
     }
 
