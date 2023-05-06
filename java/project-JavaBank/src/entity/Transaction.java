@@ -1,8 +1,5 @@
 package entity;
 
-import handle.InputControl;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -17,7 +14,7 @@ public class Transaction {
     private double convertedCredit;
     private double convertedDebit;
 
-    public Transaction(LocalDateTime transactionTime) {
+    public Transaction() {
     }
 
     public Transaction(LocalDateTime transactionTime, TransactionType transactionType, int accountId, int customerId,

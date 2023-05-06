@@ -262,19 +262,15 @@ public class Menu {
                                 customerHandle.overview(summaryHandle, users, username);
                             }
                             case 2 -> {
-                                // List of loans
                                 customerHandle.viewProducts(inputControl, users, ProductType.LOAN, username);
                             }
                             case 3 -> {
-                                // List of savings
                                 customerHandle.viewProducts(inputControl, users, ProductType.SAVING, username);
                             }
                             case 4 -> {
-                                // List of accounts
                                 customerHandle.viewProducts(inputControl, users, ProductType.ACCOUNT, username);
                             }
                             case 5 -> {
-                                //transaction history
                                 transactionHandle.viewHistory(sc, inputControl, users, username);
                             }
                             case 6 -> {
