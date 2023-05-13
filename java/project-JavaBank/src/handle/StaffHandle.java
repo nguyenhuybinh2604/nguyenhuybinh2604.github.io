@@ -1,6 +1,7 @@
 package handle;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,7 @@ public class StaffHandle {
         } else System.out.println("Staff not found");
     }
 
-    public void viewListOfCustomers(InputControl inputControl, SummaryHandle summaryHandle, CustomerHandle customerHandle,
+    public void viewListOfCustomers(SummaryHandle summaryHandle, CustomerHandle customerHandle,
                                     Map<String, Object> users, List<Product> products, String staffUsername) {
         if (users != null && users.size() > 0 && users.containsKey(staffUsername)) {
             Staff staff = (Staff) users.get(staffUsername);
@@ -62,8 +63,9 @@ public class StaffHandle {
 
     //only if customer already has credit rating, if not return to update Rating
     public void approveLoans(Scanner sc, InputControl inputControl, CustomerHandle customerHandle,
-                             ProductHandle productHandle, Map<String, Object> users, List<Product> products,
-                             List<InterestRate> interestRates, List<ExchangeRate> exchangeRates, String staffUsername) {
+                             ProductHandle productHandle, BalanceSheet balanceSheet, Map<String, Object> users,
+                             List<Product> products, List<InterestRate> interestRates, List<ExchangeRate> exchangeRates,
+                             String staffUsername) {
         if (users != null && users.size() > 0 && users.containsKey(staffUsername)) {
             Staff staff = (Staff) users.get(staffUsername);
             int staffId = staff.getStaffId();
@@ -117,13 +119,15 @@ public class StaffHandle {
                                         double exchangeRate = productHandle.getExchangeRate(exchangeRates, product.getCurrency(), "VND");
                                         product.setConvertedBalance(product.getBalance() * exchangeRate);
                                         product.setProductStatus(ProductStatus.ACTIVE);
-                                        // log a message to customer
+
+                                        System.out.println("Loan proposal No. " + loanId + " from customer " + customer.getName() + "has been approved");
                                     }
 
                                     // declines -> set proposed loan as INACTIVE
                                     case 2 -> {
                                         // log a message to customer
                                         product.setProductStatus(ProductStatus.INACTIVE);
+                                        System.out.println("Loan proposal No. " + loanId + " from customer " + customer.getName() + "has been declined");
                                     }
                                 }
                             } else System.out.println("Customer has not been rated. Update credit rating");
@@ -134,8 +138,11 @@ public class StaffHandle {
         } else System.out.println("Staff not found");
     }
 
-    public void updateRating(Scanner sc, InputControl inputControl, CustomerHandle customerHandle, Map<String,
-            Object> users, String staffUsername) {
+    // create an active rating update request
+    public void updateRating(Scanner sc, InputControl inputControl, CustomerHandle customerHandle,
+                             RatingHandle ratingHandle, Map<String, Object> users, List<RatingUpdateRequest> ratingUpdateRequests,
+                             String staffUsername
+    ) {
         System.out.println("Select customer Id:");
         int customerId = inputControl.getInput(sc, 1, null);
         if (customerHandle.findCustomer(users, customerId) != null) {
@@ -151,6 +158,18 @@ public class StaffHandle {
                         || newRating.equalsIgnoreCase("C")) {
 
                     //create message to manager to update rating => turn rating update flag ON
+                    int requestId = ratingHandle.getNextId(ratingUpdateRequests);
+
+                    // convert new rating Str to rating type
+                    CreditRating proposedRating;
+                    if (newRating.equalsIgnoreCase("A")) proposedRating = CreditRating.A;
+                    else if (newRating.equalsIgnoreCase("B")) proposedRating = CreditRating.B;
+                    else proposedRating = CreditRating.C;
+
+                    RatingUpdateRequest request = new RatingUpdateRequest(requestId, LocalDateTime.now(), staffId, customerId,
+                            customer.getCreditRating(), proposedRating, true);
+
+                    ratingUpdateRequests.add(request);
 
                     System.out.println("Rating submitted for approval");
                 } else System.out.println("Must choose A, B or C");

@@ -26,7 +26,6 @@ this.staffId = staffId;
         this.username = username;-> user input, nonblank, unique
         this.password = password;-> user input, nonblank
         this.basicSalary = basicSalary;-> manager assigns
-        this.rateOfBonus = rateOfBonus;-> manager assigns
         protected String personId; -> user input, nonblank, unique
     protected String name; -> user input, nonblank
     protected String sex; -> user input, nonblank
@@ -38,8 +37,6 @@ c. Manager --> system pre-sets up
 private UserRole userRole;-> auto assigned (MANAGER)
     private String username;-> user input, nonblank, unique
     private String password;-> user input, nonblank
-    private double basicSalary;-> auto assigned (200% x avgsalary(staff))
-    private double rateOfBonus;-> auto assigned (5% bank income)
 
 
 5. Sample data preparation + Input data.
@@ -93,11 +90,8 @@ CUSTOMER menu:
 case 2 -> {
     productHandle.addBalance(sc, inputControl, transactionHandle, users, exchangeRates, transactions, username);
                 }
-                +cash +balance
-case 3 -> {
-    productHandle.newAccount(sc, users, products, interestRates, username);
-                }
-                0
+                +cash +balance -> done
+
 case 4 -> {
     productHandle.newLoan(sc, inputControl, users, products, interestRates, username);
                 }
@@ -105,13 +99,8 @@ case 4 -> {
 case 5 -> {
     productHandle.newSaving(sc, inputControl, users, products, exchangeRates, interestRates, username);
                 }
-                +cash +saving balance
-case 6 -> {
-    productHandle.foreignExchange(sc, inputControl, transactionHandle, users, products, exchangeRates, transactions, username);
-                }
-case 7 -> {
-    productHandle.fundTransfer(sc, inputControl, userHandle, transactionHandle, users, products, exchangeRates, transactions, username);
-                }
+                +cash +saving balance -> done
+
 STAFF menu:
 case 3 -> {
      staffHandle.approveLoans(sc, inputControl, customerHandle, productHandle, users, products,

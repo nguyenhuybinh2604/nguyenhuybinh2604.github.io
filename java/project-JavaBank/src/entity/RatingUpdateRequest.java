@@ -1,6 +1,7 @@
 package entity;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class RatingUpdateRequest {
     private int requestId;
@@ -65,12 +66,27 @@ public class RatingUpdateRequest {
         this.currentRating = currentRating;
     }
 
+    public void setCurrentRating(String currentRatingStr) {
+        if (currentRatingStr.equalsIgnoreCase("A")) this.currentRating = CreditRating.A;
+        else if (currentRatingStr.equalsIgnoreCase("B")) this.currentRating = CreditRating.B;
+        else if (currentRatingStr.equalsIgnoreCase("C")) this.currentRating = CreditRating.C;
+        else this.currentRating = CreditRating.NA;
+    }
+
     public CreditRating getProposedRating() {
         return proposedRating;
     }
 
     public void setProposedRating(CreditRating proposedRating) {
         this.proposedRating = proposedRating;
+    }
+
+    public void setProposedRating(String proposedRatingStr) {
+
+        if (proposedRatingStr.equalsIgnoreCase("A")) this.proposedRating = CreditRating.A;
+        else if (proposedRatingStr.equalsIgnoreCase("B")) this.proposedRating = CreditRating.B;
+        else if (proposedRatingStr.equalsIgnoreCase("C")) this.proposedRating = CreditRating.C;
+        else this.proposedRating = CreditRating.NA;
     }
 
     public boolean isActive() {
@@ -81,5 +97,16 @@ public class RatingUpdateRequest {
         isActive = active;
     }
 
+    public void setActive(String activeStr) {
+        if (activeStr.equalsIgnoreCase("true")) this.isActive = true;
+        else this.isActive = false;
+    }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter fmtDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return String.format("%5d%15s%10d%10d%10s%10s\n", requestId, requestCreation.format(fmtDateTime), staffId,
+                customerId, currentRating.toString(), proposedRating.toString());
+    }
 
 }

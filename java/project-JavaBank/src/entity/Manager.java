@@ -11,7 +11,7 @@ public class Manager extends Person implements IUser {
     private String password;
     private String email;
     private double basicSalary;
-    private double rateOfBonus;
+    private double bonus;
 
     public Manager() {
     }
@@ -82,12 +82,12 @@ public class Manager extends Person implements IUser {
         this.basicSalary = basicSalary;
     }
 
-    public double getRateOfBonus() {
-        return this.rateOfBonus;
+    public double getBonus() {
+        return this.bonus;
     }
 
-    public void setRateOfBonus(double rateOfBonus) {
-        this.rateOfBonus = rateOfBonus;
+    public void setBonus(double bonus) {
+        this.bonus = bonus;
     }
 
     @Override
@@ -97,7 +97,7 @@ public class Manager extends Person implements IUser {
                 " name='" + getName() + "'" +
                 ", password='" + getPassword() + "'" +
                 ", basicSalary='" + getBasicSalary() + "'" +
-                ", bonus='" + getRateOfBonus() + "'" +
+                ", bonus='" + getBonus() + "'" +
                 "} \n";
     }
 }

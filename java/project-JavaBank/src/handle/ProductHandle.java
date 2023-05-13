@@ -4,7 +4,6 @@ import entity.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -49,8 +48,9 @@ public class ProductHandle {
         } else System.out.println("Customer not found");
     }
 
-    public void addBalance(Scanner sc, InputControl inputControl, TransactionHandle transactionHandle, Map<String, Object> users,
-                           List<ExchangeRate> exchangeRates, List<Transaction> transactions, String username) {
+    public void addBalance(Scanner sc, InputControl inputControl, TransactionHandle transactionHandle,
+                           BalanceSheet balanceSheet, Map<String, Object> users, List<ExchangeRate> exchangeRates,
+                           List<Transaction> transactions, String username) {
         if (users != null && users.size() > 0 && users.containsKey(username)) {
             Customer customer = (Customer) users.get(username);
             if (customer.getProducts() != null && customer.getProducts().size() > 0) {
@@ -89,6 +89,12 @@ public class ProductHandle {
                                 getExchangeRate(exchangeRates, currency, "VND"), 0);
                         transactions.add(transaction);
                         customer.getTransactions().add(transaction);
+
+                        // change in balance sheet
+                        balanceSheet.setCashBalance(balanceSheet.getCashBalance()
+                                + (addedAmount * getExchangeRate(exchangeRates, currency, "VND")));
+                        balanceSheet.setDepositBalance(balanceSheet.getDepositBalance()
+                                + (addedAmount * getExchangeRate(exchangeRates, currency, "VND")));
 
                         System.out.println("Account balance added");
                     } else System.out.println("Wrong account Id entered. Retry");
@@ -181,8 +187,9 @@ public class ProductHandle {
         } else System.out.println("Customer not found");
     }
 
-    public void newSaving(Scanner sc, InputControl inputControl, Map<String, Object> users, List<Product> products,
-                          List<ExchangeRate> exchangeRates, List<InterestRate> interestRates, String username) {
+    public void newSaving(Scanner sc, InputControl inputControl, BalanceSheet balanceSheet, Map<String, Object> users,
+                          List<Product> products, List<ExchangeRate> exchangeRates, List<InterestRate> interestRates,
+                          String username) {
         if (users != null && users.size() > 0 && users.containsKey(username)) {
             System.out.println("Choose a currency:");
             String currency = sc.nextLine();
@@ -218,6 +225,12 @@ public class ProductHandle {
 
                             // also add in common records
                             products.add(saving);
+
+                            // change in balance sheet
+                            balanceSheet.setCashBalance(balanceSheet.getCashBalance()
+                                    + saving.getConvertedBalance());
+                            balanceSheet.setDepositBalance(balanceSheet.getDepositBalance()
+                                    + saving.getConvertedBalance());
 
                             System.out.println("New " + currency + " saving created");
                         } else System.out.println("Interest rate for the product is not available");

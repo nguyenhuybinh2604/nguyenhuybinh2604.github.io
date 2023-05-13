@@ -26,7 +26,8 @@ public class DataIO {
                           List<Product> products,
                           List<InterestRate> interestRates,
                           List<ExchangeRate> exchangeRates,
-                          List<Transaction> transactions) {
+                          List<Transaction> transactions,
+                          List<RatingUpdateRequest> ratingUpdateRequests) {
         try {
             String pathProject = System.getProperty("user.dir");
             FileInputStream excelFile = new FileInputStream((pathProject + "/src/io/data.xlsx"));
@@ -46,6 +47,8 @@ public class DataIO {
 
             loadProduct(users, products);
             importTransaction(workbook, transactions);
+
+            importRatingUpdateRequests(workbook, ratingUpdateRequests);
 
             workbook.close();
 
@@ -99,14 +102,15 @@ public class DataIO {
             Row currentRow = iterator.next();
             Staff staff = new Staff();
             staff.setUserRole(UserRole.STAFF);
-            staff.setStaffId((int) (currentRow.getCell(0) == null ? 0 : currentRow.getCell(0).getNumericCellValue()));
+            staff.setStaffId(currentRow.getCell(0) == null ? 0 : (int) currentRow.getCell(0).getNumericCellValue());
             staff.setPersonId(currentRow.getCell(1) == null ? null : currentRow.getCell(1).getStringCellValue());
             staff.setUsername(currentRow.getCell(2) == null ? null : currentRow.getCell(2).getStringCellValue());
             staff.setPassword(currentRow.getCell(3) == null ? null : currentRow.getCell(3).getStringCellValue());
             staff.setEmail(currentRow.getCell(4) == null ? null : currentRow.getCell(4).getStringCellValue());
-            staff.setBasicSalary(currentRow.getCell(5) == null ? 0 : currentRow.getCell(5).getNumericCellValue());
-            staff.setRateOfBonus(currentRow.getCell(6) == null ? 0 : currentRow.getCell(6).getNumericCellValue());
-            String userStatusStr = currentRow.getCell(7) == null ? "" : currentRow.getCell(7).getStringCellValue();
+            staff.setBasicSalary(currentRow.getCell(5) == null ? 0.0 : currentRow.getCell(5).getNumericCellValue());
+            staff.setRank(currentRow.getCell(6) == null ? null : (int) currentRow.getCell(6).getNumericCellValue());
+            staff.setBonus(currentRow.getCell(7) == null ? 0.0 : currentRow.getCell(7).getNumericCellValue());
+            String userStatusStr = currentRow.getCell(8) == null ? "" : currentRow.getCell(8).getStringCellValue();
             staff.setUserStatus(userStatusStr);
             users.put(staff.getUsername(), staff);
         }
@@ -127,7 +131,7 @@ public class DataIO {
             manager.setPassword(currentRow.getCell(2) == null ? null : currentRow.getCell(2).getStringCellValue());
             manager.setEmail(currentRow.getCell(3) == null ? null : currentRow.getCell(3).getStringCellValue());
             manager.setBasicSalary(currentRow.getCell(4) == null ? 0 : currentRow.getCell(4).getNumericCellValue());
-            manager.setRateOfBonus(currentRow.getCell(5) == null ? 0 : currentRow.getCell(5).getNumericCellValue());
+            manager.setBonus(currentRow.getCell(5) == null ? 0 : currentRow.getCell(5).getNumericCellValue());
             String userStatusStr = currentRow.getCell(6) == null ? "" : currentRow.getCell(6).getStringCellValue();
             manager.setUserStatus(userStatusStr);
             users.put(manager.getUsername(), manager);
@@ -321,6 +325,35 @@ public class DataIO {
         }
     }
 
+    private void importRatingUpdateRequests(Workbook workbook, List<RatingUpdateRequest> ratingUpdateRequests) {
+        String sheetName = "ratingUpdate";
+        Sheet datatypeSheet = workbook.getSheet(sheetName);
+        Iterator<Row> iterator = datatypeSheet.iterator();
+        Row firstRow = iterator.next();
+        Cell firstCell = firstRow.getCell(0);
+        while (iterator.hasNext()) {
+            Row currentRow = iterator.next();
+            RatingUpdateRequest ratingUpdateRequest = new RatingUpdateRequest();
+            if (currentRow.getCell(0) != null)
+                ratingUpdateRequest.setRequestId((int) currentRow.getCell(0).getNumericCellValue());
+
+            ratingUpdateRequest.setRequestCreation(currentRow.getCell(1) == null ? null :
+                    currentRow.getCell(1).getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+            if (currentRow.getCell(2) != null)
+                ratingUpdateRequest.setStaffId((int) currentRow.getCell(2).getNumericCellValue());
+            if (currentRow.getCell(3) != null)
+                ratingUpdateRequest.setCustomerId((int) currentRow.getCell(3).getNumericCellValue());
+            String currentRatingStr = currentRow.getCell(4).getStringCellValue();
+            ratingUpdateRequest.setCurrentRating(currentRatingStr);
+            String proposedRatingStr = currentRow.getCell(5).getStringCellValue();
+            ratingUpdateRequest.setProposedRating(proposedRatingStr);
+            ratingUpdateRequest.setActive(currentRow.getCell(6).getStringCellValue());
+
+            ratingUpdateRequests.add(ratingUpdateRequest);
+
+        }
+    }
+
     // load to each customer
     private void loadProduct(Map<String, Object> users, List<Product> products) {
         if (users != null && users.size() > 0) {
@@ -363,12 +396,13 @@ public class DataIO {
         }
     }
 
-    public void writeExcel(InputControl inputControl,
-                           Map<String, Object> users,
-                           List<Product> products,
-                           List<InterestRate> interestRates,
-                           List<ExchangeRate> exchangeRates,
-                           List<Transaction> transactions) {
+    public void writeExcel(
+            Map<String, Object> users,
+            List<Product> products,
+            List<InterestRate> interestRates,
+            List<ExchangeRate> exchangeRates,
+            List<Transaction> transactions,
+            List<RatingUpdateRequest> ratingUpdateRequests) {
         try {
             String pathProject = System.getProperty("user.dir");
             DateTimeFormatter fmtLocalDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -417,6 +451,7 @@ public class DataIO {
             exportPerson(workbook, users);
 
             exportTransaction(workbook, transactions, fmtLocalDateTime);
+            exportRatingUpdateRequest(workbook, ratingUpdateRequests, fmtLocalDateTime);
 
             // Write the workbook to the file
             workbook.write(outputStream);
@@ -604,9 +639,11 @@ public class DataIO {
             XSSFCell cell6 = sheetRow.createCell(5);
             cell6.setCellValue(((Staff) user).getBasicSalary());
             XSSFCell cell7 = sheetRow.createCell(6);
-            cell7.setCellValue(((Staff) user).getRateOfBonus());
+            cell7.setCellValue(((Staff) user).getRank());
             XSSFCell cell8 = sheetRow.createCell(7);
-            cell8.setCellValue(((Staff) user).getUserStatus().toString());
+            cell8.setCellValue(((Staff) user).getBonus());
+            XSSFCell cell9 = sheetRow.createCell(8);
+            cell9.setCellValue(((Staff) user).getUserStatus().toString());
         }
     }
 
@@ -639,7 +676,7 @@ public class DataIO {
             XSSFCell cell5 = sheetRow.createCell(4);
             cell5.setCellValue(((Manager) user).getBasicSalary());
             XSSFCell cell6 = sheetRow.createCell(5);
-            cell6.setCellValue(((Manager) user).getRateOfBonus());
+            cell6.setCellValue(((Manager) user).getBonus());
             XSSFCell cell7 = sheetRow.createCell(6);
             cell7.setCellValue(((Manager) user).getUserStatus().toString());
         }
@@ -705,6 +742,38 @@ public class DataIO {
                 cell9.setCellValue(transaction.getConvertedCredit());
                 XSSFCell cell10 = sheetRow.createCell(9);
                 cell10.setCellValue(transaction.getConvertedDebit());
+            }
+        }
+    }
+
+    private void exportRatingUpdateRequest(XSSFWorkbook workbook, List<RatingUpdateRequest> requests,
+                                           DateTimeFormatter fmt) {
+        XSSFSheet sheet = workbook.getSheet("ratingUpdate");
+
+        // Clear all rows from the 2nd row downward
+        clearSheet(sheet);
+
+        // Write the list to the sheet
+        int rowCount = 0;
+        if (requests.size() > 0) {
+            for (RatingUpdateRequest request : requests) {
+                XSSFRow sheetRow = sheet.createRow(++rowCount);
+
+                XSSFCell cell1 = sheetRow.createCell(0);
+                cell1.setCellValue(request.getRequestId());
+                XSSFCell cell2 = sheetRow.createCell(1);
+                if (request.getRequestCreation() != null)
+                    cell2.setCellValue(request.getRequestCreation().format(fmt));
+                XSSFCell cell3 = sheetRow.createCell(2);
+                cell3.setCellValue(request.getStaffId());
+                XSSFCell cell4 = sheetRow.createCell(3);
+                cell4.setCellValue(request.getCustomerId());
+                XSSFCell cell5 = sheetRow.createCell(4);
+                cell5.setCellValue(request.getCurrentRating().toString());
+                XSSFCell cell6 = sheetRow.createCell(5);
+                cell6.setCellValue(request.getProposedRating().toString());
+                XSSFCell cell7 = sheetRow.createCell(6);
+                cell7.setCellValue(request.isActive());
             }
         }
     }

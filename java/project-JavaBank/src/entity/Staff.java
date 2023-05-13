@@ -12,7 +12,8 @@ public class Staff extends Person implements IUser {
     private String password;
     private String email;
     private double basicSalary;
-    private double rateOfBonus;
+    private Integer rank;
+    private double bonus;
     private UserStatus userStatus;
 
     public Staff() {
@@ -107,12 +108,20 @@ public class Staff extends Person implements IUser {
         this.basicSalary = basicSalary;
     }
 
-    public double getRateOfBonus() {
-        return this.rateOfBonus;
+    public int getRank() {
+        return this.rank;
     }
 
-    public void setRateOfBonus(double rateOfBonus) {
-        this.rateOfBonus = rateOfBonus;
+    public void setRank(Integer rank) {
+        this.rank = rank;
+    }
+
+    public double getBonus() {
+        return this.bonus;
+    }
+
+    public void setBonus(double bonus) {
+        this.bonus = bonus;
     }
 
     @Override
@@ -123,7 +132,8 @@ public class Staff extends Person implements IUser {
                 ", username='" + getUsername() + "'" +
                 ", password='" + getPassword() + "'" +
                 ", basicSalary='" + getBasicSalary() + "'" +
-                ", bonus='" + getRateOfBonus() + "'" +
+                ", rank='" + getRank() + "'" +
+                ", bonus='" + getBonus() + "'" +
                 "} \n";
     }
 

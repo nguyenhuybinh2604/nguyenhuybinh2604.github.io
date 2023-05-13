@@ -13,4 +13,12 @@ public class RatingHandle {
         }
         return ++maxId;
     }
+
+    public RatingUpdateRequest findRequest(List<RatingUpdateRequest> ratingUpdateRequests, int requestId) {
+        for (RatingUpdateRequest request : ratingUpdateRequests)
+            if (request.getRequestId() == requestId) {
+                return request;
+            }
+        return null;
+    }
 }

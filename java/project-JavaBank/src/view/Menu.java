@@ -19,6 +19,7 @@ public class Menu {
     StaffHandle staffHandle = new StaffHandle();
     ManagerHandle managerHandle = new ManagerHandle();
     ProductHandle productHandle = new ProductHandle();
+    RatingHandle ratingHandle = new RatingHandle();
 
     BalanceSheet balanceSheet;
     Map<String, Object> users = new HashMap<>();
@@ -26,6 +27,7 @@ public class Menu {
     List<InterestRate> interestRates = new ArrayList<>();
     List<ExchangeRate> exchangeRates = new ArrayList<>();
     List<Transaction> transactions = new ArrayList<>();
+    List<RatingUpdateRequest> ratingUpdateRequests = new ArrayList<>();
 
     String loginStatus;
     String activeUsername;
@@ -43,7 +45,7 @@ public class Menu {
     public void callMainMenu() {
 
         // initial data import
-        dataIO.readExcel(inputControl, users, products, interestRates, exchangeRates, transactions);
+        dataIO.readExcel(inputControl, users, products, interestRates, exchangeRates, transactions, ratingUpdateRequests);
 
         // initialize bs
         balanceSheet = new BalanceSheet(products);
@@ -283,7 +285,8 @@ public class Menu {
                     } while (inputViewInfo >= 0 && inputViewInfo <= 5);
                 }
                 case 2 -> {
-                    productHandle.addBalance(sc, inputControl, transactionHandle, users, exchangeRates, transactions, username);
+                    productHandle.addBalance(sc, inputControl, transactionHandle, balanceSheet, users, exchangeRates,
+                            transactions, username);
                 }
                 case 3 -> {
                     productHandle.newAccount(sc, users, products, interestRates, username);
@@ -292,7 +295,8 @@ public class Menu {
                     productHandle.newLoan(sc, inputControl, users, products, interestRates, username);
                 }
                 case 5 -> {
-                    productHandle.newSaving(sc, inputControl, users, products, exchangeRates, interestRates, username);
+                    productHandle.newSaving(sc, inputControl, balanceSheet, users, products, exchangeRates,
+                            interestRates, username);
                 }
                 case 6 -> {
                     productHandle.foreignExchange(sc, inputControl, transactionHandle, users, products, exchangeRates, transactions, username);
@@ -347,15 +351,16 @@ public class Menu {
                     staffHandle.overview(customerHandle, summaryHandle, users, products, username);
                 }
                 case 2 -> {
-                    staffHandle.viewListOfCustomers(inputControl, summaryHandle, customerHandle, users, products,
+                    staffHandle.viewListOfCustomers(summaryHandle, customerHandle, users, products,
                             username);
                 }
                 case 3 -> {
-                    staffHandle.approveLoans(sc, inputControl, customerHandle, productHandle, users, products,
-                            interestRates, exchangeRates, username);
+                    staffHandle.approveLoans(sc, inputControl, customerHandle, productHandle, balanceSheet, users,
+                            products, interestRates, exchangeRates, username);
                 }
                 case 4 -> {
-                    staffHandle.updateRating(sc, inputControl, customerHandle, users, username);
+                    staffHandle.updateRating(sc, inputControl, customerHandle, ratingHandle, users,
+                            ratingUpdateRequests, username);
                 }
                 case 5 -> {
                     //do nothing, meets the loop exit condition
@@ -372,16 +377,17 @@ public class Menu {
     public int inputManager(String username) {
         System.out.println("\nWELCOME " + username + ". SELECT AN OPTION");
         System.out.println("1. View bank info");
-        System.out.println("2. Customer management");
-        System.out.println("3. Staff management");
-        // register, set salaries, bonuses, approve customer rating change requests ...
+
+        // register, set salaries,approve customer rating change requests ...
         // assign staff to products with missing staffId
-        System.out.println("4. Exchange rates");
-        System.out.println("5. Interest rates");
-        System.out.println("6. Return");
+        System.out.println("2. Staff management");
+
+        System.out.println("3. Exchange rates");
+        System.out.println("4. Interest rates");
+        System.out.println("5. Return");
         System.out.println("0. Exit");
 
-        return inputControl.getInput(sc, 0, 6);
+        return inputControl.getInput(sc, 0, 5);
     }
 
     public int inputViewBankInfo() {
@@ -390,18 +396,19 @@ public class Menu {
         System.out.println("2. Customer info");
         System.out.println("3. Staff info");
         System.out.println("4. Balance sheet");
-        System.out.println("5. Return");
+        System.out.println("5. Estimated bonus");
+        System.out.println("6. Return");
         System.out.println("0. Exit");
 
-        return inputControl.getInput(sc, 0, 5);
+        return inputControl.getInput(sc, 0, 6);
     }
 
     public int inputStaffManagement() {
         System.out.println("\nSELECT AN OPTION");
         System.out.println("1. Approve staff register");
-        System.out.println("2. Assign staff");
-        System.out.println("3. Adjust salary");
-        System.out.println("4. Calculate bonus");
+        System.out.println("2. Approve rating changes");
+        System.out.println("3. Assign staff");
+        System.out.println("4. Adjust salary");
         System.out.println("5. Return");
         System.out.println("0. Exit");
 
@@ -450,17 +457,17 @@ public class Menu {
                                 System.out.println(balanceSheet.toString());
                             }
                             case 5 -> {
+                                managerHandle.viewBonus(summaryHandle, staffHandle, customerHandle, users, products);
+                            }
+                            case 6 -> {
                                 //do nothing, meets the loop exit condition
                             }
                             case 0 -> exitProgram();
                         }
                         inputViewInfo = inputViewBankInfo();
-                    } while (inputViewInfo >= 0 && inputViewInfo <= 4);
+                    } while (inputViewInfo >= 0 && inputViewInfo <= 5);
                 }
                 case 2 -> {
-                    // Approve credit rating update from staff
-                }
-                case 3 -> {
                     int inputStaffManagement = inputStaffManagement();
                     do {
                         switch (inputStaffManagement) {
@@ -468,13 +475,14 @@ public class Menu {
                                 managerHandle.approveStaffRegister(sc, inputControl, users);
                             }
                             case 2 -> {
-                                managerHandle.assignStaffs(sc, inputControl, summaryHandle, staffHandle, users, products);
+                                managerHandle.approveCreditRating(sc, inputControl, customerHandle, ratingHandle, users,
+                                        ratingUpdateRequests);
                             }
                             case 3 -> {
-                                managerHandle.editSalary(sc, inputControl, summaryHandle, staffHandle, users, products);
+                                managerHandle.assignStaffs(sc, inputControl, summaryHandle, staffHandle, users, products);
                             }
                             case 4 -> {
-                                managerHandle.viewBonus(sc, inputControl, summaryHandle, staffHandle, users, products);
+                                managerHandle.editSalary(sc, inputControl, summaryHandle, staffHandle, users, products);
                             }
                             case 5 -> {
                                 //do nothing, meets the loop exit condition
@@ -484,7 +492,7 @@ public class Menu {
                         inputStaffManagement = inputStaffManagement();
                     } while (inputStaffManagement >= 0 && inputStaffManagement <= 4);
                 }
-                case 4 -> {
+                case 3 -> {
                     int inputXR = inputXRManagement();
                     do {
                         switch (inputXR) {
@@ -502,7 +510,7 @@ public class Menu {
                         inputXR = inputXRManagement();
                     } while (inputXR >= 0 && inputXR <= 2);
                 }
-                case 5 -> {
+                case 4 -> {
                     int inputIR = inputIRManagement();
                     do {
                         switch (inputIR) {
@@ -520,7 +528,7 @@ public class Menu {
                         inputIR = inputIRManagement();
                     } while (inputIR >= 0 && inputIR <= 2);
                 }
-                case 6 -> {
+                case 5 -> {
                     // Return to previous menu
                 }
                 case 0 ->
@@ -529,13 +537,13 @@ public class Menu {
             }
             // Call input options
             input = inputManager(username);
-        } while (input >= 0 && input <= 5);
+        } while (input >= 0 && input <= 4);
     }
 
     public void exitProgram() {
 
         // call data export to excel --> can redesign to run after each completed transaction
-        dataIO.writeExcel(inputControl, users, products, interestRates, exchangeRates, transactions);
+        dataIO.writeExcel(users, products, interestRates, exchangeRates, transactions, ratingUpdateRequests);
 
         System.out.println("Exiting. Goodbye.");
         System.exit(0);
