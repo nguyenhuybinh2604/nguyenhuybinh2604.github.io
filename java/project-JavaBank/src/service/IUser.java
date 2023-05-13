@@ -23,5 +23,7 @@ public interface IUser {
 
     public void setUserStatus(UserStatus userStatus);
 
+    public void setUserStatus(String userStatusStr);
+
     public void setEmail(String email);
 }

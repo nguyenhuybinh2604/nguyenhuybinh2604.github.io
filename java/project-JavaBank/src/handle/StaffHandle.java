@@ -1,7 +1,6 @@
 package handle;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -9,11 +8,11 @@ import entity.*;
 
 public class StaffHandle {
 
-    public void overview(SummaryHandle summaryHandle, Map<String, Object> users, List<Product> products, String staffUsername) {
-        if (users.size() > 0 && users.containsKey(staffUsername)) {
+    public void overview(CustomerHandle customerHandle, SummaryHandle summaryHandle, Map<String, Object> users, List<Product> products, String staffUsername) {
+        if (users != null && users.size() > 0 && users.containsKey(staffUsername)) {
             Staff staff = (Staff) users.get(staffUsername);
             int staffId = staff.getStaffId();
-            if (products.size() > 0) {
+            if (products != null && products.size() > 0) {
 
                 // get all products assigned to the staff
                 List<Product> filteredProducts = products.stream()
@@ -24,7 +23,7 @@ public class StaffHandle {
                 if (filteredProducts.size() > 0) {
 
                     // Pivoted Sum
-                    Map<Integer, Summary> result = summaryHandle.byCustomer(filteredProducts);
+                    Map<Integer, Summary> result = summaryHandle.byCustomer(customerHandle, users, filteredProducts);
 
                     // calculate total array
                     Summary total = summaryHandle.getTotal(result);
@@ -40,10 +39,10 @@ public class StaffHandle {
 
     public void viewListOfCustomers(InputControl inputControl, SummaryHandle summaryHandle, CustomerHandle customerHandle,
                                     Map<String, Object> users, List<Product> products, String staffUsername) {
-        if (users.size() > 0 && users.containsKey(staffUsername)) {
+        if (users != null && users.size() > 0 && users.containsKey(staffUsername)) {
             Staff staff = (Staff) users.get(staffUsername);
             int staffId = staff.getStaffId();
-            if (products.size() > 0) {
+            if (products != null && products.size() > 0) {
 
                 // get all products assigned to the staff
                 List<Product> filteredProducts = products.stream()
@@ -54,8 +53,8 @@ public class StaffHandle {
                 if (filteredProducts.size() > 0) {
 
                     // Pivoted Sum
-                    Map<Integer, Summary> result = summaryHandle.byCustomer(filteredProducts);
-                    summaryHandle.displayDetail(inputControl, customerHandle, users, result);
+                    Map<Integer, Summary> result = summaryHandle.byCustomer(customerHandle, users, filteredProducts);
+                    summaryHandle.displayDetailCustomer(customerHandle, users, result);
                 } else System.out.println("No record");
             } else System.out.println("No record");
         } else System.out.println("Staff not found");
@@ -65,10 +64,10 @@ public class StaffHandle {
     public void approveLoans(Scanner sc, InputControl inputControl, CustomerHandle customerHandle,
                              ProductHandle productHandle, Map<String, Object> users, List<Product> products,
                              List<InterestRate> interestRates, List<ExchangeRate> exchangeRates, String staffUsername) {
-        if (users.size() > 0 && users.containsKey(staffUsername)) {
+        if (users != null && users.size() > 0 && users.containsKey(staffUsername)) {
             Staff staff = (Staff) users.get(staffUsername);
             int staffId = staff.getStaffId();
-            if (products.size() > 0) {
+            if (products != null && products.size() > 0) {
 
                 // get all locked loans assigned to the staff
                 Map<Integer, Product> productMap = products.stream()
@@ -78,14 +77,13 @@ public class StaffHandle {
                         .filter(o -> o.getProductStatus() == ProductStatus.LOCKED)
                         .collect(Collectors.toMap(Product::getProductId, o -> o));
                 if (productMap.size() > 0) {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
                     //list all related loans with LOCKED status, choose one
                     System.out.printf("%-10s%-10s%12s%12s%10s%10s%30s%30s%8s%10s%10s\n", "IDs", "Staff IDs",
                             "Value Date", "Maturity", "Tenor (M)", "Currency", "Balance",
                             "Balance in VND", "IR", "Status", "Type");
                     for (Product product : productMap.values())
-                        System.out.println(product.toString(inputControl, formatter));
+                        System.out.println(product.toString());
                     System.out.println("Select a loan Id:");
                     int loanId = inputControl.getInput(sc, 1, null);
                     // check if selected loan belong to related loans
@@ -93,6 +91,8 @@ public class StaffHandle {
                         Product product = productMap.get(loanId);
 
                         //check whether if bank has enough money
+                        //if enough -> continue next steps, if not -> print not enough money
+                        // wont change (still pending for approval)
                         int customerId = product.getCustomerId();
                         String customerUsername = customerHandle.findCustomer(users, customerId);
                         if (customerUsername != null) {
@@ -112,7 +112,7 @@ public class StaffHandle {
                                         LocalDate maturityDate = valueDate.plusMonths(product.getTenor());
                                         product.setMaturityDate(maturityDate);
                                         double interestRate = productHandle.getInterestRate(interestRates, ProductType.LOAN,
-                                                product.getCurrency(), product.getTenor(), inputControl.toCreditRatingStr(creditRating));
+                                                product.getCurrency(), product.getTenor(), creditRating.toString());
                                         product.setInterestRate(interestRate);
                                         double exchangeRate = productHandle.getExchangeRate(exchangeRates, product.getCurrency(), "VND");
                                         product.setConvertedBalance(product.getBalance() * exchangeRate);
@@ -141,6 +141,7 @@ public class StaffHandle {
         if (customerHandle.findCustomer(users, customerId) != null) {
             String customerUsername = customerHandle.findCustomer(users, customerId);
             Customer customer = (Customer) users.get(customerUsername);
+
             // check if customer relates to staff
             int staffId = ((Staff) users.get(staffUsername)).getStaffId(); //cant be null
             if (findStaff(customer, staffId) != null) {
@@ -148,16 +149,18 @@ public class StaffHandle {
                 String newRating = inputControl.getNonEmptyString(sc);
                 if (newRating.equalsIgnoreCase("A") || newRating.equalsIgnoreCase("B")
                         || newRating.equalsIgnoreCase("C")) {
-                    //create request to manager to update rating
-//                customer.setCreditRating(inputControl.toCreditRating(newRating.toUpperCase(Locale.ROOT)));
+
+                    //create message to manager to update rating => turn rating update flag ON
+
                     System.out.println("Rating submitted for approval");
                 } else System.out.println("Must choose A, B or C");
             } else System.out.println("Customer not found");
         } else System.out.println("Customer not found");
     }
 
+    // if any of customer's products has staffId
     private Integer findStaff(Customer customer, int staffId) {
-        if (customer.getProducts().size() > 0) {
+        if (customer.getProducts() != null && customer.getProducts().size() > 0) {
             List<Product> subProducts = customer.getProducts();
             for (Product product : subProducts) {
                 if (product.getStaffId() != null && product.getStaffId() == staffId)
@@ -165,6 +168,18 @@ public class StaffHandle {
             }
         } else {
             System.out.println("Customer has no product");
+        }
+        return null;
+    }
+
+    public String findStaff(Map<String, Object> users, int staffId) {
+        if (users != null && users.size() > 0) {
+            for (Object user : users.values()) {
+                if (user.getClass().getSimpleName().equals("Staff")
+                        && ((Staff) user).getStaffId() == staffId) {
+                    return ((Staff) user).getUsername();
+                }
+            }
         }
         return null;
     }

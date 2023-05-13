@@ -1,9 +1,7 @@
 package entity;
 
-import handle.InputControl;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public abstract class Product {
     protected int customerId;
@@ -121,6 +119,13 @@ public abstract class Product {
         this.productStatus = productStatus;
     }
 
+    public void setProductStatus(String productStatusStr) {
+        if (productStatusStr.equalsIgnoreCase("ACTIVE")) this.productStatus = ProductStatus.ACTIVE;
+        else if (productStatusStr.equalsIgnoreCase("INACTIVE")) this.productStatus = ProductStatus.INACTIVE;
+        else if (productStatusStr.equalsIgnoreCase("LOCKED")) this.productStatus = ProductStatus.LOCKED;
+        else this.productStatus = ProductStatus.NA;
+    }
+
     public ProductType getProductType() {
         return this.productType;
     }
@@ -129,6 +134,6 @@ public abstract class Product {
         this.productType = productType;
     }
 
-    public abstract String toString(InputControl inputControl, DateTimeFormatter formatter);
+    public abstract String toString();
 
 }

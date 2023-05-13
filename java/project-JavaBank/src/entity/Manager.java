@@ -12,7 +12,6 @@ public class Manager extends Person implements IUser {
     private String email;
     private double basicSalary;
     private double rateOfBonus;
-    private List<Message> requests;
 
     public Manager() {
     }
@@ -67,6 +66,14 @@ public class Manager extends Person implements IUser {
         this.userStatus = userStatus;
     }
 
+    @Override
+    public void setUserStatus(String userStatusStr) {
+        if (userStatusStr.equalsIgnoreCase("ACTIVE")) this.userStatus = UserStatus.ACTIVE;
+        else if (userStatusStr.equalsIgnoreCase("INACTIVE")) this.userStatus = UserStatus.INACTIVE;
+        else if (userStatusStr.equalsIgnoreCase("LOCKED")) this.userStatus = UserStatus.LOCKED;
+        else this.userStatus = UserStatus.NA;
+    }
+
     public double getBasicSalary() {
         return this.basicSalary;
     }
@@ -81,14 +88,6 @@ public class Manager extends Person implements IUser {
 
     public void setRateOfBonus(double rateOfBonus) {
         this.rateOfBonus = rateOfBonus;
-    }
-
-    public List<Message> getRequests() {
-        return this.requests;
-    }
-
-    public void setRequests(List<Message> requests) {
-        this.requests = requests;
     }
 
     @Override

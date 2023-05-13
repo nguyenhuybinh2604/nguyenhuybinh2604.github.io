@@ -47,6 +47,13 @@ public class InterestRate {
         this.productType = productType;
     }
 
+    public void setProductType(String productTypeStr) {
+        if (productTypeStr.equalsIgnoreCase("ACCOUNT")) this.productType = ProductType.ACCOUNT;
+        else if (productTypeStr.equalsIgnoreCase("LOAN")) this.productType = ProductType.LOAN;
+        else if (productTypeStr.equalsIgnoreCase("SAVING")) this.productType = ProductType.SAVING;
+        else this.productType = ProductType.NA;
+    }
+
     public Integer getTenor() {
         return tenor;
     }

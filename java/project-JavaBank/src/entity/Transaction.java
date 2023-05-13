@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Transaction {
+    private int transactionId;
     private LocalDateTime transactionTime;
     private TransactionType transactionType;
     private int accountId;
@@ -17,8 +18,9 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(LocalDateTime transactionTime, TransactionType transactionType, int accountId, int customerId,
+    public Transaction(int transactionId, LocalDateTime transactionTime, TransactionType transactionType, int accountId, int customerId,
                        String currency, double credit, double debit, double convertedCredit, double convertedDebit) {
+        this.transactionId = transactionId;
         this.transactionTime = transactionTime;
         this.transactionType = transactionType;
         this.accountId = accountId;
@@ -28,6 +30,14 @@ public class Transaction {
         this.debit = debit;
         this.convertedCredit = convertedCredit;
         this.convertedDebit = convertedDebit;
+    }
+
+    public int getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(int transactionId) {
+        this.transactionId = transactionId;
     }
 
     public LocalDateTime getTransactionTime() {
@@ -44,6 +54,13 @@ public class Transaction {
 
     public void setTransactionType(TransactionType transactionType) {
         this.transactionType = transactionType;
+    }
+
+    public void setTransactionType(String transactionTypeStr) {
+        if (transactionTypeStr.equalsIgnoreCase("BALANCE")) this.transactionType = TransactionType.ADDBALANCE;
+        else if (transactionTypeStr.equalsIgnoreCase("FT")) this.transactionType = TransactionType.FUNDTRANSFER;
+        else if (transactionTypeStr.equalsIgnoreCase("FX")) this.transactionType = TransactionType.FOREIGNEXCHANGE;
+        else this.transactionType = TransactionType.NA;
     }
 
     public int getAccountId() {
@@ -102,9 +119,9 @@ public class Transaction {
         this.convertedDebit = convertedDebit;
     }
 
-//    @Override
+    //    @Override
     public String toString(DateTimeFormatter formatter) {
-        return String.format("%20s%8s%-10d%-10d%10s%,30.2f%,30.2f%,30.2f%,30.2f", transactionTime.format(formatter),
+        return String.format("%-10d%-20s%-10s%-12d%-14d%-10s%,30.2f%,30.2f%,30.2f%,30.2f", transactionId, transactionTime.format(formatter),
                 transactionType.toString(), accountId, customerId, currency, credit,
                 debit, convertedCredit, convertedDebit);
     }

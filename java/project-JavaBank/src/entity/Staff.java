@@ -1,5 +1,6 @@
 package entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import service.IUser;
@@ -13,13 +14,12 @@ public class Staff extends Person implements IUser {
     private double basicSalary;
     private double rateOfBonus;
     private UserStatus userStatus;
-    private List<Message> requests;
 
     public Staff() {
     }
 
-    public Staff(int staffId, String personId, String username, String password, String email,
-                 String name, String gender, int age, String address, UserStatus userStatus) {
+    public Staff(int staffId, String personId, String username, String password, String email, String name, String gender,
+                 int age, String address, UserStatus userStatus) {
         this.staffId = staffId;
         this.userRole = UserRole.STAFF;
         this.personId = personId;
@@ -91,6 +91,14 @@ public class Staff extends Person implements IUser {
         this.userStatus = userStatus;
     }
 
+    @Override
+    public void setUserStatus(String userStatusStr) {
+        if (userStatusStr.equalsIgnoreCase("ACTIVE")) this.userStatus = UserStatus.ACTIVE;
+        else if (userStatusStr.equalsIgnoreCase("INACTIVE")) this.userStatus = UserStatus.INACTIVE;
+        else if (userStatusStr.equalsIgnoreCase("LOCKED")) this.userStatus = UserStatus.LOCKED;
+        else this.userStatus = UserStatus.NA;
+    }
+
     public double getBasicSalary() {
         return this.basicSalary;
     }
@@ -105,14 +113,6 @@ public class Staff extends Person implements IUser {
 
     public void setRateOfBonus(double rateOfBonus) {
         this.rateOfBonus = rateOfBonus;
-    }
-
-    public List<Message> getRequests() {
-        return this.requests;
-    }
-
-    public void setRequests(List<Message> requests) {
-        this.requests = requests;
     }
 
     @Override

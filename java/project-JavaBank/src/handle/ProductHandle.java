@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class ProductHandle {
     public void newAccount(Scanner sc, Map<String, Object> users, List<Product> products,
                            List<InterestRate> interestRates, String username) {
-        if (users.size() > 0 && users.containsKey(username)) {
+        if (users != null && users.size() > 0 && users.containsKey(username)) {
 
             // show currently supported CCY
             System.out.println("Choose a currency:");
@@ -36,22 +36,24 @@ public class ProductHandle {
                     int accountId = getNextId(products, ProductType.ACCOUNT);
                     account.setProductId(accountId);
 
-                    // update in customer's product records
+                    // update in customer's personal product records
                     List<Product> subProducts = customer.getProducts();
                     subProducts.add(account);
 
-                    // Code to add to transaction log
+                    // update in common records
+                    products.add(account);
+
                     System.out.println("New " + currency + " account created");
-                } else System.out.println("Interest rate for the product is not available. Contact manager");
-            } else System.out.println("Currency not supported. Contact manager");
+                } else System.out.println("Interest rate for the product is not available");
+            } else System.out.println("Currency not supported");
         } else System.out.println("Customer not found");
     }
 
-    public void addBalance(Scanner sc, InputControl inputControl, Map<String, Object> users,
+    public void addBalance(Scanner sc, InputControl inputControl, TransactionHandle transactionHandle, Map<String, Object> users,
                            List<ExchangeRate> exchangeRates, List<Transaction> transactions, String username) {
-        if (users.size() > 0 && users.containsKey(username)) {
+        if (users != null && users.size() > 0 && users.containsKey(username)) {
             Customer customer = (Customer) users.get(username);
-            if (customer.getProducts().size() > 0) {
+            if (customer.getProducts() != null && customer.getProducts().size() > 0) {
 
                 // get customer's list of products, type: account
                 List<Product> subProducts = customer.getProducts();
@@ -61,9 +63,11 @@ public class ProductHandle {
                         .filter(o -> o.getProductType() == ProductType.ACCOUNT)
                         .collect(Collectors.toMap(Product::getProductId, o -> o));
                 if (productMap.size() > 0) {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    System.out.printf("%-10s%-10s%12s%12s%10s%10s%30s%30s%8s%10s%10s\n", "IDs", "Staff IDs",
+                            "Value Date", "Maturity", "Tenor (M)", "Currency", "Balance",
+                            "Balance in VND", "IR", "Status", "Type");
                     for (Map.Entry<Integer, Product> entry : productMap.entrySet()) {
-                        System.out.println(entry.getValue().toString(inputControl, formatter));
+                        System.out.println(entry.getValue().toString());
                     }
                     System.out.println("Select the account Id to add balance:");
                     int accountId = inputControl.getInput(sc, 1, null);
@@ -79,10 +83,12 @@ public class ProductHandle {
                                 * getExchangeRate(exchangeRates, currency, "VND"));
 
                         // to transaction log
-                        Transaction transaction = new Transaction(LocalDateTime.now(), TransactionType.ADDBALANCE, accountId,
-                                customer.getCustomerId(), currency, addedAmount, 0, addedAmount *
+                        int transactionId = transactionHandle.getNextId(transactions);
+                        Transaction transaction = new Transaction(transactionId, LocalDateTime.now(), TransactionType.ADDBALANCE,
+                                accountId, customer.getCustomerId(), currency, addedAmount, 0, addedAmount *
                                 getExchangeRate(exchangeRates, currency, "VND"), 0);
                         transactions.add(transaction);
+                        customer.getTransactions().add(transaction);
 
                         System.out.println("Account balance added");
                     } else System.out.println("Wrong account Id entered. Retry");
@@ -91,11 +97,12 @@ public class ProductHandle {
         } else System.out.println("Customer not found");
     }
 
-    public void fundTransfer(Scanner sc, InputControl inputControl, Map<String, Object> users, List<Product> products,
+    public void fundTransfer(Scanner sc, InputControl inputControl, UserHandle userHandle, TransactionHandle transactionHandle, Map<String, Object> users, List<Product> products,
                              List<ExchangeRate> exchangeRates, List<Transaction> transactions, String username) {
-        if (users.size() > 0 && users.containsKey(username)) {
+        if (users != null && users.size() > 0 && users.containsKey(username)) {
             Customer sender = (Customer) users.get(username);
-            if (sender.getProducts().size() > 0) {
+            // see if customer has any product
+            if (sender.getProducts() != null && sender.getProducts().size() > 0) {
 
                 // get all accounts
                 Map<Integer, Product> productMap = products.stream()
@@ -104,10 +111,12 @@ public class ProductHandle {
                 if (productMap.size() > 0) {
 
                     // print all senders' accounts, if any
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    System.out.printf("%-10s%-10s%12s%12s%10s%10s%30s%30s%8s%10s%10s\n", "IDs", "Staff IDs",
+                            "Value Date", "Maturity", "Tenor (M)", "Currency", "Balance",
+                            "Balance in VND", "IR", "Status", "Type");
                     for (Map.Entry<Integer, Product> entry : productMap.entrySet()) {
                         if (entry.getValue().getCustomerId() == sender.getCustomerId())
-                            System.out.println(entry.getValue().toString(inputControl, formatter));
+                            System.out.println(entry.getValue().toString());
                     }
                     System.out.println("Select source account Id:");
                     int sourceAccountId = inputControl.getInput(sc, 1, null);
@@ -123,13 +132,13 @@ public class ProductHandle {
                         int targetAccountId = inputControl.getInput(sc, 1, null);
 
                         //check if targetAccount exists, <>sourceAccount & has same currency
-                        if (targetAccountId != sourceAccountId)
+                        if (targetAccountId == sourceAccountId)
                             System.out.println("Target account must be different than source account");
                         else if (productMap.containsKey(targetAccountId)
                                 && productMap.get(targetAccountId).getCurrency().equals(sourceCurrency)) {
                             Account targetAccount = (Account) productMap.get(targetAccountId);
                             System.out.println("Enter amount to be transferred:");
-                            double transferredAmount = inputControl.getInput(sc, 0, null);
+                            double transferredAmount = inputControl.getInput(sc, 0.0, null);
 
                             //check if source has enough money
                             if (sourceAccount.getBalance() >= transferredAmount) {
@@ -138,18 +147,30 @@ public class ProductHandle {
                                 targetAccount.setBalance(targetAccount.getBalance() + transferredAmount); //same currency
                                 targetAccount.setConvertedBalance(targetAccount.getBalance() * getExchangeRate(exchangeRates, sourceCurrency, "VND"));
 
-                                // print transaction info
-
                                 // to transaction log
-                                Transaction transactionSend = new Transaction(LocalDateTime.now(), TransactionType.FUNDTRANSFER, sourceAccountId,
-                                        sender.getCustomerId(), sourceCurrency, 0, transferredAmount, 0, transferredAmount *
-                                        getExchangeRate(exchangeRates, sourceCurrency, "VND"));
+                                // send transaction
+                                int transactionSendId = transactionHandle.getNextId(transactions);
+                                Transaction transactionSend = new Transaction(transactionSendId, LocalDateTime.now(), TransactionType.FUNDTRANSFER,
+                                        sourceAccountId, sender.getCustomerId(), sourceCurrency, 0, transferredAmount, 0,
+                                        transferredAmount * getExchangeRate(exchangeRates, sourceCurrency, "VND"));
                                 transactions.add(transactionSend);
+                                sender.getTransactions().add(transactionSend);
 
-                                Transaction transactionReceive = new Transaction(LocalDateTime.now(), TransactionType.FUNDTRANSFER, targetAccountId,
-                                        targetAccount.getCustomerId(), sourceCurrency, transferredAmount, 0, transferredAmount *
-                                        getExchangeRate(exchangeRates, sourceCurrency, "VND"), 0);
+                                // receive transaction
+                                int transactionReceiveId = transactionHandle.getNextId(transactions);
+                                int receiverId = targetAccount.getCustomerId();
+                                Customer receiver = userHandle.getCustomerUsername(users, receiverId);
+
+                                Transaction transactionReceive = new Transaction(transactionReceiveId, LocalDateTime.now(), TransactionType.FUNDTRANSFER,
+                                        targetAccountId, receiverId, sourceCurrency, transferredAmount, 0,
+                                        transferredAmount * getExchangeRate(exchangeRates, sourceCurrency, "VND"), 0);
+
                                 transactions.add(transactionReceive);
+                                receiver.getTransactions().add(transactionReceive);
+
+                                // print transaction info
+                                System.out.printf("%s%s%s%,.2f%s%d%s%d\n", "Transfer success: ", sourceCurrency, " ", transferredAmount, " from Account ",
+                                        sourceAccountId, " to Account ", targetAccountId);
 
                             } else System.out.println("Not enough money in source account");
                         } else
@@ -162,7 +183,7 @@ public class ProductHandle {
 
     public void newSaving(Scanner sc, InputControl inputControl, Map<String, Object> users, List<Product> products,
                           List<ExchangeRate> exchangeRates, List<InterestRate> interestRates, String username) {
-        if (users.size() > 0 && users.containsKey(username)) {
+        if (users != null && users.size() > 0 && users.containsKey(username)) {
             System.out.println("Choose a currency:");
             String currency = sc.nextLine();
             if (findCurrency(interestRates, ProductType.SAVING, currency) != null) {
@@ -180,7 +201,7 @@ public class ProductHandle {
                         // auto calculate matdate basing on tenor
                         LocalDate maturityDate = valueDate.plusMonths(tenor);
                         System.out.println("Enter saving balance:");
-                        double balance = inputControl.getInput(sc, 0, null);
+                        double balance = inputControl.getInput(sc, 0.0, null);
                         double convertedBalance = getExchangeRate(exchangeRates, currency, "VND") * balance;
                         Double interestRate = getInterestRate(interestRates, ProductType.SAVING, currency, tenor, null);
                         if (interestRate != null) {
@@ -195,18 +216,20 @@ public class ProductHandle {
                             List<Product> subProducts = customer.getProducts();
                             subProducts.add(saving);
 
-                            // Code to add to transaction log
+                            // also add in common records
+                            products.add(saving);
+
                             System.out.println("New " + currency + " saving created");
-                        } else System.out.println("Interest rate for the product is not available. Contact manager");
-                    } else System.out.println("Chosen tenor is not available. Contact manager");
-                } else System.out.println("Tenor for the product is not available. Contact manager");
-            } else System.out.println("Currency not supported. Contact manager");
+                        } else System.out.println("Interest rate for the product is not available");
+                    } else System.out.println("Chosen tenor is not available");
+                } else System.out.println("Tenor for the product is not available");
+            } else System.out.println("Currency not supported");
         } else System.out.println("Customer not found");
     }
 
     public void newLoan(Scanner sc, InputControl inputControl, Map<String, Object> users, List<Product> products,
                         List<InterestRate> interestRates, String username) {
-        if (users.size() > 0 && users.containsKey(username)) {
+        if (users != null && users.size() > 0 && users.containsKey(username)) {
 
             //check credit rating
             // User type check not required since this can only be called by Customer
@@ -222,8 +245,8 @@ public class ProductHandle {
                         int tenor = inputControl.getInput(sc, 1, null);
                         if (findTenor(interestRates, ProductType.LOAN, currency, tenor) != 0) {
                             System.out.println("Enter borrowing amount:");
-                            double balance = inputControl.getInput(sc, 0, null); // converted Balance calculate on loan approval
-                            String creditRatingStr = inputControl.toCreditRatingStr(customer.getCreditRating());
+                            double balance = inputControl.getInput(sc, 0.0, null); // converted Balance calculate on loan approval
+                            String creditRatingStr = customer.getCreditRating().toString();
                             Double interestRate = getInterestRate(interestRates, ProductType.LOAN, currency, tenor, creditRatingStr);
                             if (interestRate != null) {
 
@@ -237,23 +260,25 @@ public class ProductHandle {
                                 List<Product> subProducts = customer.getProducts();
                                 subProducts.add(loan);
 
-                                // Code to add to transaction log
+                                // also add in common records
+                                products.add(loan);
+
                                 System.out.println("New " + currency + " loan submitted for approval");
                             } else
-                                System.out.println("Interest rate for the product is not available. Contact manager");
-                        } else System.out.println("Chosen tenor is not available. Contact manager");
-                    } else System.out.println("Tenor for the product is not available. Contact manager");
-                } else System.out.println("Currency not supported. Contact manager");
-            } else System.out.println("Credit rating not set. Contact manager");
+                                System.out.println("Interest rate for the product is not available");
+                        } else System.out.println("Chosen tenor is not available");
+                    } else System.out.println("Tenor for the product is not available");
+                } else System.out.println("Currency not supported");
+            } else System.out.println("Credit rating not set");
         } else System.out.println("Customer not found");
     }
 
     // within a customer
-    public void foreignExchange(Scanner sc, InputControl inputControl, Map<String, Object> users,
+    public void foreignExchange(Scanner sc, InputControl inputControl, TransactionHandle transactionHandle, Map<String, Object> users, List<Product> products,
                                 List<ExchangeRate> exchangeRates, List<Transaction> transactions, String username) {
-        if (users.size() > 0 && users.containsKey(username)) {
+        if (users != null && users.size() > 0 && users.containsKey(username)) {
             Customer customer = (Customer) users.get(username);
-            if (customer.getProducts().size() > 0) {
+            if (customer.getProducts() != null && customer.getProducts().size() > 0) {
 
                 // get customer's list of products, type: account
                 List<Product> subProducts = customer.getProducts();
@@ -307,22 +332,32 @@ public class ProductHandle {
                                             toAccount.setBalance(toAccount.getBalance() + exchangedAmount * exchangeRate);
                                             toAccount.setConvertedBalance(toAccount.getBalance() * getExchangeRate(exchangeRates, toCurrency, "VND"));
 
-                                            // add to transaction log
-                                            Transaction transactionSell = new Transaction(LocalDateTime.now(), TransactionType.FOREIGNEXCHANGE, fromAccountId,
-                                                    fromAccount.getCustomerId(), fromCurrency, 0, exchangedAmount, 0, exchangedAmount *
-                                                    getExchangeRate(exchangeRates, fromCurrency, "VND"));
+                                            // to transaction log
+                                            // send transaction
+                                            int transactionSellId = transactionHandle.getNextId(transactions);
+                                            Transaction transactionSell = new Transaction(transactionSellId, LocalDateTime.now(), TransactionType.FOREIGNEXCHANGE,
+                                                    fromAccountId, customer.getCustomerId(), fromCurrency, 0, exchangedAmount, 0,
+                                                    exchangedAmount * getExchangeRate(exchangeRates, fromCurrency, "VND"));
                                             transactions.add(transactionSell);
+                                            customer.getTransactions().add(transactionSell);
 
-                                            Transaction transactionBuy = new Transaction(LocalDateTime.now(), TransactionType.FOREIGNEXCHANGE, toAccountId,
-                                                    toAccount.getCustomerId(), toCurrency, exchangedAmount * exchangeRate, 0, exchangedAmount *
-                                                    exchangeRate * getExchangeRate(exchangeRates, fromCurrency, "VND"), 0);
+                                            // receive transaction
+                                            int transactionBuyId = transactionHandle.getNextId(transactions);
+
+                                            Transaction transactionBuy = new Transaction(transactionBuyId, LocalDateTime.now(), TransactionType.FOREIGNEXCHANGE,
+                                                    toAccountId, customer.getCustomerId(), toCurrency, exchangedAmount * exchangeRate, 0,
+                                                    exchangedAmount * exchangeRate * getExchangeRate(exchangeRates, toCurrency, "VND"), 0);
                                             transactions.add(transactionBuy);
+                                            customer.getTransactions().add(transactionBuy);
 
+                                            // print transaction info
+                                            System.out.printf("%s%s%s%,.2f%s%s%s%,.2f\n", "Exchange success: ", fromCurrency, " ", exchangedAmount, " for ",
+                                                    toCurrency, " ", exchangedAmount * exchangeRate);
                                         } else System.out.println("Wrong account Id entered. Retry");
                                     } else System.out.println("Not enough money in source account");
                                 } else System.out.println("Wrong account Id entered. Retry");
                             } else
-                                System.out.println("Exchange from " + fromCurrency + " to " + toCurrency + " not available. Contact manager");
+                                System.out.println("Exchange from " + fromCurrency + " to " + toCurrency + " not available");
                         } else System.out.println(fromCurrency + " account not available. Return to open account");
                     } else System.out.println(toCurrency + " account not available. Return to open account");
                 } else System.out.println("Customer has no account. Return to open account");
@@ -331,9 +366,9 @@ public class ProductHandle {
     }
 
     public void displayAccounts(Map<String, Object> users, String currency, String username) {
-        if (users.size() > 0 && users.containsKey(username)) {
+        if (users != null && users.size() > 0 && users.containsKey(username)) {
             Customer customer = (Customer) users.get(username);
-            if (customer.getProducts().size() > 0) {
+            if (customer.getProducts() != null && customer.getProducts().size() > 0) {
                 List<Product> filteredProducts;
                 if (currency != null)
                     filteredProducts = customer.getProducts().stream()
@@ -345,16 +380,20 @@ public class ProductHandle {
                 else filteredProducts = customer.getProducts().stream()
                         .filter(o -> o.getProductType() == ProductType.ACCOUNT)
                         .collect(Collectors.toList());
-                for (Product product : filteredProducts) System.out.println(product);
+                System.out.printf("%-10s%-10s%12s%12s%10s%10s%30s%30s%8s%10s%10s\n", "IDs", "Staff IDs",
+                        "Value Date", "Maturity", "Tenor (M)", "Currency", "Balance",
+                        "Balance in VND", "IR", "Status", "Type");
+                for (Product product : filteredProducts) System.out.println(product.toString());
             } else System.out.println("No record");
         } else System.out.println("No record");
     }
 
+    // in customers product list
     private boolean findAccountsByCurrency(Map<String, Object> users, String currency, String username) {
-        if (users.size() > 0) {
+        if (users != null && users.size() > 0) {
             if (users.containsKey(username)) {
                 Customer customer = (Customer) users.get(username);
-                if (customer.getProducts().size() > 0) {
+                if (customer.getProducts() != null && customer.getProducts().size() > 0) {
                     List<Product> filteredProducts;
                     filteredProducts = customer.getProducts().stream()
                             .filter(o -> o.getProductType() == ProductType.ACCOUNT)
@@ -368,10 +407,11 @@ public class ProductHandle {
 
     // find currency in list of rate curves (int rate table)
     private String findCurrency(List<InterestRate> interestRates, ProductType productType, String currency) {
-        if (interestRates.size() > 0) {
+        if (interestRates != null && interestRates.size() > 0) {
 
             // get latest effectDate
             LocalDate latestEffectDate = interestRates.stream()
+                    .filter(p -> p.getEffectDate().isBefore(LocalDate.now().plusDays(1))) // latest day before today
                     .map(InterestRate::getEffectDate)
                     .max(LocalDate::compareTo)
                     .orElse(null);
@@ -393,10 +433,11 @@ public class ProductHandle {
     // find tenor in list of products rate (int rate table)
     // tenor can't be null -> either loans or savings
     private int findTenor(List<InterestRate> interestRates, ProductType productType, String currency, int tenor) {
-        if (interestRates.size() > 0) {
+        if (interestRates != null && interestRates.size() > 0) {
 
             // get latest effectDate
             LocalDate latestEffectDate = interestRates.stream()
+                    .filter(p -> p.getEffectDate().isBefore(LocalDate.now().plusDays(1))) // latest day before today
                     .map(InterestRate::getEffectDate)
                     .max(LocalDate::compareTo)
                     .orElse(null);
@@ -418,13 +459,15 @@ public class ProductHandle {
     // find latest interest rate by product type, currency, tenor and credit rating
     public Double getInterestRate(List<InterestRate> interestRates, ProductType productType, String currency,
                                   Integer tenor, String creditRatingStr) {
-        if (interestRates.size() > 0) {
+        if (interestRates != null && interestRates.size() > 0) {
 
             // get latest effectDate
             LocalDate latestEffectDate = interestRates.stream()
+                    .filter(p -> p.getEffectDate().isBefore(LocalDate.now().plusDays(1))) // latest day before today
                     .map(InterestRate::getEffectDate)
-                    .max(LocalDate::compareTo)
-                    .orElse(null);
+                    .max(LocalDate::compareTo) // get the maximum value
+                    .orElse(null); // handle empty list
+
             List<InterestRate> filteredInterestRates = new ArrayList<>();
             switch (productType) {
                 case ACCOUNT -> //avoid credit rating str && tenor which are null
@@ -459,13 +502,14 @@ public class ProductHandle {
 
     // find currency in list of currencies (int rate table)
     public Double getExchangeRate(List<ExchangeRate> exchangeRates, String fromCurrency, String toCurrency) {
-        if (exchangeRates.size() > 0) {
+        if (exchangeRates != null && exchangeRates.size() > 0) {
 
             // get latest effectDate
             LocalDate latestEffectDate = exchangeRates.stream()
+                    .filter(p -> p.getEffectDate().isBefore(LocalDate.now().plusDays(1))) // latest day before today
                     .map(ExchangeRate::getEffectDate)
-                    .max(LocalDate::compareTo)
-                    .orElse(null);
+                    .max(LocalDate::compareTo) // get the maximum value
+                    .orElse(null); // handle empty list
 
             //case when exchange rate table happens to be null -> return 0
             List<ExchangeRate> filteredExchangeRates = exchangeRates.stream()
@@ -501,6 +545,7 @@ public class ProductHandle {
         } else return null;
     }
 
+
     private int getNextId(List<Product> products, ProductType productType) {
         int maxId = 0;
         for (Product product : products) {
@@ -514,7 +559,7 @@ public class ProductHandle {
 
     //used after currency for the product is found
     private String displayTenors(List<InterestRate> interestRates, ProductType productType, String currency) {
-        if (interestRates.size() > 0) {
+        if (interestRates != null && interestRates.size() > 0) {
             if (productType == ProductType.ACCOUNT)
                 return "Current account product have no tenor";
             else {
@@ -536,7 +581,31 @@ public class ProductHandle {
                     return distinctTenor.toString();
                 else return null;
             }
-        } else return null;
+        } else return "Interest rate data not available";
+    }
+
+    // for certain effect date
+    public String displayCurrencies(List<InterestRate> interestRates, ProductType productType, LocalDate effectDate) {
+        if (interestRates != null && interestRates.size() > 0) {
+
+            // filter the list to get selected product type
+            List<InterestRate> filteredInterestRates = interestRates.stream()
+                    .filter(o -> o.getProductType() == productType)
+                    .filter(o -> o.getEffectDate().equals(effectDate))
+                    .collect(Collectors.toList());
+
+            // get distinct currencies
+            List<String> distinctCurrencies = filteredInterestRates.stream()
+                    .map(InterestRate::getCurrency)
+                    .distinct()
+                    .collect(Collectors.toList());
+
+            // print the distinct tenors
+            if (distinctCurrencies.size() > 0)
+                return distinctCurrencies.toString();
+            else return null;
+
+        } else return "Interest rate data not available";
     }
 
 }

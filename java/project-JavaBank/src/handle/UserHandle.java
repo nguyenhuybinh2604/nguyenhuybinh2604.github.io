@@ -16,12 +16,19 @@ public class UserHandle {
         String username = inputControl.getNonEmptyString(sc);
         if (users.containsKey(username)) {
             IUser user = (IUser) users.get(username);
+
             //only continue with ACTIVE users
             if (user.getUserStatus() == UserStatus.ACTIVE) {
-                if (user.getUserRole() == userRole) { // to ensure the username entered here match the userrole at the menu
+
+                // to ensure the username entered here match the userrole at the menu
+                if (user.getUserRole() == userRole) {
+
                     //eg. customer cant log in using staff username
                     System.out.println("Enter password:");
-                    String password = sc.nextLine(); // no need to check password format at login
+
+                    // no need to check password format at login
+                    String password = sc.nextLine();
+
                     if (user.getPassword().equals(password)) {
                         return "loginSuccess_" + username;
                     } else {
@@ -32,7 +39,7 @@ public class UserHandle {
                     return "loginFailureWrongUserRole";
                 }
             } else {
-                System.out.println("User locked. Contact manager");
+                System.out.println("User locked");
                 return "loginFailureUserLocked";
             }
         } else {
@@ -42,6 +49,7 @@ public class UserHandle {
     }
 
     public String forgotPassword(Scanner sc, InputControl inputControl, Map<String, Object> users, String username) {
+
         // add code to allow interaction with only ACTIVE users
         System.out.println("Enter recovery email for " + username + ":");
         String email = inputControl.getNonEmptyString(sc);
@@ -50,6 +58,7 @@ public class UserHandle {
                     .println(
                             "Enter new password (7-15 characters, at least 01 capitalized and 01 special characters):");
             String newPassword = inputControl.getPassword(sc);
+
             // update new password
             ((IUser) users.get(username)).setPassword(newPassword);
             System.out.println("Password changed. Logging in");
@@ -62,8 +71,10 @@ public class UserHandle {
 
     public void register(Scanner sc, InputControl inputControl, Map<String, Object> users, UserRole userRole) {
         System.out.println("Register starts");
+
         // customer -> register freely. autoId = next cusId
         System.out.println("Enter your personal id:");
+
         // check if id has been used in all records
         String personId = inputControl.getNonEmptyString(sc);
         while (findPersonalId(users, personId) != null) {
@@ -95,6 +106,8 @@ public class UserHandle {
         int id = getNextId(users, userRole);
         switch (userRole) {
             case CUSTOMER -> {
+
+                // no credit rating yet
                 Customer customer = new Customer(id, personId, username, password, email, name, gender,
                         age, address, UserStatus.ACTIVE);
                 users.put(username, customer);
@@ -104,6 +117,7 @@ public class UserHandle {
                 Staff staff = new Staff(id, personId, username, password, email, name, gender, age, address,
                         UserStatus.LOCKED);
                 users.put(username, staff);
+
                 // them code add staff register to manager's request
                 System.out.println("Staff's user has been submitted for register");
             }
@@ -117,6 +131,7 @@ public class UserHandle {
             if (user.getPersonId().equals(personId))
                 return username;
         }
+
         // if a value has been found this row is skipped
         return null;
     }
@@ -128,22 +143,33 @@ public class UserHandle {
             if (user.getEmail().equals(email))
                 return username;
         }
+
         // if a value has been found this row is skipped
         return null;
     }
 
     private int getNextId(Map<String, Object> users, UserRole userRole) {
-        int maxId = 0;
+        int maxCustomerId = 0;
+        int maxStaffId = 0;
         for (Map.Entry<String, Object> entry : users.entrySet()) {
-            if (users.entrySet().getClass().getSimpleName().equals("Customer") && userRole == UserRole.CUSTOMER) {
+            if (entry.getValue().getClass().getSimpleName().equals("Customer") && userRole == UserRole.CUSTOMER) {
                 int id = ((Customer) entry.getValue()).getCustomerId();
-                if (id > maxId) maxId = id;
-            } else if (users.entrySet().getClass().getSimpleName().equals("Staff") && userRole == UserRole.STAFF) {
+                if (id > maxCustomerId) maxCustomerId = id;
+            } else if (entry.getValue().getClass().getSimpleName().equals("Staff") && userRole == UserRole.STAFF) {
                 int id = ((Staff) entry.getValue()).getStaffId();
-                if (id > maxId) maxId = id;
+                if (id > maxStaffId) maxStaffId = id;
             }
         }
-        return ++maxId;
+        if (userRole == UserRole.CUSTOMER) return ++maxCustomerId;
+        else return maxStaffId;
     }
 
+    public Customer getCustomerUsername(Map<String, Object> users, int userId) {
+        for (Map.Entry<String, Object> entry : users.entrySet()) {
+            if (((Customer) entry.getValue()).getCustomerId() == userId) {
+                return (Customer) entry.getValue();
+            }
+        }
+        return null;
+    }
 }

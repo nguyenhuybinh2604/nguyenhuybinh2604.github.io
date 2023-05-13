@@ -3,7 +3,8 @@ package entity;
 public enum TransactionType {
     ADDBALANCE,
     FUNDTRANSFER,
-    FOREIGNEXCHANGE;
+    FOREIGNEXCHANGE,
+    NA;
 
     @Override
     public String toString() {
@@ -11,6 +12,7 @@ public enum TransactionType {
             case ADDBALANCE -> "BALANCE";
             case FUNDTRANSFER -> "FT";
             case FOREIGNEXCHANGE -> "FX";
+            default -> "NA";
         };
     }
 }

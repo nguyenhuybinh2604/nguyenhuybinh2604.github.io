@@ -1,5 +1,6 @@
 package entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import service.IUser;
@@ -13,17 +14,19 @@ public class Customer extends Person implements IUser {
     private String email;
     private CreditRating creditRating;
     private List<Product> products;
-    private List<Message> messages;
     private List<Transaction> transactions;
 
     public Customer() {
+        this.transactions = new ArrayList<>();
+        this.products = new ArrayList<>();
     }
 
-    public Customer(int customerId, String personId, String username, String password, String email,
-                    String name, String gender, int age, String address, UserStatus userStatus) {
+    public Customer(int customerId, String personId, String username, String password, String email, String name,
+                    String gender, int age, String address, UserStatus userStatus) {
         this.customerId = customerId;
-        this.userRole = UserRole.CUSTOMER;
         this.personId = personId;
+        this.userRole = UserRole.CUSTOMER;
+        this.userStatus = userStatus;
         this.username = username;
         this.password = password;
         this.email = email;
@@ -31,7 +34,8 @@ public class Customer extends Person implements IUser {
         this.gender = gender;
         this.age = age;
         this.address = address;
-        this.userStatus = userStatus;
+        this.products = new ArrayList<>();
+        this.transactions = new ArrayList<>();
     }
 
     public int getCustomerId() {
@@ -92,6 +96,14 @@ public class Customer extends Person implements IUser {
         this.userStatus = userStatus;
     }
 
+    @Override
+    public void setUserStatus(String userStatusStr) {
+        if (userStatusStr.equalsIgnoreCase("ACTIVE")) this.userStatus = UserStatus.ACTIVE;
+        else if (userStatusStr.equalsIgnoreCase("INACTIVE")) this.userStatus = UserStatus.INACTIVE;
+        else if (userStatusStr.equalsIgnoreCase("LOCKED")) this.userStatus = UserStatus.LOCKED;
+        else this.userStatus = UserStatus.NA;
+    }
+
     // get a rating from existing records
     public CreditRating getCreditRating() {
         return this.creditRating;
@@ -101,20 +113,19 @@ public class Customer extends Person implements IUser {
         this.creditRating = creditRating;
     }
 
+    public void setCreditRating(String creditRatingStr) {
+        if (creditRatingStr.equalsIgnoreCase("A")) this.creditRating = CreditRating.A;
+        else if (creditRatingStr.equalsIgnoreCase("B")) this.creditRating = CreditRating.B;
+        else if (creditRatingStr.equalsIgnoreCase("C")) this.creditRating = CreditRating.C;
+        else this.creditRating = CreditRating.NA;
+    }
+
     public List<Product> getProducts() {
         return this.products;
     }
 
     public void setProducts(List<Product> products) {
         this.products = products;
-    }
-
-    public List<Message> getRequests() {
-        return this.messages;
-    }
-
-    public void setRequests(List<Message> requests) {
-        this.messages = requests;
     }
 
     public List<Transaction> getTransactions() {
@@ -154,7 +165,6 @@ public class Customer extends Person implements IUser {
                 ", password='" + getPassword() + "'" +
                 ", creditRating='" + getCreditRating() + "'" +
                 ", products='" + getProducts() + "'" +
-                ", requests='" + getRequests() + "'" +
                 ", transactions='" + getTransactions() + "'" +
                 "} \n";
     }

@@ -10,8 +10,8 @@ public enum UserStatus {
     public String toString() {
         return switch (this) {
             case ACTIVE -> "ACTIVE";
-            case INACTIVE -> "INACTIVE";
-            case LOCKED -> "LOCKED";
+            case INACTIVE -> "INACTIVE"; // not accessible
+            case LOCKED -> "LOCKED"; // pending approval
             default -> "NA";
         };
     }

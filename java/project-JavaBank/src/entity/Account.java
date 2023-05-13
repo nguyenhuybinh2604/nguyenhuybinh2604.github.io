@@ -1,7 +1,5 @@
 package entity;
 
-import handle.InputControl;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -36,12 +34,13 @@ public class Account extends Product {
     }
 
     @Override
-    public String toString(InputControl inputControl, DateTimeFormatter formatter) {
-        String valDate = valueDate == null ? "" : valueDate.format(formatter);
-        String matDate = maturityDate == null ? "" : maturityDate.format(formatter);
+    public String toString() {
+        DateTimeFormatter fmtDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String valDate = valueDate == null ? "" : valueDate.format(fmtDate);
+        String matDate = maturityDate == null ? "" : maturityDate.format(fmtDate);
         return String.format("%-10d%-10d%12s%12s%,10d%10s%,30.2f%,30.2f%,7.2f%%%10s%10s", accountId, staffId,
                 valDate, matDate, tenor, currency, balance,
-                convertedBalance, interestRate*100, inputControl.toProductStatusStr(productStatus),
-                inputControl.toProductTypeStr(productType));
+                convertedBalance, interestRate * 100, productStatus.toString(),
+                productType.toString());
     }
 }

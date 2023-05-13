@@ -72,23 +72,52 @@ x. hoan thien cac phan trinh bay:
 1/ customerHandle personal screen: view info -> done
 2/ staffhandle overview -> reformat -> done
 
-3/ staffhandle: approve loans: log messages to customers + add check for sufficient fund
-4/ staffhandle: update rating: log message to manager
-5/ transaction log:
-- producthandle: newAccount, addBalance, fundtransfer (x2), newSaving, newLoan, FX
-- customerhandle: edit info. !in viewinfo: display transactions;
-- transactionHandle: view transaction_history by: date range/ type of transaction
-- staffhandle: view number of transactions : overview/list of customers
--
-6/ producthandle: customer messages to contact manager:
-- newAccount: interest rate not available, currency not supported
-- newSaving: IR not avaiable, tenors #NA, chosen tenor #NA, currency not supported
-- newLoan:   IR not avaiable, tenors #NA, chosen tenor #NA, currency not supported, rating not set
-- FX: currency pairs not available
-
-x/ important: borrow on interbank market (manager function) + set prices + add product type INTERBANK T T
  / why return straight to user menu??? -> done
 x/ if staff got no products: -> done
-x/ does new product assigned linked to staff & customers?
+x/ does new product assigned linked to staff & customers? -> done
 x/ staff rating update: only customers with related products -> done
-x/ data export -> done (remaining transaction & messages)
+x/ data export -> done (remaining transaction -> done & messages)
+
+-8.05: round cuoi ra lai: cac arguments ko dung den
+
+3/ staffhandle: approve loans: log messages to customers + add check for sufficient fund + display pending requests at menu
+4/ staffhandle: update rating: log message to manager
+5/ transaction log:
+- producthandle: addBalance, fundtransfer (x2), FX -> done
+- customerhandle: edit info. !in viewinfo: display transactions; -> done
+- transactionHandle: view transaction_history by: date range/ type of transaction -> done
+- staffhandle: view number of transactions : overview/list of customers -> done
+
+13.05: activities which change BS:
+CUSTOMER menu:
+case 2 -> {
+    productHandle.addBalance(sc, inputControl, transactionHandle, users, exchangeRates, transactions, username);
+                }
+                +cash +balance
+case 3 -> {
+    productHandle.newAccount(sc, users, products, interestRates, username);
+                }
+                0
+case 4 -> {
+    productHandle.newLoan(sc, inputControl, users, products, interestRates, username);
+                }
+                pick disbursement account
+case 5 -> {
+    productHandle.newSaving(sc, inputControl, users, products, exchangeRates, interestRates, username);
+                }
+                +cash +saving balance
+case 6 -> {
+    productHandle.foreignExchange(sc, inputControl, transactionHandle, users, products, exchangeRates, transactions, username);
+                }
+case 7 -> {
+    productHandle.fundTransfer(sc, inputControl, userHandle, transactionHandle, users, products, exchangeRates, transactions, username);
+                }
+STAFF menu:
+case 3 -> {
+     staffHandle.approveLoans(sc, inputControl, customerHandle, productHandle, users, products,
+                            interestRates, exchangeRates, username);
+                }
+                -cash
+                +loan balance
+                +disbursement account balance
+                +cash

@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 public class InputControl {
 
     public int getInput(Scanner sc, Integer min, Integer max) {
-        int input = 0;
-        String inputString = "";
+        int input;
+        String inputString;
         while (true) {
             System.out.print("Enter an integer number " + valueRange(String.valueOf(min), String.valueOf(max)) + ": ");
             inputString = sc.nextLine().trim();
@@ -37,8 +37,8 @@ public class InputControl {
     }
 
     public double getInput(Scanner sc, Double min, Double max) {
-        double input = 0.0;
-        String inputString = "";
+        double input;
+        String inputString;
         while (true) {
             System.out.print("Enter a double number " + valueRange(String.valueOf(min), String.valueOf(max)) + ": ");
             inputString = sc.nextLine().trim();
@@ -96,23 +96,11 @@ public class InputControl {
             if (min == null && max == null) {
                 return true;
             } else if (min == null) {
-                if (inputInt <= max) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return inputInt <= max;
             } else if (max == null) {
-                if (inputInt >= min) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return inputInt >= min;
             } else {
-                if (inputInt >= min && inputInt <= max) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return inputInt >= min && inputInt <= max;
             }
             // inputInt null -> dang input so double
         } else if (inputInt == null) {
@@ -135,23 +123,11 @@ public class InputControl {
             if (min == null && max == null) {
                 return true;
             } else if (min == null) {
-                if (inputDouble <= max) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return inputDouble <= max;
             } else if (max == null) {
-                if (inputDouble >= min) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return inputDouble >= min;
             } else {
-                if (inputDouble >= min && inputDouble <= max) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return inputDouble >= min && inputDouble <= max;
             }
         } else
             return false;
@@ -202,16 +178,16 @@ public class InputControl {
             return false;
     }
 
-    public LocalDate getLocalDate(Scanner sc, DateTimeFormatter fmt) {
-
+    public LocalDate getLocalDate(Scanner sc) {
         // Prompt the user to enter a date in the expected format
+        DateTimeFormatter fmtDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate date = null;
         while (date == null) {
             String input = sc.nextLine();
 
             try {
                 // Parse the user input as a LocalDate object
-                date = LocalDate.parse(input, fmt);
+                date = LocalDate.parse(input, fmtDate);
             } catch (DateTimeParseException e) {
                 // Handle the exception if the user input is invalid
                 System.out.println("Invalid date. Enter a date in the dd/MM/yyyy format:");
@@ -227,83 +203,5 @@ public class InputControl {
             returnString = sc.nextLine().trim();
         }
         return returnString;
-    }
-
-    // return credit rating from a str
-    public CreditRating toCreditRating(String ratingStr) {
-        return switch (ratingStr) {
-            case "A" -> CreditRating.A;
-            case "B" -> CreditRating.B;
-            case "C" -> CreditRating.C;
-            default -> CreditRating.NA;
-        };
-    }
-
-    // return credit rating from a str
-    public String toCreditRatingStr(CreditRating creditRating) {
-        return switch (creditRating) {
-            case A -> "A";
-            case B -> "B";
-            case C -> "C";
-            default -> "UNKNOWN";
-        };
-    }
-
-    // return product type from a str
-    public ProductType toProductType(String productTypeStr) {
-        return switch (productTypeStr) {
-            case "LOAN" -> ProductType.LOAN;
-            case "SAVING" -> ProductType.SAVING;
-            case "ACCOUNT" -> ProductType.ACCOUNT;
-            default -> ProductType.NA;
-        };
-    }
-
-    // return str product type
-    public String toProductTypeStr(ProductType productType) {
-        return switch (productType) {
-            case LOAN -> "LOAN";
-            case SAVING -> "SAVING";
-            case ACCOUNT -> "ACCOUNT";
-            default -> "";
-        };
-    }
-
-    public ProductStatus toProductStatus(String productStatusStr) {
-        return switch (productStatusStr) {
-            case "ACTIVE" -> ProductStatus.ACTIVE;
-            case "INACTIVE" -> ProductStatus.INACTIVE;
-            case "LOCKED" -> ProductStatus.LOCKED;
-            default -> ProductStatus.NA;
-        };
-    }
-
-    public String toProductStatusStr(ProductStatus productStatus) {
-        return switch (productStatus) {
-            case ACTIVE -> "ACTIVE";
-            case INACTIVE -> "INACTIVE";
-            case LOCKED -> "LOCKED";
-            default -> "";
-        };
-    }
-
-    // return product type from a str
-    public UserStatus toUserStatus(String userStatusStr) {
-        return switch (userStatusStr) {
-            case "ACTIVE" -> UserStatus.ACTIVE;
-            case "LOCKED" -> UserStatus.LOCKED;
-            case "INACTIVE" -> UserStatus.INACTIVE;
-            default -> UserStatus.NA;
-        };
-    }
-
-    // return str user status
-    public String toUserStatusStr(UserStatus userStatus) {
-        return switch (userStatus) {
-            case ACTIVE -> "ACTIVE";
-            case LOCKED -> "LOCKED";
-            case INACTIVE -> "INACTIVE";
-            default -> "";
-        };
     }
 }

@@ -10,8 +10,8 @@ public enum ProductStatus {
     public String toString() {
         return switch (this) {
             case ACTIVE -> "ACTIVE";
-            case INACTIVE -> "INACTIVE";
-            case LOCKED -> "LOCKED";
+            case INACTIVE -> "INACTIVE"; // matured or denied
+            case LOCKED -> "LOCKED"; // pending approval
             default -> "NA";
         };
     }

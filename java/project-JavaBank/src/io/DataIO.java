@@ -3,6 +3,7 @@ package io;
 import entity.*;
 
 import handle.InputControl;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -13,6 +14,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,36 +26,29 @@ public class DataIO {
                           List<Product> products,
                           List<InterestRate> interestRates,
                           List<ExchangeRate> exchangeRates,
-                          List<Message> messages,
                           List<Transaction> transactions) {
         try {
             String pathProject = System.getProperty("user.dir");
             FileInputStream excelFile = new FileInputStream((pathProject + "/src/io/data.xlsx"));
             Workbook workbook = new XSSFWorkbook(excelFile);
 
-            importCustomer(workbook, inputControl, users);
-
-            importStaff(inputControl, workbook, users);
-
-            importManager(inputControl, workbook, users);
-
+            importCustomer(workbook, users);
+            importStaff(workbook, users);
+            importManager(workbook, users);
             importPerson(workbook, users);
 
-            importInterestRate(workbook, inputControl, interestRates);
-
+            importInterestRate(workbook, interestRates);
             importExchangeRate(workbook, exchangeRates);
 
-            importAccount(workbook, inputControl, products);
-
-            importLoan(workbook, inputControl, products);
-
-            importSaving(workbook, inputControl, products);
+            importAccount(workbook, products);
+            importLoan(workbook, products);
+            importSaving(workbook, products);
 
             loadProduct(users, products);
-
-            loadTransaction(users, transactions);
+            importTransaction(workbook, transactions);
 
             workbook.close();
+
             if (users.size() == 0) System.out.println("Message: No user record");
             if (products.size() == 0) System.out.println("Message: No product record");
             if (transactions.size() == 0) System.out.println("Message: No transaction record");
@@ -69,7 +64,7 @@ public class DataIO {
         }
     }
 
-    private void importCustomer(Workbook workbook, InputControl inputControl, Map<String, Object> users) {
+    private void importCustomer(Workbook workbook, Map<String, Object> users) {
         String sheetName = "Customer";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
@@ -86,14 +81,15 @@ public class DataIO {
             customer.setPassword(currentRow.getCell(3) == null ? null : currentRow.getCell(3).getStringCellValue());
             customer.setEmail(currentRow.getCell(4) == null ? null : currentRow.getCell(4).getStringCellValue());
             String creditRatingStr = currentRow.getCell(5) == null ? "" : currentRow.getCell(5).getStringCellValue();
-            customer.setCreditRating(inputControl.toCreditRating(creditRatingStr));
+            customer.setCreditRating(creditRatingStr);
             String userStatusStr = currentRow.getCell(6) == null ? "" : currentRow.getCell(6).getStringCellValue();
-            customer.setUserStatus(inputControl.toUserStatus(userStatusStr));
+            customer.setUserStatus(userStatusStr);
+
             users.put(customer.getUsername(), customer);
         }
     }
 
-    private void importStaff(InputControl inputControl, Workbook workbook, Map<String, Object> users) {
+    private void importStaff(Workbook workbook, Map<String, Object> users) {
         String sheetName = "Staff";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
@@ -111,12 +107,12 @@ public class DataIO {
             staff.setBasicSalary(currentRow.getCell(5) == null ? 0 : currentRow.getCell(5).getNumericCellValue());
             staff.setRateOfBonus(currentRow.getCell(6) == null ? 0 : currentRow.getCell(6).getNumericCellValue());
             String userStatusStr = currentRow.getCell(7) == null ? "" : currentRow.getCell(7).getStringCellValue();
-            staff.setUserStatus(inputControl.toUserStatus(userStatusStr));
+            staff.setUserStatus(userStatusStr);
             users.put(staff.getUsername(), staff);
         }
     }
 
-    private void importManager(InputControl inputControl, Workbook workbook, Map<String, Object> users) {
+    private void importManager(Workbook workbook, Map<String, Object> users) {
         String sheetName = "Manager";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
@@ -133,7 +129,7 @@ public class DataIO {
             manager.setBasicSalary(currentRow.getCell(4) == null ? 0 : currentRow.getCell(4).getNumericCellValue());
             manager.setRateOfBonus(currentRow.getCell(5) == null ? 0 : currentRow.getCell(5).getNumericCellValue());
             String userStatusStr = currentRow.getCell(6) == null ? "" : currentRow.getCell(6).getStringCellValue();
-            manager.setUserStatus(inputControl.toUserStatus(userStatusStr));
+            manager.setUserStatus(userStatusStr);
             users.put(manager.getUsername(), manager);
         }
     }
@@ -144,7 +140,7 @@ public class DataIO {
         Iterator<Row> iterator = datatypeSheet.iterator();
         Row firstRow = iterator.next();
         Cell firstCell = firstRow.getCell(0);
-        if (users.size() > 0) {
+        if (users != null && users.size() > 0) {
             while (iterator.hasNext()) {
                 Row currentRow = iterator.next();
                 String personId = currentRow.getCell(0) == null ? null : currentRow.getCell(0).getStringCellValue();
@@ -169,7 +165,7 @@ public class DataIO {
         } else System.out.println("No record");
     }
 
-    private void importInterestRate(Workbook workbook, InputControl inputControl, List<InterestRate> interestRates) {
+    private void importInterestRate(Workbook workbook, List<InterestRate> interestRates) {
         String sheetName = "interestRate";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
@@ -181,7 +177,7 @@ public class DataIO {
             interestRate.setEffectDate(currentRow.getCell(0) == null ? null : currentRow.getCell(0).getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
             interestRate.setCurrency(currentRow.getCell(1) == null ? null : currentRow.getCell(1).getStringCellValue());
             String productTypeStr = currentRow.getCell(2) == null ? null : currentRow.getCell(2).getStringCellValue();
-            interestRate.setProductType(inputControl.toProductType(productTypeStr));
+            interestRate.setProductType(productTypeStr);
             interestRate.setTenor(currentRow.getCell(3) == null ? null : (int) currentRow.getCell(3).getNumericCellValue());
             interestRate.setCreditRatingStr(currentRow.getCell(4) == null ? null : currentRow.getCell(4).getStringCellValue());
             interestRate.setInterestRate(currentRow.getCell(5) == null ? 0 : currentRow.getCell(5).getNumericCellValue());
@@ -206,7 +202,7 @@ public class DataIO {
         }
     }
 
-    private void importAccount(Workbook workbook, InputControl inputControl, List<Product> products) {
+    private void importAccount(Workbook workbook, List<Product> products) {
         String sheetName = "Account";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
@@ -227,12 +223,13 @@ public class DataIO {
             account.setConvertedBalance(currentRow.getCell(8) == null ? 0 : currentRow.getCell(8).getNumericCellValue());
             account.setInterestRate(currentRow.getCell(9) == null ? 0 : currentRow.getCell(9).getNumericCellValue());
             String productStatusStr = currentRow.getCell(10) == null ? null : currentRow.getCell(10).getStringCellValue();
-            account.setProductStatus(inputControl.toProductStatus(productStatusStr));
+            account.setProductStatus(productStatusStr);
             products.add(account);
+//            products.put(account.getProductType().toString()+String.valueOf(account.getProductId()),account);
         }
     }
 
-    private void importLoan(Workbook workbook, InputControl inputControl, List<Product> products) {
+    private void importLoan(Workbook workbook, List<Product> products) {
         String sheetName = "Loan";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
@@ -253,16 +250,17 @@ public class DataIO {
             loan.setConvertedBalance(currentRow.getCell(8) == null ? 0 : currentRow.getCell(8).getNumericCellValue());
             loan.setInterestRate(currentRow.getCell(9) == null ? 0 : currentRow.getCell(9).getNumericCellValue());
             String productStatusStr = currentRow.getCell(10) == null ? null : currentRow.getCell(10).getStringCellValue();
-            loan.setProductStatus(inputControl.toProductStatus(productStatusStr));
+            loan.setProductStatus(productStatusStr);
 
             //check maturitydate of ACTIVE loans -> if matured -> to INACTIVE
             if (loan.getProductStatus() == ProductStatus.ACTIVE && loan.getMaturityDate().isBefore(LocalDate.now()))
                 loan.setProductStatus(ProductStatus.INACTIVE);
             products.add(loan);
+
         }
     }
 
-    private void importSaving(Workbook workbook, InputControl inputControl, List<Product> products) {
+    private void importSaving(Workbook workbook, List<Product> products) {
         String sheetName = "Saving";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
@@ -283,7 +281,7 @@ public class DataIO {
             saving.setConvertedBalance(currentRow.getCell(8) == null ? 0 : currentRow.getCell(8).getNumericCellValue());
             saving.setInterestRate(currentRow.getCell(9) == null ? 0 : currentRow.getCell(9).getNumericCellValue());
             String productStatusStr = currentRow.getCell(10) == null ? null : currentRow.getCell(10).getStringCellValue();
-            saving.setProductStatus(inputControl.toProductStatus(productStatusStr));
+            saving.setProductStatus(productStatusStr);
 
             //check maturitydate of ACTIVE savings -> if matured -> to INACTIVE
             if (saving.getProductStatus() == ProductStatus.ACTIVE && saving.getMaturityDate().isBefore(LocalDate.now()))
@@ -292,14 +290,45 @@ public class DataIO {
         }
     }
 
+    private void importTransaction(Workbook workbook, List<Transaction> transactions) {
+        String sheetName = "transactionLog";
+        Sheet datatypeSheet = workbook.getSheet(sheetName);
+        Iterator<Row> iterator = datatypeSheet.iterator();
+        Row firstRow = iterator.next();
+        Cell firstCell = firstRow.getCell(0);
+        while (iterator.hasNext()) {
+            Row currentRow = iterator.next();
+            Transaction transaction = new Transaction();
+            if (currentRow.getCell(0) != null)
+                transaction.setTransactionId((int) currentRow.getCell(0).getNumericCellValue());
+            transaction.setTransactionTime(currentRow.getCell(1) == null ? null :
+                    currentRow.getCell(1).getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+            if (currentRow.getCell(2) != null)
+                transaction.setTransactionType(currentRow.getCell(2).getStringCellValue());
+            if (currentRow.getCell(3) != null)
+                transaction.setAccountId((int) currentRow.getCell(3).getNumericCellValue());
+            if (currentRow.getCell(4) != null)
+                transaction.setCustomerId((int) currentRow.getCell(4).getNumericCellValue());
+            transaction.setCurrency(currentRow.getCell(5) == null ? null : currentRow.getCell(5).getStringCellValue());
+            if (currentRow.getCell(6) != null) transaction.setCredit(currentRow.getCell(6).getNumericCellValue());
+            if (currentRow.getCell(7) != null) transaction.setDebit(currentRow.getCell(7).getNumericCellValue());
+            if (currentRow.getCell(8) != null)
+                transaction.setConvertedCredit(currentRow.getCell(8).getNumericCellValue());
+            if (currentRow.getCell(9) != null)
+                transaction.setConvertedDebit(currentRow.getCell(9).getNumericCellValue());
+
+            transactions.add(transaction);
+        }
+    }
+
     // load to each customer
     private void loadProduct(Map<String, Object> users, List<Product> products) {
-        if (users.size() > 0) {
+        if (users != null && users.size() > 0) {
             for (Map.Entry<String, Object> entry : users.entrySet()) {
                 if (entry.getValue().getClass().getSimpleName().equals("Customer")) {
                     String username = entry.getKey();
                     Customer customer = (Customer) entry.getValue();
-                    if (products.size() > 0) {
+                    if (products != null && products.size() > 0) {
                         List<Product> filteredProducts = products.stream()
                                 .filter(o -> o.getCustomerId() == customer.getCustomerId())
                                 .collect(Collectors.toList());
@@ -315,12 +344,12 @@ public class DataIO {
 
     // load to each customer
     private void loadTransaction(Map<String, Object> users, List<Transaction> transactions) {
-        if (users.size() > 0) {
+        if (users != null && users.size() > 0) {
             for (Map.Entry<String, Object> entry : users.entrySet()) {
                 if (entry.getValue().getClass().getSimpleName().equals("Customer")) {
                     String username = entry.getKey();
                     Customer customer = (Customer) entry.getValue();
-                    if (transactions.size() > 0) {
+                    if (transactions != null && transactions.size() > 0) {
                         List<Transaction> filteredTransactions = transactions.stream()
                                 .filter(o -> o.getCustomerId() == customer.getCustomerId())
                                 .collect(Collectors.toList());
@@ -339,35 +368,55 @@ public class DataIO {
                            List<Product> products,
                            List<InterestRate> interestRates,
                            List<ExchangeRate> exchangeRates,
-                           List<Message> messages,
                            List<Transaction> transactions) {
         try {
             String pathProject = System.getProperty("user.dir");
+            DateTimeFormatter fmtLocalDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter fmtLocalDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            File file = new File(pathProject + "/src/io/output.xlsx");
+
+            //Check if workbook is open
+            Workbook checkWorkbook = null;
+            boolean isOpen = true;
+
+            // Loop until the workbook is closed
+            while (isOpen) {
+                try {
+                    // Try to create a new workbook from the file
+                    checkWorkbook = WorkbookFactory.create(file);
+                    isOpen = false; // workbook is not open
+                } catch (IOException e) {
+                    // If the workbook is open, catch the IOException and wait for it to close
+                    System.out.println("Workbook is open. Waiting for it to close...");
+                    try {
+                        Thread.sleep(5000); // wait for 1 second
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+                } catch (InvalidFormatException e) {
+                    e.printStackTrace();
+                }
+            }
 
             // Open the existing workbook and sheet
             FileInputStream inputStream = new FileInputStream(pathProject + "/src/io/output.xlsx");
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
-            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
             FileOutputStream outputStream = new FileOutputStream(pathProject + "/src/io/output.xlsx");
 
-            exportExchangeRate(workbook, outputStream, exchangeRates, fmt);
+            exportExchangeRate(workbook, exchangeRates, fmtLocalDate);
+            exportInterestRate(workbook, interestRates, fmtLocalDate);
 
-            exportInterestRate(workbook, outputStream, interestRates, fmt);
+            exportProduct(workbook, products, fmtLocalDate, ProductType.ACCOUNT, "Account");
+            exportProduct(workbook, products, fmtLocalDate, ProductType.LOAN, "Loan");
+            exportProduct(workbook, products, fmtLocalDate, ProductType.SAVING, "Saving");
 
-            exportProduct(workbook, outputStream, products, fmt, ProductType.ACCOUNT, "Account");
+            exportCustomer(workbook, users);
+            exportStaff(workbook, users);
+            exportManager(workbook, users);
+            exportPerson(workbook, users);
 
-            exportProduct(workbook, outputStream, products, fmt, ProductType.LOAN, "Loan");
-
-            exportProduct(workbook, outputStream, products, fmt, ProductType.SAVING, "Saving");
-
-            exportCustomer(workbook, outputStream, users);
-
-            exportStaff(workbook, outputStream, users);
-
-            exportManager(workbook, outputStream, users);
-
-            exportPerson(workbook, outputStream, users);
+            exportTransaction(workbook, transactions, fmtLocalDateTime);
 
             // Write the workbook to the file
             workbook.write(outputStream);
@@ -394,7 +443,7 @@ public class DataIO {
         }
     }
 
-    private void exportExchangeRate(XSSFWorkbook workbook, OutputStream outputStream, List<ExchangeRate> exchangeRates,
+    private void exportExchangeRate(XSSFWorkbook workbook, List<ExchangeRate> exchangeRates,
                                     DateTimeFormatter fmt) throws IOException {
         XSSFSheet sheet = workbook.getSheet("exchangeRate");
 
@@ -417,7 +466,7 @@ public class DataIO {
 
     }
 
-    private void exportInterestRate(XSSFWorkbook workbook, OutputStream outputStream, List<InterestRate> interestRates,
+    private void exportInterestRate(XSSFWorkbook workbook, List<InterestRate> interestRates,
                                     DateTimeFormatter fmt) throws IOException {
         XSSFSheet sheet = workbook.getSheet("interestRate");
 
@@ -443,9 +492,9 @@ public class DataIO {
         }
     }
 
-    private void exportProduct(XSSFWorkbook workbook, OutputStream outputStream, List<Product> products,
+    private void exportProduct(XSSFWorkbook workbook, List<Product> products,
                                DateTimeFormatter fmt, ProductType productType, String sheetName) throws IOException {
-        if (products.size() > 0) {
+        if (products != null && products.size() > 0) {
             XSSFSheet sheet = workbook.getSheet(sheetName);
 
             // Clear all rows from the 2nd row downward
@@ -486,7 +535,7 @@ public class DataIO {
         }
     }
 
-    private void exportCustomer(XSSFWorkbook workbook, OutputStream outputStream, Map<String, Object> users)
+    private void exportCustomer(XSSFWorkbook workbook, Map<String, Object> users)
             throws IOException {
         XSSFSheet sheet = workbook.getSheet("Customer");
 
@@ -520,10 +569,11 @@ public class DataIO {
             XSSFCell cell7 = sheetRow.createCell(6);
             if (((Customer) user).getUserStatus() != null)
                 cell7.setCellValue(((Customer) user).getUserStatus().toString());
+
         }
     }
 
-    private void exportStaff(XSSFWorkbook workbook, OutputStream outputStream, Map<String, Object> users)
+    private void exportStaff(XSSFWorkbook workbook, Map<String, Object> users)
             throws IOException {
         XSSFSheet sheet = workbook.getSheet("Staff");
 
@@ -560,7 +610,7 @@ public class DataIO {
         }
     }
 
-    private void exportManager(XSSFWorkbook workbook, OutputStream outputStream, Map<String, Object> users)
+    private void exportManager(XSSFWorkbook workbook, Map<String, Object> users)
             throws IOException {
         XSSFSheet sheet = workbook.getSheet("Manager");
 
@@ -595,7 +645,7 @@ public class DataIO {
         }
     }
 
-    private void exportPerson(XSSFWorkbook workbook, OutputStream outputStream, Map<String, Object> users)
+    private void exportPerson(XSSFWorkbook workbook, Map<String, Object> users)
             throws IOException {
         XSSFSheet sheet = workbook.getSheet("Person");
 
@@ -617,6 +667,45 @@ public class DataIO {
             cell4.setCellValue(((Person) user).getAge());
             XSSFCell cell5 = sheetRow.createCell(4);
             cell5.setCellValue(((Person) user).getAddress());
+        }
+    }
+
+    private void exportTransaction(XSSFWorkbook workbook, List<Transaction> transactions,
+                                   DateTimeFormatter fmt) {
+        XSSFSheet sheet = workbook.getSheet("transactionLog");
+
+        // Clear all rows from the 2nd row downward
+        clearSheet(sheet);
+
+        // Write the list to the sheet
+        int rowCount = 0;
+        if (transactions.size() > 0) {
+            for (Transaction transaction : transactions) {
+                XSSFRow sheetRow = sheet.createRow(++rowCount);
+
+                XSSFCell cell1 = sheetRow.createCell(0);
+                cell1.setCellValue(transaction.getTransactionId());
+                XSSFCell cell2 = sheetRow.createCell(1);
+                if (transaction.getTransactionTime() != null)
+                    cell2.setCellValue(transaction.getTransactionTime().format(fmt));
+                XSSFCell cell3 = sheetRow.createCell(2);
+                if (transaction.getTransactionType() != null)
+                    cell3.setCellValue(transaction.getTransactionType().toString());
+                XSSFCell cell4 = sheetRow.createCell(3);
+                cell4.setCellValue(transaction.getAccountId());
+                XSSFCell cell5 = sheetRow.createCell(4);
+                cell5.setCellValue(transaction.getCustomerId());
+                XSSFCell cell6 = sheetRow.createCell(5);
+                cell6.setCellValue(transaction.getCurrency());
+                XSSFCell cell7 = sheetRow.createCell(6);
+                cell7.setCellValue(transaction.getCredit());
+                XSSFCell cell8 = sheetRow.createCell(7);
+                cell8.setCellValue(transaction.getDebit());
+                XSSFCell cell9 = sheetRow.createCell(8);
+                cell9.setCellValue(transaction.getConvertedCredit());
+                XSSFCell cell10 = sheetRow.createCell(9);
+                cell10.setCellValue(transaction.getConvertedDebit());
+            }
         }
     }
 }
