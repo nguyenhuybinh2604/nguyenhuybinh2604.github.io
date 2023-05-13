@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-//        countArray = new int[5];
-//        // 4 - no of transactions last 7 days
-
 public class SummaryHandle {
 
     // pivot group list of products by customer - only customers with at least 1 product

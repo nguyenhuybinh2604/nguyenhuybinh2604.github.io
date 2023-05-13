@@ -105,7 +105,7 @@ public class RatingUpdateRequest {
     @Override
     public String toString() {
         DateTimeFormatter fmtDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return String.format("%5d%15s%10d%10d%10s%10s\n", requestId, requestCreation.format(fmtDateTime), staffId,
+        return String.format("%-5d%20s%-10d%-12d%10s%10s\n", requestId, requestCreation.format(fmtDateTime), staffId,
                 customerId, currentRating.toString(), proposedRating.toString());
     }
 

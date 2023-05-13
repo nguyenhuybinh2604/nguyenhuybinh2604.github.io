@@ -1,8 +1,6 @@
 package handle;
 
 import entity.*;
-import org.apache.poi.poifs.filesystem.NDocumentOutputStream;
-import org.w3c.dom.ls.LSOutput;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -568,27 +566,31 @@ public class ManagerHandle {
         List<RatingUpdateRequest> activeRequests = requests.stream()
                 .filter(RatingUpdateRequest::isActive)
                 .collect(Collectors.toList());
+        if (activeRequests.size() > 0) {
 
-        System.out.printf("%5s%15s%10s%10s%10s%10s\n", "IDs", "Time created", "Staff Id",
-                "Customer Id", "Current", "Proposed");
-        //list all active requests
-        for (RatingUpdateRequest request : activeRequests) System.out.println(request.toString());
+            System.out.printf("%-5s%20s%10s%12s%10s%10s\n", "IDs", "Time created", "Staff Id",
+                    "Customer Id", "Current", "Proposed");
+            //list all active requests
+            for (RatingUpdateRequest request : activeRequests) System.out.println(request.toString());
 
-        System.out.println("Select request Id to approve:");
-        int requestId = inputControl.getInput(sc, 1, null);
+            System.out.println("Select request Id to approve:");
+            int requestId = inputControl.getInput(sc, 1, null);
 
-        if (ratingHandle.findRequest(requests, requestId) != null) {
-            RatingUpdateRequest request = ratingHandle.findRequest(requests, requestId);
-            int customerId = request.getCustomerId();
-            String customerUsername = customerHandle.findCustomer(users, customerId);
-            if (customerUsername != null) {
-                Customer customer = (Customer) users.get(customerUsername);
-                customer.setCreditRating(request.getProposedRating());
-                System.out.println("New rating has been approved");
-                request.setActive(false);
-            } else System.out.println("Customer not found");
-        } else System.out.println("Request Id not found");
+            if (ratingHandle.findRequest(activeRequests, requestId) != null) {
+                RatingUpdateRequest request = ratingHandle.findRequest(activeRequests, requestId);
+                int customerId = request.getCustomerId();
+                String customerUsername = customerHandle.findCustomer(users, customerId);
+                if (customerUsername != null) {
+                    Customer customer = (Customer) users.get(customerUsername);
+                    customer.setCreditRating(request.getProposedRating());
+                    System.out.println("New rating has been approved");
 
+                    // turn off flag
+                    request.setActive(false);
+
+                } else System.out.println("Customer not found");
+            } else System.out.println("Request Id not found");
+        } else System.out.println("No active request");
     }
 
     public void approveStaffRegister(Scanner sc, InputControl inputControl, Map<String, Object> users) {
@@ -600,13 +602,13 @@ public class ManagerHandle {
                 .filter(object -> ((Staff) object).getUserStatus() == UserStatus.LOCKED)
                 .collect(Collectors.toList());
         if (lockedStaffs.size() > 0) {
-            System.out.printf("%6s%30s%15s%7s%4s%30s%10s", "Staff IDs", "Name", "Person IDs", "Gender", "Age",
+            System.out.printf("%10s%30s%15s%7s%4s%-30s%-10s\n", "Staff IDs", "Name", "Person IDs", "Gender", "Age",
                     "Email", "User status");
 
             // display staffs
             for (Object staff : lockedStaffs) {
                 Staff currentStaff = (Staff) staff;
-                System.out.printf("%6d%30s%15s%7s%4d%30s%10s", currentStaff.getStaffId(), currentStaff.getName(),
+                System.out.printf("%10d%30s%15s%7s%4d%-30s%-10s\n", currentStaff.getStaffId(), currentStaff.getName(),
                         currentStaff.getPersonId(), currentStaff.getGender(), currentStaff.getAge(),
                         currentStaff.getEmail(), currentStaff.getUserStatus().toString());
             }
@@ -637,10 +639,12 @@ public class ManagerHandle {
                     case 1: {
                         foundStaff.setUserStatus(UserStatus.ACTIVE);
                         System.out.println("Staff No." + staffId + " has been activated");
+                        break;
                     }
                     case 2: {
                         foundStaff.setUserStatus(UserStatus.INACTIVE);
                         System.out.println("Staff register " + staffId + " has been denied");
+                        break;
                     }
                     default:
                         break;

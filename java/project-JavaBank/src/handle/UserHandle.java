@@ -3,11 +3,7 @@ package handle;
 import java.util.Map;
 import java.util.Scanner;
 
-import entity.Customer;
-import entity.Staff;
-import entity.Person;
-import entity.UserRole;
-import entity.UserStatus;
+import entity.*;
 import service.IUser;
 
 public class UserHandle {
@@ -111,6 +107,7 @@ public class UserHandle {
                 Customer customer = new Customer(id, personId, username, password, email, name, gender,
                         age, address, UserStatus.ACTIVE);
                 users.put(username, customer);
+
                 System.out.println("Customer's user has been registered");
             }
             case STAFF -> {
@@ -118,7 +115,6 @@ public class UserHandle {
                         UserStatus.LOCKED);
                 users.put(username, staff);
 
-                // them code add staff register to manager's request
                 System.out.println("Staff's user has been submitted for register");
             }
         }
@@ -161,7 +157,7 @@ public class UserHandle {
             }
         }
         if (userRole == UserRole.CUSTOMER) return ++maxCustomerId;
-        else return maxStaffId;
+        else return ++maxStaffId;
     }
 
     public Customer getCustomerUsername(Map<String, Object> users, int userId) {

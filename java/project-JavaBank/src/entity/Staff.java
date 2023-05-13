@@ -32,6 +32,8 @@ public class Staff extends Person implements IUser {
         this.age = age;
         this.address = address;
         this.userStatus = userStatus;
+        this.rank = 0;
+        this.bonus = 0;
     }
 
     public int getStaffId() {

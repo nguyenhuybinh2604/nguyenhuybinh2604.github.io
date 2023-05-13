@@ -372,7 +372,7 @@ public class ProductHandle {
                             } else
                                 System.out.println("Exchange from " + fromCurrency + " to " + toCurrency + " not available");
                         } else System.out.println(fromCurrency + " account not available. Return to open account");
-                    } else System.out.println(toCurrency + " account not available. Return to open account");
+                    } else System.out.println(toCurrency + " currency not available. Return to open account");
                 } else System.out.println("Customer has no account. Return to open account");
             } else System.out.println("No record");
         } else System.out.println("Customer not found");
@@ -559,7 +559,7 @@ public class ProductHandle {
     }
 
 
-    private int getNextId(List<Product> products, ProductType productType) {
+    public int getNextId(List<Product> products, ProductType productType) {
         int maxId = 0;
         for (Product product : products) {
             if (product.getProductType() == productType) {

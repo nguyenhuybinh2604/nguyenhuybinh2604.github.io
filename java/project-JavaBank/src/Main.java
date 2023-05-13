@@ -1,3 +1,5 @@
+import entity.ProductType;
+import handle.ProductHandle;
 import view.Menu;
 
 public class Main {

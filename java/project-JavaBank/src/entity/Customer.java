@@ -19,6 +19,7 @@ public class Customer extends Person implements IUser {
     public Customer() {
         this.transactions = new ArrayList<>();
         this.products = new ArrayList<>();
+        this.creditRating = CreditRating.NA;
     }
 
     public Customer(int customerId, String personId, String username, String password, String email, String name,
@@ -36,6 +37,7 @@ public class Customer extends Person implements IUser {
         this.address = address;
         this.products = new ArrayList<>();
         this.transactions = new ArrayList<>();
+        this.creditRating = CreditRating.NA;
     }
 
     public int getCustomerId() {

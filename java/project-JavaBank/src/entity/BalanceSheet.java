@@ -28,17 +28,18 @@ public class BalanceSheet {
         List<Product> activeProducts = products.stream()
                 .filter(o -> o.getProductStatus() == ProductStatus.ACTIVE) //chi lay active
                 .collect(Collectors.toList());
+
         for (Product product : activeProducts) {
-            switch (product.getProductType()) {
-                case LOAN:
-                    loanBalance += product.getConvertedBalance();
-                case SAVING:
-                    depositBalance += product.getConvertedBalance();
-                case ACCOUNT:
-                    depositBalance += product.getConvertedBalance();
+            if (product.getProductType() == ProductType.LOAN) {
+                loanBalance += product.getConvertedBalance();
+            } else {
+                depositBalance += product.getConvertedBalance();
             }
         }
+        this.loanBalance = loanBalance;
+        this.depositBalance = depositBalance;
         this.cashBalance = this.equityBalance + depositBalance - loanBalance;
+
     }
 
     public LocalDate getEffectDate() {
@@ -84,7 +85,7 @@ public class BalanceSheet {
     @Override
     public String toString() {
         DateTimeFormatter fmtDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return String.format("%s %s %s %,.2f %s %s %,.2f %s %,.2f %s %s %,.2f %s", "JavaBank Balance Sheet for ",
+        return String.format("%s%s%-42s%,30.2f%s%-40s%,30.2f%-41s%,30.2f%s%-40s%,30.2f%s", "JavaBank Balance Sheet for ",
                 effectDate.format(fmtDate), ":\nCash: ", cashBalance, "\n", "Outstanding loan balance: ", loanBalance,
                 "\nOutstanding deposit balance: ", depositBalance, "\n", "Equity: ", equityBalance, "\n");
     }

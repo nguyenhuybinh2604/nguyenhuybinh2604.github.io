@@ -52,12 +52,12 @@ public class DataIO {
 
             workbook.close();
 
-            if (users.size() == 0) System.out.println("Message: No user record");
-            if (products.size() == 0) System.out.println("Message: No product record");
-            if (transactions.size() == 0) System.out.println("Message: No transaction record");
-            if (interestRates.size() == 0) System.out.println("Message: No interest rate record");
-            if (exchangeRates.size() == 0) System.out.println("Message: No exchange rate record");
-            System.out.println("Message: Done importing");
+            if (users.size() == 0) System.out.println("No user record");
+            if (products.size() == 0) System.out.println("No product record");
+            if (transactions.size() == 0) System.out.println("No transaction record");
+            if (interestRates.size() == 0) System.out.println("No interest rate record");
+            if (exchangeRates.size() == 0) System.out.println("No exchange rate record");
+            System.out.println("Done importing");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.out.println("JavaBank Error: file not found.");
@@ -343,11 +343,18 @@ public class DataIO {
                 ratingUpdateRequest.setStaffId((int) currentRow.getCell(2).getNumericCellValue());
             if (currentRow.getCell(3) != null)
                 ratingUpdateRequest.setCustomerId((int) currentRow.getCell(3).getNumericCellValue());
-            String currentRatingStr = currentRow.getCell(4).getStringCellValue();
+            String currentRatingStr = "";
+            if (currentRow.getCell(4) != null)
+                currentRatingStr = currentRow.getCell(4).getStringCellValue();
             ratingUpdateRequest.setCurrentRating(currentRatingStr);
-            String proposedRatingStr = currentRow.getCell(5).getStringCellValue();
+            String proposedRatingStr = "";
+            if (currentRow.getCell(5) != null)
+                proposedRatingStr = currentRow.getCell(5).getStringCellValue();
             ratingUpdateRequest.setProposedRating(proposedRatingStr);
-            ratingUpdateRequest.setActive(currentRow.getCell(6).getStringCellValue());
+//            String isActiveStr = "false";
+            if (currentRow.getCell(6) != null)
+//                isActiveStr=currentRow.getCell(6).getStringCellValue();
+                ratingUpdateRequest.setActive(currentRow.getCell(6).getBooleanCellValue());
 
             ratingUpdateRequests.add(ratingUpdateRequest);
 
@@ -456,7 +463,7 @@ public class DataIO {
             // Write the workbook to the file
             workbook.write(outputStream);
             workbook.close();
-            System.out.println("Message: Done exporting");
+            System.out.println("Done exporting");
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -639,9 +646,9 @@ public class DataIO {
             XSSFCell cell6 = sheetRow.createCell(5);
             cell6.setCellValue(((Staff) user).getBasicSalary());
             XSSFCell cell7 = sheetRow.createCell(6);
-            cell7.setCellValue(((Staff) user).getRank());
+            if (((Staff) user).getRank() != 0) cell7.setCellValue(((Staff) user).getRank());
             XSSFCell cell8 = sheetRow.createCell(7);
-            cell8.setCellValue(((Staff) user).getBonus());
+            if (((Staff) user).getBonus() != 0) cell8.setCellValue(((Staff) user).getBonus());
             XSSFCell cell9 = sheetRow.createCell(8);
             cell9.setCellValue(((Staff) user).getUserStatus().toString());
         }

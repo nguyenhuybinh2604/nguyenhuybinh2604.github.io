@@ -92,46 +92,71 @@ public class StaffHandle {
                     if (productMap.containsKey(loanId)) {
                         Product product = productMap.get(loanId);
 
+                        double exchangeRate = productHandle.getExchangeRate(exchangeRates, product.getCurrency(), "VND");
+                        double remainingMoney = balanceSheet.getCashBalance();
+                        double convertedBalance = exchangeRate * product.getBalance();
+
                         //check whether if bank has enough money
                         //if enough -> continue next steps, if not -> print not enough money
-                        // wont change (still pending for approval)
-                        int customerId = product.getCustomerId();
-                        String customerUsername = customerHandle.findCustomer(users, customerId);
-                        if (customerUsername != null) {
-                            Customer customer = (Customer) users.get(customerUsername);
-                            CreditRating creditRating = customer.getCreditRating();
-                            if (creditRating != CreditRating.NA) {
-                                System.out.println("SELECT AN OPTION");
-                                System.out.println("1. Approve loan");
-                                System.out.println("2. Decline loan");
-                                int input = inputControl.getInput(sc, 1, 2);
-                                switch (input) {
+                        if (remainingMoney >= convertedBalance) {
 
-                                    // approves -> turn ACTIVE, update all loan properties
-                                    case 1 -> {
-                                        LocalDate valueDate = LocalDate.now();
-                                        product.setValueDate(valueDate);
-                                        LocalDate maturityDate = valueDate.plusMonths(product.getTenor());
-                                        product.setMaturityDate(maturityDate);
-                                        double interestRate = productHandle.getInterestRate(interestRates, ProductType.LOAN,
-                                                product.getCurrency(), product.getTenor(), creditRating.toString());
-                                        product.setInterestRate(interestRate);
-                                        double exchangeRate = productHandle.getExchangeRate(exchangeRates, product.getCurrency(), "VND");
-                                        product.setConvertedBalance(product.getBalance() * exchangeRate);
-                                        product.setProductStatus(ProductStatus.ACTIVE);
+                            // wont change (still pending for approval)
+                            int customerId = product.getCustomerId();
+                            String customerUsername = customerHandle.findCustomer(users, customerId);
+                            if (customerUsername != null) {
+                                Customer customer = (Customer) users.get(customerUsername);
+                                CreditRating creditRating = customer.getCreditRating();
+                                if (creditRating != CreditRating.NA) {
+                                    System.out.println("SELECT AN OPTION");
+                                    System.out.println("1. Approve loan");
+                                    System.out.println("2. Decline loan");
+                                    int input = inputControl.getInput(sc, 1, 2);
+                                    switch (input) {
 
-                                        System.out.println("Loan proposal No. " + loanId + " from customer " + customer.getName() + "has been approved");
+                                        // approves -> turn ACTIVE, update all loan properties
+                                        case 1 -> {
+                                            LocalDate valueDate = LocalDate.now();
+                                            product.setValueDate(valueDate);
+                                            LocalDate maturityDate = valueDate.plusMonths(product.getTenor());
+                                            product.setMaturityDate(maturityDate);
+                                            double interestRate = productHandle.getInterestRate(interestRates, ProductType.LOAN,
+                                                    product.getCurrency(), product.getTenor(), creditRating.toString());
+                                            product.setInterestRate(interestRate);
+
+                                            product.setConvertedBalance(convertedBalance);
+                                            product.setProductStatus(ProductStatus.ACTIVE);
+
+                                            // create disbursement account
+                                            int disbursementAccountId = productHandle.getNextId(products, ProductType.ACCOUNT);
+                                            double disbursementAccountRate = productHandle.getInterestRate(interestRates, ProductType.ACCOUNT, product.getCurrency(), null, null);
+                                            Account disbursementAccount = new Account(disbursementAccountId, staffId, valueDate,
+                                                    null, null, product.getCurrency(), product.getBalance(), convertedBalance,
+                                                    disbursementAccountRate, ProductStatus.ACTIVE);
+
+                                            // add disb account to product lists
+                                            products.add(disbursementAccount);
+                                            customer.getProducts().add(disbursementAccount);
+
+                                            // change in balance sheet
+                                            balanceSheet.setLoanBalance(balanceSheet.getLoanBalance()
+                                                    + convertedBalance);
+                                            balanceSheet.setDepositBalance(balanceSheet.getDepositBalance()
+                                                    + convertedBalance);
+
+                                            System.out.println("Loan proposal No. " + loanId + " from customer " + customer.getName() + " has been approved");
+                                        }
+
+                                        // declines -> set proposed loan as INACTIVE
+                                        case 2 -> {
+                                            // log a message to customer
+                                            product.setProductStatus(ProductStatus.INACTIVE);
+                                            System.out.println("Loan proposal No. " + loanId + " from customer " + customer.getName() + " has been declined");
+                                        }
                                     }
-
-                                    // declines -> set proposed loan as INACTIVE
-                                    case 2 -> {
-                                        // log a message to customer
-                                        product.setProductStatus(ProductStatus.INACTIVE);
-                                        System.out.println("Loan proposal No. " + loanId + " from customer " + customer.getName() + "has been declined");
-                                    }
-                                }
-                            } else System.out.println("Customer has not been rated. Update credit rating");
-                        } else System.out.println("Customer not found");
+                                } else
+                                    System.out.println("Customer No." + customerId + " has not been rated. Update credit rating");
+                            } else System.out.println("Customer not found");
+                        } else System.out.println("Not sufficient fund");
                     } else System.out.println("Loan Id not found");
                 } else System.out.println("No loan on waiting list");
             } else System.out.println("No record");
@@ -139,6 +164,7 @@ public class StaffHandle {
     }
 
     // create an active rating update request
+    // applies for all customers
     public void updateRating(Scanner sc, InputControl inputControl, CustomerHandle customerHandle,
                              RatingHandle ratingHandle, Map<String, Object> users, List<RatingUpdateRequest> ratingUpdateRequests,
                              String staffUsername

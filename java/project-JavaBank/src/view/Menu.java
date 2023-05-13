@@ -391,7 +391,7 @@ public class Menu {
     }
 
     public int inputViewBankInfo() {
-        System.out.println("\nELECT AN OPTION");
+        System.out.println("\nSELECT AN OPTION");
         System.out.println("1. Bank overview");
         System.out.println("2. Customer info");
         System.out.println("3. Staff info");
