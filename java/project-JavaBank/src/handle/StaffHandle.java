@@ -17,7 +17,7 @@ public class StaffHandle {
 
                 // get all products assigned to the staff
                 List<Product> filteredProducts = products.stream()
-                        .filter(o -> o.getStaffId() != null)
+                        .filter(o -> o.getStaffId() != null && o.getStaffId() != 0)
                         .filter(o -> o.getStaffId() == staffId)
                         .filter(o -> o.getProductStatus() != ProductStatus.INACTIVE) //chi lay active & locked
                         .collect(Collectors.toList());

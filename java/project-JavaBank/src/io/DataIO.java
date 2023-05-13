@@ -221,7 +221,8 @@ public class DataIO {
             account.setCustomerId((int) (currentRow.getCell(1) == null ? 0 : currentRow.getCell(1).getNumericCellValue()));
             account.setStaffId(currentRow.getCell(2) == null ? null : (int) currentRow.getCell(2).getNumericCellValue());
             account.setValueDate(currentRow.getCell(3) == null ? null : LocalDate.parse(currentRow.getCell(3).getStringCellValue(), formatter));
-            account.setMaturityDate(currentRow.getCell(4) == null ? null : LocalDate.parse(currentRow.getCell(4).getStringCellValue(), formatter));
+            if (!currentRow.getCell(4).getStringCellValue().isEmpty() && !currentRow.getCell(4).getStringCellValue().isBlank())
+                account.setMaturityDate(LocalDate.parse(currentRow.getCell(4).getStringCellValue(), formatter));
             account.setTenor(currentRow.getCell(5) == null ? null : (int) currentRow.getCell(5).getNumericCellValue());
             account.setCurrency(currentRow.getCell(6) == null ? null : currentRow.getCell(6).getStringCellValue());
             account.setBalance(currentRow.getCell(7) == null ? 0 : currentRow.getCell(7).getNumericCellValue());
@@ -247,8 +248,10 @@ public class DataIO {
             loan.setProductId((int) (currentRow.getCell(0) == null ? 0 : currentRow.getCell(0).getNumericCellValue()));
             loan.setCustomerId((int) (currentRow.getCell(1) == null ? 0 : currentRow.getCell(1).getNumericCellValue()));
             loan.setStaffId(currentRow.getCell(2) == null ? null : (int) currentRow.getCell(2).getNumericCellValue());
-            loan.setValueDate(currentRow.getCell(3) == null ? null : LocalDate.parse(currentRow.getCell(3).getStringCellValue(), formatter));
-            loan.setMaturityDate(currentRow.getCell(4) == null ? null : LocalDate.parse(currentRow.getCell(4).getStringCellValue(), formatter));
+            if (!currentRow.getCell(3).getStringCellValue().isEmpty() && !currentRow.getCell(3).getStringCellValue().isBlank())
+                loan.setValueDate(LocalDate.parse(currentRow.getCell(3).getStringCellValue(), formatter));
+            if (!currentRow.getCell(4).getStringCellValue().isEmpty() && !currentRow.getCell(4).getStringCellValue().isBlank())
+                loan.setMaturityDate(LocalDate.parse(currentRow.getCell(4).getStringCellValue(), formatter));
             loan.setTenor(currentRow.getCell(5) == null ? null : (int) currentRow.getCell(5).getNumericCellValue());
             loan.setCurrency(currentRow.getCell(6) == null ? null : currentRow.getCell(6).getStringCellValue());
             loan.setBalance(currentRow.getCell(7) == null ? 0 : currentRow.getCell(7).getNumericCellValue());
@@ -306,8 +309,8 @@ public class DataIO {
             Transaction transaction = new Transaction();
             if (currentRow.getCell(0) != null)
                 transaction.setTransactionId((int) currentRow.getCell(0).getNumericCellValue());
-            transaction.setTransactionTime(currentRow.getCell(1) == null ? null :
-                    LocalDateTime.parse(currentRow.getCell(1).getStringCellValue(), formatter));
+            if (!currentRow.getCell(1).getStringCellValue().isEmpty() && !currentRow.getCell(1).getStringCellValue().isBlank())
+                transaction.setTransactionTime(LocalDateTime.parse(currentRow.getCell(1).getStringCellValue(), formatter));
             if (currentRow.getCell(2) != null)
                 transaction.setTransactionType(currentRow.getCell(2).getStringCellValue());
             if (currentRow.getCell(3) != null)
@@ -337,9 +340,8 @@ public class DataIO {
             RatingUpdateRequest ratingUpdateRequest = new RatingUpdateRequest();
             if (currentRow.getCell(0) != null)
                 ratingUpdateRequest.setRequestId((int) currentRow.getCell(0).getNumericCellValue());
-
-            ratingUpdateRequest.setRequestCreation(currentRow.getCell(1) == null ? null :
-                    LocalDateTime.parse(currentRow.getCell(1).getStringCellValue(), formatter));
+            if (!currentRow.getCell(1).getStringCellValue().isEmpty() && !currentRow.getCell(1).getStringCellValue().isBlank())
+                ratingUpdateRequest.setRequestCreation(LocalDateTime.parse(currentRow.getCell(1).getStringCellValue(), formatter));
             if (currentRow.getCell(2) != null)
                 ratingUpdateRequest.setStaffId((int) currentRow.getCell(2).getNumericCellValue());
             if (currentRow.getCell(3) != null)

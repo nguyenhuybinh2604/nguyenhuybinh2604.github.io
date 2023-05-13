@@ -74,7 +74,7 @@ public class ManagerHandle {
 
         // get list of non-inactive products with missing IDs
         List<Product> productsNullStaff = products.stream()
-                .filter(o -> o.getStaffId() == null)
+                .filter(o -> o.getStaffId() == null || o.getStaffId() == 0)
                 .filter(o -> o.getProductStatus() != ProductStatus.INACTIVE)
                 .collect(Collectors.toList());
 
