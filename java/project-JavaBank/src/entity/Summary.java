@@ -1,8 +1,9 @@
 package entity;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
-public class Summary {
+public class Summary implements Comparable<Summary> {
 
     private final double[] sumArray;
     private final int[] countArray;
@@ -43,4 +44,13 @@ public class Summary {
                 Arrays.toString(countArray);
     }
 
+    @Override
+    public int compareTo(Summary o) {
+
+        // 70% from loan x rate + 20% from deposit balance + 10% from loan balance
+        double amount = 0.7 * this.getSum(1) + 0.2 * this.getSum(2) + 0.1 * this.getSum(0);
+        double otherAmount = 0.7 * o.getSum(1) + 0.2 * o.getSum(2) + 0.1 * o.getSum(0);
+
+        return Double.compare(otherAmount, amount);
+    }
 }

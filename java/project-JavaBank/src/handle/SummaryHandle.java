@@ -48,12 +48,14 @@ public class SummaryHandle {
 
         if (users != null && users.size() > 0) {
             for (Object user : users.values()) {
+
                 // only get active staff (staffs whose registration pending approval are not included)
                 if (user.getClass().getSimpleName().equals("Staff")
                         && ((Staff) user).getUserStatus() == UserStatus.ACTIVE) {
                     int key = ((Staff) user).getStaffId();
 
                     Summary summary = result.getOrDefault(key, new Summary());
+                    summary.addToCount(0, 0);
 
                     // get related to staff products, if any
                     List<Product> filteredStaffProducts = filteredProducts.stream()
@@ -77,10 +79,9 @@ public class SummaryHandle {
                             summary.addToSum(2, product.getConvertedBalance());// 3 - deposit balance
                             summary.addToSum(3, product.getConvertedBalance() * product.getInterestRate()); // 4 - avg rate x balance
                         }
-
-                        // update to summary
-                        result.put(key, summary);
                     }
+                    // update to summary
+                    result.put(key, summary);
                 }
             }
         }

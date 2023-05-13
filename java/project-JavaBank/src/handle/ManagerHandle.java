@@ -206,8 +206,6 @@ public class ManagerHandle {
             String managerUsername = "";
 
             for (Map.Entry<String, Object> entry : users.entrySet()) {
-                String colat1 = entry.getValue().getClass().getSimpleName();
-                String colat2 = entry.getClass().getSimpleName();
                 if (entry.getValue().getClass().getSimpleName().equals("Staff"))
                     annualSalaryFund += ((Staff) entry.getValue()).getBasicSalary();
                 else if (entry.getValue().getClass().getSimpleName().equals("Manager")) {
@@ -230,24 +228,25 @@ public class ManagerHandle {
             // get only staffs with at least 1 active products
             Map<Integer, Summary> unsortedStaffs = summaryHandle.byStaff(users, activeProducts);
 
-            // Sort the map based on multiple object properties
-            List<Map.Entry<Integer, Summary>> sortedStaffs = new ArrayList<>(unsortedStaffs.entrySet());
-            Comparator<Map.Entry<Integer, Summary>> comparator = Comparator.comparing(e ->
-                    // 70% from loan x rate + 20% from deposit balance + 10% from loan balance
-                    0.7 * e.getValue().getSum(1) + 0.2 * e.getValue().getSum(2) + 0.1 * e.getValue().getSum(0));
-            sortedStaffs.sort(comparator);
+            List<Map.Entry<Integer, Summary>> list = new ArrayList<>(unsortedStaffs.entrySet());
+            Collections.sort(list, Comparator.comparing(Map.Entry::getValue));
+
+            Map<Integer, Summary> sortedStaffs = new LinkedHashMap<>();
+            for (Map.Entry<Integer, Summary> entry : list) {
+                sortedStaffs.put(entry.getKey(), entry.getValue());
+            }
 
             int noOfStaffs = sortedStaffs.size();
-            int firstThird = (noOfStaffs / 3) + 1;
+            int firstThird = Math.max(noOfStaffs / 3, 1);
             int secondThird = firstThird * 2;
 
             int i = 0;
 
             System.out.println("Estimated bonuses for year " + LocalDate.now().getYear() + " :");
-            System.out.printf("\n%5s%10s%30s%5s%30s%30s\n", "IDs", "Role", "Name", "Rank", "Salary", "Bonus");
+            System.out.printf("\n%5s%10s %-30s%5s%30s%30s\n", "IDs", "Role ", "Name", "Rank", "Salary", "Bonus");
 
             // Assign rank to each sorted staff + display
-            for (Map.Entry<Integer, Summary> entry : sortedStaffs) {
+            for (Map.Entry<Integer, Summary> entry : sortedStaffs.entrySet()) {
                 i++;
                 int staffId = entry.getKey();
                 String staffUsername = staffHandle.findStaff(users, staffId);
@@ -264,16 +263,16 @@ public class ManagerHandle {
                 }
 
                 // print each staff
-                System.out.printf("%5d%10s%30s%5d%,30.2f%,30.2f\n", staffId, "STAFF", staff.getName(), staff.getRank(),
+                System.out.printf("%5d%10s %-30s%5d%,30.2f%,30.2f\n", staffId, "STAFF", staff.getName(), staff.getRank(),
                         staff.getBasicSalary(), staff.getBonus());
             }
 
             //subtotal line
-            System.out.printf("%5s%10s%30s%5s%30s%,30.2f\n", "ALL", "STAFF", "Subtotal", "", "", totalStaffBonus);
+            System.out.printf("%5s%10s %-30s%5s%30s%,30.2f\n", "ALL", "STAFF", "Subtotal", "", "", totalStaffBonus);
 
             //manager header
-            System.out.printf("\n%5s%10s%30s%5s%30s%30s\n", "IDs", "Role", "Name", "Rank", "Salary", "Bonus");
-            System.out.printf("%5s%10s%30s%5s%,30.2f%,30.2f\n", "", "MANAGER", manager.getName(), "",
+            System.out.printf("\n%5s%10s %-30s%5s%30s%30s\n", "IDs", "Role", "Name", "Rank", "Salary", "Bonus");
+            System.out.printf("%5s%10s %-30s%5s%,30.2f%,30.2f\n", "", "MANAGER", manager.getName(), "",
                     manager.getBasicSalary(), manager.getBonus());
 
         } else System.out.println("No active product");
@@ -602,13 +601,13 @@ public class ManagerHandle {
                 .filter(object -> ((Staff) object).getUserStatus() == UserStatus.LOCKED)
                 .collect(Collectors.toList());
         if (lockedStaffs.size() > 0) {
-            System.out.printf("%10s%30s%15s%7s%4s%-30s%-10s\n", "Staff IDs", "Name", "Person IDs", "Gender", "Age",
+            System.out.printf("%10s%-30s%-15s%-7s%-5s%-30s%-10s\n", "Staff IDs", "Name", "Person IDs", "Gender", "Age",
                     "Email", "User status");
 
             // display staffs
             for (Object staff : lockedStaffs) {
                 Staff currentStaff = (Staff) staff;
-                System.out.printf("%10d%30s%15s%7s%4d%-30s%-10s\n", currentStaff.getStaffId(), currentStaff.getName(),
+                System.out.printf("%-10d%-30s%-15s%-7s%-5d%-30s%-10s\n", currentStaff.getStaffId(), currentStaff.getName(),
                         currentStaff.getPersonId(), currentStaff.getGender(), currentStaff.getAge(),
                         currentStaff.getEmail(), currentStaff.getUserStatus().toString());
             }

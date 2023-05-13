@@ -12,12 +12,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DataIO {
@@ -33,22 +31,25 @@ public class DataIO {
             FileInputStream excelFile = new FileInputStream((pathProject + "/src/io/data.xlsx"));
             Workbook workbook = new XSSFWorkbook(excelFile);
 
+            DateTimeFormatter fmtLocalDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter fmtLocalDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
             importCustomer(workbook, users);
             importStaff(workbook, users);
             importManager(workbook, users);
             importPerson(workbook, users);
 
-            importInterestRate(workbook, interestRates);
-            importExchangeRate(workbook, exchangeRates);
+            importInterestRate(workbook, fmtLocalDate, interestRates);
+            importExchangeRate(workbook, fmtLocalDate, exchangeRates);
 
-            importAccount(workbook, products);
-            importLoan(workbook, products);
-            importSaving(workbook, products);
+            importAccount(workbook, fmtLocalDate, products);
+            importLoan(workbook, fmtLocalDate, products);
+            importSaving(workbook, fmtLocalDate, products);
 
             loadProduct(users, products);
-            importTransaction(workbook, transactions);
+            importTransaction(workbook, fmtLocalDateTime, transactions);
 
-            importRatingUpdateRequests(workbook, ratingUpdateRequests);
+            importRatingUpdateRequests(workbook, fmtLocalDateTime, ratingUpdateRequests);
 
             workbook.close();
 
@@ -169,7 +170,7 @@ public class DataIO {
         } else System.out.println("No record");
     }
 
-    private void importInterestRate(Workbook workbook, List<InterestRate> interestRates) {
+    private void importInterestRate(Workbook workbook, DateTimeFormatter formatter, List<InterestRate> interestRates) {
         String sheetName = "interestRate";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
@@ -178,7 +179,7 @@ public class DataIO {
         while (iterator.hasNext()) {
             Row currentRow = iterator.next();
             InterestRate interestRate = new InterestRate();
-            interestRate.setEffectDate(currentRow.getCell(0) == null ? null : currentRow.getCell(0).getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            interestRate.setEffectDate(currentRow.getCell(0) == null ? null : LocalDate.parse(currentRow.getCell(0).getStringCellValue(), formatter));
             interestRate.setCurrency(currentRow.getCell(1) == null ? null : currentRow.getCell(1).getStringCellValue());
             String productTypeStr = currentRow.getCell(2) == null ? null : currentRow.getCell(2).getStringCellValue();
             interestRate.setProductType(productTypeStr);
@@ -189,7 +190,7 @@ public class DataIO {
         }
     }
 
-    private void importExchangeRate(Workbook workbook, List<ExchangeRate> exchangeRates) {
+    private void importExchangeRate(Workbook workbook, DateTimeFormatter formatter, List<ExchangeRate> exchangeRates) {
         String sheetName = "exchangeRate";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
@@ -198,7 +199,7 @@ public class DataIO {
         while (iterator.hasNext()) {
             Row currentRow = iterator.next();
             ExchangeRate exchangeRate = new ExchangeRate();
-            exchangeRate.setEffectDate(currentRow.getCell(0) == null ? null : currentRow.getCell(0).getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            exchangeRate.setEffectDate(currentRow.getCell(0) == null ? null : LocalDate.parse(currentRow.getCell(0).getStringCellValue(), formatter));
             exchangeRate.setFromCurrency(currentRow.getCell(1) == null ? null : currentRow.getCell(1).getStringCellValue());
             exchangeRate.setToCurrency(currentRow.getCell(2) == null ? null : currentRow.getCell(2).getStringCellValue());
             exchangeRate.setExchangeRate(currentRow.getCell(3) == null ? 0 : currentRow.getCell(3).getNumericCellValue());
@@ -206,7 +207,7 @@ public class DataIO {
         }
     }
 
-    private void importAccount(Workbook workbook, List<Product> products) {
+    private void importAccount(Workbook workbook, DateTimeFormatter formatter, List<Product> products) {
         String sheetName = "Account";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
@@ -219,8 +220,8 @@ public class DataIO {
             account.setProductId((int) (currentRow.getCell(0) == null ? 0 : currentRow.getCell(0).getNumericCellValue()));
             account.setCustomerId((int) (currentRow.getCell(1) == null ? 0 : currentRow.getCell(1).getNumericCellValue()));
             account.setStaffId(currentRow.getCell(2) == null ? null : (int) currentRow.getCell(2).getNumericCellValue());
-            account.setValueDate(currentRow.getCell(3) == null ? null : currentRow.getCell(3).getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-            account.setMaturityDate(currentRow.getCell(4) == null ? null : currentRow.getCell(4).getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            account.setValueDate(currentRow.getCell(3) == null ? null : LocalDate.parse(currentRow.getCell(3).getStringCellValue(), formatter));
+            account.setMaturityDate(currentRow.getCell(4) == null ? null : LocalDate.parse(currentRow.getCell(4).getStringCellValue(), formatter));
             account.setTenor(currentRow.getCell(5) == null ? null : (int) currentRow.getCell(5).getNumericCellValue());
             account.setCurrency(currentRow.getCell(6) == null ? null : currentRow.getCell(6).getStringCellValue());
             account.setBalance(currentRow.getCell(7) == null ? 0 : currentRow.getCell(7).getNumericCellValue());
@@ -233,7 +234,7 @@ public class DataIO {
         }
     }
 
-    private void importLoan(Workbook workbook, List<Product> products) {
+    private void importLoan(Workbook workbook, DateTimeFormatter formatter, List<Product> products) {
         String sheetName = "Loan";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
@@ -246,8 +247,8 @@ public class DataIO {
             loan.setProductId((int) (currentRow.getCell(0) == null ? 0 : currentRow.getCell(0).getNumericCellValue()));
             loan.setCustomerId((int) (currentRow.getCell(1) == null ? 0 : currentRow.getCell(1).getNumericCellValue()));
             loan.setStaffId(currentRow.getCell(2) == null ? null : (int) currentRow.getCell(2).getNumericCellValue());
-            loan.setValueDate(currentRow.getCell(3) == null ? null : currentRow.getCell(3).getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-            loan.setMaturityDate(currentRow.getCell(4) == null ? null : currentRow.getCell(4).getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            loan.setValueDate(currentRow.getCell(3) == null ? null : LocalDate.parse(currentRow.getCell(3).getStringCellValue(), formatter));
+            loan.setMaturityDate(currentRow.getCell(4) == null ? null : LocalDate.parse(currentRow.getCell(4).getStringCellValue(), formatter));
             loan.setTenor(currentRow.getCell(5) == null ? null : (int) currentRow.getCell(5).getNumericCellValue());
             loan.setCurrency(currentRow.getCell(6) == null ? null : currentRow.getCell(6).getStringCellValue());
             loan.setBalance(currentRow.getCell(7) == null ? 0 : currentRow.getCell(7).getNumericCellValue());
@@ -264,7 +265,7 @@ public class DataIO {
         }
     }
 
-    private void importSaving(Workbook workbook, List<Product> products) {
+    private void importSaving(Workbook workbook, DateTimeFormatter formatter, List<Product> products) {
         String sheetName = "Saving";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
@@ -277,8 +278,8 @@ public class DataIO {
             saving.setProductId((int) (currentRow.getCell(0) == null ? 0 : currentRow.getCell(0).getNumericCellValue()));
             saving.setCustomerId((int) (currentRow.getCell(1) == null ? 0 : currentRow.getCell(1).getNumericCellValue()));
             saving.setStaffId(currentRow.getCell(2) == null ? null : (int) currentRow.getCell(2).getNumericCellValue());
-            saving.setValueDate(currentRow.getCell(3) == null ? null : currentRow.getCell(3).getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-            saving.setMaturityDate(currentRow.getCell(4) == null ? null : currentRow.getCell(4).getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            saving.setValueDate(currentRow.getCell(3) == null ? null : LocalDate.parse(currentRow.getCell(3).getStringCellValue(), formatter));
+            saving.setMaturityDate(currentRow.getCell(4) == null ? null : LocalDate.parse(currentRow.getCell(4).getStringCellValue(), formatter));
             saving.setTenor(currentRow.getCell(5) == null ? null : (int) currentRow.getCell(5).getNumericCellValue());
             saving.setCurrency(currentRow.getCell(6) == null ? null : currentRow.getCell(6).getStringCellValue());
             saving.setBalance(currentRow.getCell(7) == null ? 0 : currentRow.getCell(7).getNumericCellValue());
@@ -294,7 +295,7 @@ public class DataIO {
         }
     }
 
-    private void importTransaction(Workbook workbook, List<Transaction> transactions) {
+    private void importTransaction(Workbook workbook, DateTimeFormatter formatter, List<Transaction> transactions) {
         String sheetName = "transactionLog";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
@@ -306,7 +307,7 @@ public class DataIO {
             if (currentRow.getCell(0) != null)
                 transaction.setTransactionId((int) currentRow.getCell(0).getNumericCellValue());
             transaction.setTransactionTime(currentRow.getCell(1) == null ? null :
-                    currentRow.getCell(1).getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                    LocalDateTime.parse(currentRow.getCell(1).getStringCellValue(), formatter));
             if (currentRow.getCell(2) != null)
                 transaction.setTransactionType(currentRow.getCell(2).getStringCellValue());
             if (currentRow.getCell(3) != null)
@@ -325,7 +326,7 @@ public class DataIO {
         }
     }
 
-    private void importRatingUpdateRequests(Workbook workbook, List<RatingUpdateRequest> ratingUpdateRequests) {
+    private void importRatingUpdateRequests(Workbook workbook, DateTimeFormatter formatter, List<RatingUpdateRequest> ratingUpdateRequests) {
         String sheetName = "ratingUpdate";
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Iterator<Row> iterator = datatypeSheet.iterator();
@@ -338,7 +339,7 @@ public class DataIO {
                 ratingUpdateRequest.setRequestId((int) currentRow.getCell(0).getNumericCellValue());
 
             ratingUpdateRequest.setRequestCreation(currentRow.getCell(1) == null ? null :
-                    currentRow.getCell(1).getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                    LocalDateTime.parse(currentRow.getCell(1).getStringCellValue(), formatter));
             if (currentRow.getCell(2) != null)
                 ratingUpdateRequest.setStaffId((int) currentRow.getCell(2).getNumericCellValue());
             if (currentRow.getCell(3) != null)
@@ -415,7 +416,7 @@ public class DataIO {
             DateTimeFormatter fmtLocalDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             DateTimeFormatter fmtLocalDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-            File file = new File(pathProject + "/src/io/output.xlsx");
+            File file = new File(pathProject + "/src/io/data.xlsx");
 
             //Check if workbook is open
             Workbook checkWorkbook = null;
@@ -441,9 +442,9 @@ public class DataIO {
             }
 
             // Open the existing workbook and sheet
-            FileInputStream inputStream = new FileInputStream(pathProject + "/src/io/output.xlsx");
+            FileInputStream inputStream = new FileInputStream(pathProject + "/src/io/data.xlsx");
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
-            FileOutputStream outputStream = new FileOutputStream(pathProject + "/src/io/output.xlsx");
+            FileOutputStream outputStream = new FileOutputStream(pathProject + "/src/io/data.xlsx");
 
             exportExchangeRate(workbook, exchangeRates, fmtLocalDate);
             exportInterestRate(workbook, interestRates, fmtLocalDate);

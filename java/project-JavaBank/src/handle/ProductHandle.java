@@ -143,7 +143,7 @@ public class ProductHandle {
                         else if (productMap.containsKey(targetAccountId)
                                 && productMap.get(targetAccountId).getCurrency().equals(sourceCurrency)) {
                             Account targetAccount = (Account) productMap.get(targetAccountId);
-                            System.out.println("Enter amount to be transferred:");
+                            System.out.println("Enter amount to be transferred, <=" + sourceAccount.getBalance() + " " + sourceCurrency + " :");
                             double transferredAmount = inputControl.getInput(sc, 0.0, null);
 
                             //check if source has enough money
