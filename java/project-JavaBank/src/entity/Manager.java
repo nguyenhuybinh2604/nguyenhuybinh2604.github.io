@@ -1,7 +1,5 @@
 package entity;
 
-import java.util.List;
-
 import service.IUser;
 
 public class Manager extends Person implements IUser {

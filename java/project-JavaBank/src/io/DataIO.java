@@ -13,7 +13,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -199,7 +198,8 @@ public class DataIO {
         while (iterator.hasNext()) {
             Row currentRow = iterator.next();
             ExchangeRate exchangeRate = new ExchangeRate();
-            exchangeRate.setEffectDate(currentRow.getCell(0) == null ? null : LocalDate.parse(currentRow.getCell(0).getStringCellValue(), formatter));
+            if (currentRow.getCell(0) != null && !currentRow.getCell(0).getStringCellValue().isEmpty())
+            exchangeRate.setEffectDate(LocalDate.parse(currentRow.getCell(0).getStringCellValue(), formatter));
             exchangeRate.setFromCurrency(currentRow.getCell(1) == null ? null : currentRow.getCell(1).getStringCellValue());
             exchangeRate.setToCurrency(currentRow.getCell(2) == null ? null : currentRow.getCell(2).getStringCellValue());
             exchangeRate.setExchangeRate(currentRow.getCell(3) == null ? 0 : currentRow.getCell(3).getNumericCellValue());
@@ -221,7 +221,7 @@ public class DataIO {
             account.setCustomerId((int) (currentRow.getCell(1) == null ? 0 : currentRow.getCell(1).getNumericCellValue()));
             account.setStaffId(currentRow.getCell(2) == null ? null : (int) currentRow.getCell(2).getNumericCellValue());
             account.setValueDate(currentRow.getCell(3) == null ? null : LocalDate.parse(currentRow.getCell(3).getStringCellValue(), formatter));
-            if (!currentRow.getCell(4).getStringCellValue().isEmpty() && !currentRow.getCell(4).getStringCellValue().isBlank())
+            if (currentRow.getCell(4) != null && !currentRow.getCell(4).getStringCellValue().isEmpty())
                 account.setMaturityDate(LocalDate.parse(currentRow.getCell(4).getStringCellValue(), formatter));
             account.setTenor(currentRow.getCell(5) == null ? null : (int) currentRow.getCell(5).getNumericCellValue());
             account.setCurrency(currentRow.getCell(6) == null ? null : currentRow.getCell(6).getStringCellValue());
@@ -231,7 +231,7 @@ public class DataIO {
             String productStatusStr = currentRow.getCell(10) == null ? null : currentRow.getCell(10).getStringCellValue();
             account.setProductStatus(productStatusStr);
             products.add(account);
-//            products.put(account.getProductType().toString()+String.valueOf(account.getProductId()),account);
+
         }
     }
 
@@ -248,10 +248,12 @@ public class DataIO {
             loan.setProductId((int) (currentRow.getCell(0) == null ? 0 : currentRow.getCell(0).getNumericCellValue()));
             loan.setCustomerId((int) (currentRow.getCell(1) == null ? 0 : currentRow.getCell(1).getNumericCellValue()));
             loan.setStaffId(currentRow.getCell(2) == null ? null : (int) currentRow.getCell(2).getNumericCellValue());
-            if (!currentRow.getCell(3).getStringCellValue().isEmpty() && !currentRow.getCell(3).getStringCellValue().isBlank())
+            if (currentRow.getCell(3) != null && !currentRow.getCell(3).getStringCellValue().isEmpty()) {
                 loan.setValueDate(LocalDate.parse(currentRow.getCell(3).getStringCellValue(), formatter));
-            if (!currentRow.getCell(4).getStringCellValue().isEmpty() && !currentRow.getCell(4).getStringCellValue().isBlank())
+            }
+            if (currentRow.getCell(4) != null && !currentRow.getCell(4).getStringCellValue().isEmpty()) {
                 loan.setMaturityDate(LocalDate.parse(currentRow.getCell(4).getStringCellValue(), formatter));
+            }
             loan.setTenor(currentRow.getCell(5) == null ? null : (int) currentRow.getCell(5).getNumericCellValue());
             loan.setCurrency(currentRow.getCell(6) == null ? null : currentRow.getCell(6).getStringCellValue());
             loan.setBalance(currentRow.getCell(7) == null ? 0 : currentRow.getCell(7).getNumericCellValue());
@@ -309,7 +311,7 @@ public class DataIO {
             Transaction transaction = new Transaction();
             if (currentRow.getCell(0) != null)
                 transaction.setTransactionId((int) currentRow.getCell(0).getNumericCellValue());
-            if (!currentRow.getCell(1).getStringCellValue().isEmpty() && !currentRow.getCell(1).getStringCellValue().isBlank())
+            if (currentRow.getCell(1) != null && !currentRow.getCell(1).getStringCellValue().isEmpty())
                 transaction.setTransactionTime(LocalDateTime.parse(currentRow.getCell(1).getStringCellValue(), formatter));
             if (currentRow.getCell(2) != null)
                 transaction.setTransactionType(currentRow.getCell(2).getStringCellValue());
@@ -340,7 +342,7 @@ public class DataIO {
             RatingUpdateRequest ratingUpdateRequest = new RatingUpdateRequest();
             if (currentRow.getCell(0) != null)
                 ratingUpdateRequest.setRequestId((int) currentRow.getCell(0).getNumericCellValue());
-            if (!currentRow.getCell(1).getStringCellValue().isEmpty() && !currentRow.getCell(1).getStringCellValue().isBlank())
+            if (currentRow.getCell(1) != null && !currentRow.getCell(1).getStringCellValue().isEmpty())
                 ratingUpdateRequest.setRequestCreation(LocalDateTime.parse(currentRow.getCell(1).getStringCellValue(), formatter));
             if (currentRow.getCell(2) != null)
                 ratingUpdateRequest.setStaffId((int) currentRow.getCell(2).getNumericCellValue());

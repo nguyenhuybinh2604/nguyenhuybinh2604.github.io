@@ -104,11 +104,13 @@ public class CustomerHandle {
     public int noOfTransaction(Map<String, Object> users, String username, int dayRange) {
         int returnValue = 0;
         Customer customer = (Customer) users.get(username);
-        if (customer.getTransactions() != null && customer.getTransactions().size() > 0) {
-            for (Transaction transaction : customer.getTransactions()) {
-                if (transaction.getTransactionTime().isBefore(LocalDateTime.now()) &&
-                        transaction.getTransactionTime().isAfter((LocalDate.now()).minusDays(dayRange).atStartOfDay()))
-                    returnValue++;
+        if (customer != null) {
+            if (customer.getTransactions() != null && customer.getTransactions().size() > 0) {
+                for (Transaction transaction : customer.getTransactions()) {
+                    if (transaction.getTransactionTime().isBefore(LocalDateTime.now()) &&
+                            transaction.getTransactionTime().isAfter((LocalDate.now()).minusDays(dayRange).atStartOfDay()))
+                        returnValue++;
+                }
             }
         }
         return returnValue;

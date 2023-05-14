@@ -1,7 +1,5 @@
 package entity;
 
-import handle.InputControl;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
