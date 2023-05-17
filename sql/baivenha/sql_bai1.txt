@@ -1,0 +1,7 @@
+SELECT * FROM `tbl_sinhvien` WHERE tuoi > 20 and tuoi < 30;
+
+SELECT * FROM `tbl_sinhvien` WHERE tuoi < 20 or tuoi > 30;
+
+SELECT * FROM `tbl_sinhvien` 
+ORDER BY tuoi DESC
+LIMIT 1;
