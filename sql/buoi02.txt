@@ -1,0 +1,21 @@
+0. Them moi 01 record: INSERT INTO + tenBang + (cac column) VALUES (cac value)
+INSERT INTO tbl_sinhvien (tenSinhVien, tuoi, gioiTinh, maLop, diaChi, ngaySinh)
+1. Them moi nhieu gia tri
+INSERT INTO + tenBang + (cac column) VALUES (cac value), (cac value)
+2. Update gia tri
+UPDATE TABLE tbl_sinhvienn SET col1 = val1,  col2 = val2, ... WHERE 
+3. CREATE DATABASE ten_database;
+4. CREATE TABLE table_name (
+col1 datatype,
+col2 datatype,
+...
+coln datatype
+)
+
+CREATE TABLE tbl_diem (
+id int PRIMARY KEY AUTO_INCREMENT,
+tenSinhVien varchar(255) NOT NULL,
+diemToan float,
+diemVan float,
+diemAnh float
+)

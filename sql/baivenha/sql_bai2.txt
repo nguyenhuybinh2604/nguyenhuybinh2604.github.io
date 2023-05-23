@@ -1,0 +1,82 @@
+CREATE TABLE tbl_sinhvien (
+id int PRIMARY KEY AUTO_INCREMENT,
+    hoVaTen varchar(255),
+    tuoi int,
+    gioiTinh int,
+    maLop int
+)
+;
+
+CREATE TABLE tbl_giaovien (
+id int PRIMARY KEY AUTO_INCREMENT,
+    ten varchar(255),
+    tuoi int,
+    gioiTinh int,
+    soNamKN int
+)
+;
+
+CREATE TABLE tbl_diem (
+id int PRIMARY KEY AUTO_INCREMENT,
+    maSV int,
+    diemToan float,
+    diemLy float,
+    diemHoa float
+)
+;
+
+
+INSERT INTO tbl_sinhvien
+(    hoVaTen,
+    tuoi,
+    gioiTinh,
+    maLop)
+VALUES
+('Tran Thi Hoa',25,0,1),
+('Le Thi Huong',26,0,2),
+('Nguyen Thi Ha',24,0,3),
+('Ly Thi Thao',23,0,4),
+('Thai Thi Hoe',22,0,5),
+('Le Cong Tuan Anh',27,1,1),
+('Ly Hung',28,1,2),
+('Tran Xuan Soan',29,1,3),
+('Nguyen Van Minh',30,1,4),
+('Phan Thanh Nam',34,1,5)
+;
+
+INSERT INTO tbl_giaovien
+(    hoVaTen,
+    tuoi,
+    gioiTinh,
+    soNamKN)
+VALUES
+('Tran Thi Ly',45,0,15),
+('Le Thi Trang',46,0,25),
+('Nguyen Thi Lan',44,0,35),
+('Ly Thi Thao Nguyen',43,0,14),
+('Thai Thi Hong Ly',42,0,15),
+('Le Thai Son',47,1,11),
+('Ly Lien Kiet',48,1,12),
+('Tran Van Long',49,1,13),
+('Nguyen Van Tra',40,1,14),
+('Phan Thanh Dat',44,1,15)
+;
+
+INSERT INTO tbl_diem
+(   maSV,
+    diemToan,
+    diemLy,
+    diemHoa)
+VALUES
+(1,10,9,9.5),
+(2,9.5,9.5,9),
+(3,9,10,8.5),
+(4,8.5,9.5,8.0),
+(5,8,9,8.5),
+(6,8.5,8.5,9),
+(7,9,8,9.5),
+(8,9.5,8.5,10),
+(9,10,9,9.5),
+(10,9.5,9.5,9)
+;
+
