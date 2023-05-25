@@ -1,0 +1,174 @@
+CREATE DATABASE relationship;
+
+CREATE TABLE tbl_khoa (
+id int PRIMARY KEY AUTO_INCREMENT,
+    maKhoa varchar(100),
+    tenKhoa varchar(100),
+    dienThoai int
+)
+;
+
+CREATE TABLE tbl_giangvien (
+id int PRIMARY KEY AUTO_INCREMENT,
+    maGV int,
+    tenGV varchar(100),
+    luong int,
+    maKhoa varchar(100)
+)
+;
+
+CREATE TABLE tbl_sinhvien (
+id int PRIMARY KEY AUTO_INCREMENT,
+    maSV int,
+    tenSV varchar(100),
+    maKhoa varchar(100),
+    namSinh int,
+    queQuan varchar(100)
+)
+;
+
+CREATE TABLE tbl_detai (
+id int PRIMARY KEY AUTO_INCREMENT,
+    maDT varchar(100),
+    tenDT varchar(100),
+    kinhPhi float,
+    noiThucTap varchar(100)
+)
+;
+
+CREATE TABLE tbl_huongdan (
+id int PRIMARY KEY AUTO_INCREMENT,
+    maSV int,
+    maDT varchar(100),
+    maGV int,
+    ketQua int
+)
+;
+
+INSERT INTO tbl_sinhvien
+(    maSV,
+    tenSV,
+    maKhoa,
+    namSinh,
+queQuan)
+VALUES
+(1,'Tran Thi Hoa','Bio',1999,'Nghe An'),
+(2,'Nguyen Thi Mai','Geo',1999,'Thanh Hoa'),
+(3,'Bui Xuan Duc','Math',1992,'Ha Noi'),
+(4,'Nguyen Van Tung','Bio',null,'Ha Tinh'),
+(5,'Le Khanh Linh','Bio',1989,'Ha Nam'),
+(6,'Tran Khac Trong','Geo',1991,'Ninh Binh'),
+(7,'Le Hong Van','Math',null,'null'),
+(8,'Hoang Anh Duc','Bio',1992,'Nghe An');
+
+INSERT INTO tbl_detai
+(    maDT,
+    tenDT,
+    kinhPhi,
+    noiThucTap)
+VALUES
+('Dt01','GIS',100,'Nghe An'),
+('Dt01','ARC GIS',500,'Vinh Phuc'),
+('Dt01','Spatial DB',100,'Ha Tinh'),
+('Dt01','MAP',300,'Quang Binh')
+;
+
+INSERT INTO tbl_huongdan
+(    maSV,
+    maDT,
+    maGV,
+    ketQua)
+VALUES
+(1,'Dt01',13,8),
+(2,'Dt03',14,0),
+(3,'Dt03',12,10),
+(4,'Dt04',14,7),
+(5,'Dt01',13,null),
+(6,'Dt04',11,10),
+(7,'Dt03',15,6),
+(8,'Dt02',13,8)
+;
+
+INSERT INTO tbl_khoa
+(    maKhoa,
+    tenKhoa,
+    dienThoai)
+VALUES
+('Geo','Dia ly',31289743),
+('Math','Toan hoc',31289742),
+('Bio','Cong nghe sinh hoc',31289741)
+;
+
+INSERT INTO tbl_giangvien
+(    maGV,
+    tenGV,
+    luong,
+maKhoa)
+VALUES
+(11,'Thanh Binh',700,'Geo'),
+(12,'Thu Huong',500,'Math'),
+(13,'Chu Vinh',650,'Geo'),
+(14,'Le Thi Ly',500,'Bio'),
+(15,'Tran Son',900,'Math')
+;
+
+--Cau 1
+SELECT t1.maGV,t1.tenGV,t2.tenKhoa
+FROM tbl_giangvien t1
+LEFT JOIN tbl_khoa t2
+ON t1.maKhoa = t2.maKhoa;
+
+--Cau 2
+SELECT t1.maGV,t1.tenGV,t2.tenKhoa
+FROM tbl_giangvien t1
+LEFT JOIN tbl_khoa t2
+ON t1.maKhoa = t2.maKhoa
+WHERE t2.tenKhoa = 'Dia ly';
+
+--Cau 3
+SELECT COUNT(DISTINCT t1.maSV)
+FROM tbl_sinhvien t1
+LEFT JOIN tbl_khoa t2
+ON t1.maKhoa = t2.maKhoa
+WHERE t2.tenKhoa like 'cong nghe sinh hoc';
+
+--Cau 4
+SELECT t1.maSV, t1.tenSV, t1.namSinh
+FROM tbl_sinhvien t1
+LEFT JOIN tbl_khoa t2
+ON t1.maKhoa = t2.maKhoa
+WHERE t2.tenKhoa like 'toan hoc';
+
+--Cau 5
+SELECT COUNT(DISTINCT t1.maGV)
+FROM tbl_giangvien t1
+LEFT JOIN tbl_khoa t2
+ON t1.maKhoa = t2.maKhoa
+WHERE t2.tenKhoa like 'cong nghe sinh hoc';
+
+--Cau 6
+SELECT *
+FROM tbl_huongdan t1
+LEFT JOIN tbl_sinhvien t2
+ON t1.maSV = t2.maSV
+WHERE t1.ketQua IS null;
+
+--Cau 7
+SELECT t2.maKhoa,
+t2.tenKhoa,
+COUNT(DISTINCT t1.maGV) maGV
+FROM tbl_giangvien t1
+LEFT JOIN tbl_khoa t2
+ON t1.maKhoa = t2.maKhoa
+GROUP BY
+t2.maKhoa,
+t2.tenKhoa;
+
+--Cau 8
+SELECT t1.dienThoai
+FROM tbl_khoa t1
+LEFT JOIN tbl_sinhvien t2
+ON t1.maKhoa = t2.maKhoa
+WHERE t2.tenSV like 'Tran Thi Hoa';
+
+
