@@ -1,0 +1,32 @@
+CREATE TABLE abc (
+id int PRIMARY KEY AUTO_INCREMENT
+);
+CREATE TABLE def (
+id int PRIMARY KEY AUTO_INCREMENT,
+    abc_id int,
+    CONSTRAINT fk_def_abc FOREIGN KEY (abc_id) REFERENCES abc(id)
+);
+
+fk_def_abc: fk = foreign key; def = bang hien tai; abc = bang muon link den;
+
+/*
+CONSTRAINT:
+- PRIMARY KEY: khoa chinh
+- NOT NULL: yeu cau truong khong de trong
+- UNIQUE: du lieu doc nhat, vd email, IDs, sdt
+- FOREIGN KEY: rang buoc khoa ngoai
+*/
+
+CREATE TABLE `quanlybanhang`.`tbl_sanpham` (`id` INT NOT NULL AUTO_INCREMENT , `tenSP` VARCHAR(255) NOT NULL , `donViTinh` VARCHAR(10) NOT NULL , `nuocSanXuat` VARCHAR(50) NOT NULL , `gia` FLOAT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+CREATE TABLE `quanlybanhang`.`tbl_hoadon` (`id` INT NOT NULL AUTO_INCREMENT , `ngayMua` DATE NOT NULL , `khachhang_id` INT , `nhanvien_id` INT NOT NULL , `triGia` FLOAT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+CREATE TABLE `quanlybanhang`.`tbl_chitiethoadon` (`id` INT NOT NULL AUTO_INCREMENT , `sanpham_id` INT NOT NULL , `soLuong` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+ALTER TABLE tbl_hoadon
+ADD CONSTRAINT fk_hoadon_nhanvien
+FOREIGN KEY (nhanvien_id) REFERENCES tbl_nhanvien(id);
+
+ALTER TABLE tbl_hoadon
+ADD CONSTRAINT fk_hoadon_khachhang
+FOREIGN KEY (khachhang_id) REFERENCES tbl_khachhang(id);
