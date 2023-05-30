@@ -1,0 +1,41 @@
+1. Doc hieu de
+2. Phan tich de
+3. Lua chon cau truc du lieu de thuc hien
+4. Lua chon thuat toan (giai thuat)
+5. Cai dat
+
+To chuc du lieu:
+
+1. List (su dung index)
+	- ArrayList
+	- LinkedList
+	- Stack
+
+2. Queue
+	- PriorityQueue
+	- ArrayDeque
+	...
+
+3. Set
+	- HashSet
+	- TreeSet
+	- LinkedHashSet
+	...
+
+Bai buoi 02: Array & String
+- Khai bao:
+int arr[] = {1,2,3};
+int[] arr = new int[3];
+- Duyet:
+for (int i=0;i<arr.length;i++)
+for (int a:arr)
+- Arrays: 02 han che: 1/ so luong phan tu phai xac dinh truoc ; 2/ khong xu ly cac phan tu co datatype khac nhau
+-> khac phuc: dung arraylist: 
+	Collection<Integer> nums = new ArrayList<>();
+	List<Integer> nums = new ArrayList<>();
+
+- String & StringBuilder
+Primitive: char, int, float,...
+Reference: Class, Object, Interface
+StringBuilder str = new StringBuilder(); -> It ton bo nho hon 
+

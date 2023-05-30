@@ -18,20 +18,13 @@ public class Solution {
     }
 
     //https://leetcode.com/problems/single-number/submissions/956498532/
+    // -> sort -> run for check 2 element cung 1 luc
     public int singleNumber_136(int[] nums) {
-        int returnValue = 0;
-        Map<Integer, Integer> result = new HashMap<>();
-        for (int i = 0; i < nums.length; i++) {
-            int count = result.getOrDefault(nums[i], 0);
-            result.put(nums[i], count + 1);
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length - 1; i += 2) {
+            if (nums[i] != nums[i + 1]) return nums[i];
         }
-        for (Map.Entry<Integer, Integer> entry : result.entrySet()) {
-            if (entry.getValue() == 1) {
-                returnValue = entry.getKey();
-                break;
-            }
-        }
-        return returnValue;
+        return nums[nums.length - 1];
     }
 
     //https://leetcode.com/problems/running-sum-of-1d-array/submissions/956538827/
@@ -61,28 +54,14 @@ public class Solution {
 
     //https://leetcode.com/problems/rectangle-overlap/submissions/957532834/
     public boolean isRectangleOverlap_836(int[] rec1, int[] rec2) {
-        ;
         return ((rec1[2] > rec2[0] && rec2[2] > rec1[0]) &&
                 (rec1[3] > rec2[1] && rec2[3] > rec1[1]));
     }
 
     //https://leetcode.com/problems/majority-element/submissions/956968921/
     public int majorityElement_169(int[] nums) {
-        int returnValue = 0;
-        int maxFreq = 0;
-        Map<Integer, Integer> result = new HashMap<>();
-        for (int i = 0; i < nums.length; i++) {
-            int count = result.getOrDefault(nums[i], 0);
-            result.put(nums[i], count + 1);
-            if (count + 1 > maxFreq) maxFreq = count + 1;
-        }
-        for (Map.Entry<Integer, Integer> entry : result.entrySet()) {
-            if (entry.getValue() == maxFreq) {
-                returnValue = entry.getKey();
-                break;
-            }
-        }
-        return returnValue;
+        Arrays.sort(nums);
+        return nums[nums.length / 2];
     }
 
     //  https://leetcode.com/problems/shuffle-the-array/submissions/956983719/
@@ -102,8 +81,8 @@ public class Solution {
     public int missingNumber_268(int[] nums) {
         int returnValue = 0;
         int[] countArray = new int[nums.length + 1];
-        for (int i = 0; i < nums.length; i++) {
-            countArray[nums[i]] = 1;
+        for (int num : nums) {
+            countArray[num] = 1;
         }
         for (int i = 0; i < countArray.length; i++) {
             if (countArray[i] == 0) {
@@ -127,6 +106,7 @@ public class Solution {
     public boolean canJump_55(int[] nums) {
         int maxIndex = 0;
         for (int i = 0; i < nums.length; i++) {
+            if (i + nums[i] >= nums.length - 1) return true;
             if (i > maxIndex) return false;
             maxIndex = Math.max(maxIndex, i + nums[i]);
         }
@@ -147,4 +127,8 @@ public class Solution {
         }
         return result;
     }
+
+
+
+
 }

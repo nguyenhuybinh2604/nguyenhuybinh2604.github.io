@@ -1,0 +1,37 @@
+Từ database quanlysinhvien đã tạo trên lớp
+
+1. Đưa ra thông tin gồm mã số, họ tên và tên khoa của tất cả các giảng viên.
+
+SELECT a.maGV, a.tenGV, b.tenKhoa FROM tbl_giangvien a LEFT JOIN tbl_khoa b ON a.maKhoa = b.maKhoa;
+
+2. Sử dụng lệnh xuất ra mã số, họ tên, tên khoa của các giảng viên hướng dẫn từ 3 sinh viên trở lên. 
+
+SELECT a.maGV, a.tenGV, c.tenKhoa FROM tbl_giangvien a LEFT JOIN (SELECT maGV, COUNT(maSV) soLuongSV FROM tbl_huongdan GROUP BY maGV) b ON a.maGV = b.maGV LEFT JOIN tbl_khoa c ON a.maKhoa = c.maKhoa WHERE b.soLuongSV >=3;
+
+3. Sử dụng lệnh SQL để xuất ra thông tin về những sinh viên chưa có điểm thực tập .
+
+SELECT a.maSV, a.tenSV, a.namSinh, a.queQuan, c.tenKhoa FROM tbl_sinhvien a LEFT JOIN tbl_huongdan b ON a.maSV = b.maSV LEFT JOIN tbl_khoa c ON a.maKhoa = c.maKhoa WHERE b.ketQua IS NULL;
+
+4. Thực hiện lệnh SQL xuất ra số điện thoại của khoa mà sinh viên có tên ‘Le van son’ đang theo học .
+
+SELECT b.dienThoai FROM tbl_sinhvien a LEFT JOIN tbl_khoa b ON a.maKhoa = b.maKhoa WHERE a.tenSV = 'Le Van Son';
+
+5. Sử dụng lệnh truy vấn SQL lấy ra mã số và tên các đề tài có nhiều hơn 2 sinh viên tham gia thực tập .
+
+SELECT a.maDT, a.tenDT FROM tbl_detai a LEFT JOIN (SELECT maDT, COUNT(maSV) soLuongSV FROM tbl_huongdan GROUP BY maDT) b ON a.maDT = b.maDT WHERE b.soLuongSV > 2;
+
+6. Sử dụng câu lệnh truy vấn SQL lấy ra mã số, tên đề tài của đề tài có kinh phí cao nhất
+
+SELECT maDT, tenDT FROM tbl_detai WHERE kinhPhi = (SELECT MAX(kinhPhi) FROM tbl_detai);
+
+7. Sử dụng câu lệnh SQL xuất ra Tên khoa, Số lượng sinh viên của mỗi khoa .
+
+SELECT a.tenKhoa, b.soLuongSV FROM tbl_khoa a LEFT JOIN (SELECT maKhoa, COUNT(maSV) soLuongSV FROM tbl_sinhvien GROUP BY maKhoa) b ON a.maKhoa = b.maKhoa;
+
+8. Sử dụng truy vấn SQL xuất ra mã số, họ tên và điểm của các sinh viên khoa ‘DIALY và QLTN’ .
+
+SELECT a.maSV, a.tenSV, b.ketQua FROM tbl_sinhvien a LEFT JOIN tbl_huongdan b ON a.maSV = b.maSV LEFT JOIN tbl_khoa c ON a.maKhoa = c.maKhoa WHERE c.tenKhoa = 'Dia ly';
+
+9. Sử dụng câu lệnh SQL xuất ra danh sách gồm Mã số, Họ tên và Tuổi của các sinh viên khoa ‘TOAN’
+
+SELECT a.maSV, a.tenSV, CASE WHEN a.namSinh IS NULL THEN 'NA' ELSE YEAR(NOW())-CONVERT(a.namSinh, UNSIGNED) END tuoi FROM tbl_sinhvien a LEFT JOIN tbl_khoa b ON a.maKhoa = b.maKhoa WHERE b.tenKhoa = 'Toan hoc';
