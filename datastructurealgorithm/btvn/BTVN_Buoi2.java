@@ -37,10 +37,49 @@ public class BTVN_Buoi2 {
         return nums.length - count;
     }
 
-    //https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/submissions/959340437/
-    public int strStr_28(String haystack, String needle) {
-        return haystack.indexOf(needle);
+    //https://leetcode.com/problems/duplicate-zeros/submissions/960241728/
+    public void duplicateZeros_1089(int[] arr) {
+        for (int i = 0; i < arr.length - 1; i++) {
+            if (arr[i] == 0) {
+                for (int j = arr.length - 1; j > i + 1; j--) {
+                    arr[j] = arr[j - 1];
+                }
+                arr[i + 1] = 0;
+                i++;
+            }
+        }
     }
 
-    
+    //https://leetcode.com/problems/move-zeroes/submissions/960277572/
+    public void moveZeroes_283(int[] nums) {
+        int lastZero = nums.length - 1;
+        for (int i = nums.length - 1; i >= 0; i--) {
+            if (nums[i] == 0) {
+                for (int j = i; j < lastZero; j++) {
+                    nums[j] = nums[j + 1];
+                }
+                if (lastZero >= 0) {
+                    nums[lastZero] = 0;
+                    lastZero--;
+                }
+            }
+        }
+    }
+
+    public int longestMountain_845(int[] arr) {
+
+        return 0;
+    }
+
+    //https://leetcode.com/problems/first-unique-character-in-a-string/submissions/960346654/
+    public int firstUniqChar_387(String s) {
+        for (int i = 0; i < s.length(); i++) {
+            if (i == 0) {
+                if (s.substring(i + 1).indexOf(s.charAt(i)) == -1)
+                    return i;
+            } else if (s.substring(0, i).indexOf(s.charAt(i)) == -1 && s.substring(i + 1).indexOf(s.charAt(i)) == -1)
+                return i;
+        }
+        return -1;
+    }
 }
