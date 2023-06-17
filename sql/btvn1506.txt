@@ -1,0 +1,4 @@
+bai 1: cau lenh tao db + bang + insert data -> file .sql, luu y bao gom comment, relationship, key ...
+bai 2: diagrams -> chup anh
+bai 3: chup anh cac bang (1 anh/bang) -> folder image tren git
+ 

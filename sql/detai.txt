@@ -2,3 +2,12 @@ quan ly nha hang , book ban va danh gia
 
 quy tac thiet ke:
 bieu do use case:
+
+khach hang:
+
+nhanvien: dat ban -> quan ly dat ban. nhan vien -> thanh nha hang
+
+admin:
+
+move thiet ke nguoi dung = staff sang cung phia voi admin
++ chuc nang 
