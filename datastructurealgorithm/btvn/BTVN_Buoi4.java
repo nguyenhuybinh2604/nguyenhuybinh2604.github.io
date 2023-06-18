@@ -70,6 +70,34 @@ public class BTVN_Buoi4 {
         return str.toString();
     }
 
+    //https://leetcode.com/problems/decode-string/submissions/973299606/
+    public String decodeString_394_v2(String s) {
+        // tim ngoac dong gan nhat -> truoc do phai co 1 ngoac mo
+        int i = s.indexOf(']');
+
+        //neu khong co ngoac -> tra nguyen string
+        if (i == -1) return s;
+
+        //tim diem dau
+        int j = s.substring(0, i).lastIndexOf('[');
+
+        //tim so lan lap
+        int k = j;
+        while (k > 0 && s.charAt(k - 1) >= '0' && s.charAt(k - 1) <= '9') k--;
+        int count = Integer.parseInt(s.substring(k, j));
+
+        //String o giua
+        String mid = s.substring(j + 1, i);
+
+        //ghep chuoi
+        StringBuilder sb = new StringBuilder();
+        sb.append(s.substring(0, k));
+        for (int l = 0; l < count; l++) sb.append(mid);
+        sb.append(s.substring(i + 1));
+
+        return decodeString_394_v2(sb.toString());
+    }
+
     //https://leetcode.com/problems/find-the-winner-of-the-circular-game/submissions/973193671/
     public int findTheWinner_1823(int n, int k) {
         Queue<Integer> queue = new LinkedList<Integer>();
@@ -90,5 +118,63 @@ public class BTVN_Buoi4 {
         return queue.peek();
     }
 
-    
+    public int findTheWinner_1823_v2(int n, int k) {
+        List<Integer> list = new ArrayList<>();
+        for (int i = 1; i <= n; i++) {
+            list.add(i);
+        }
+
+        return find(list, k, 0);
+    }
+
+    int find(List<Integer> list, int k, int startPos) {
+        if (list.size() == 1) return list.get(0);
+
+        int layoffPos = (startPos + k - 1) % list.size();
+        list.remove(layoffPos);
+
+        return find(list, k, layoffPos);
+    }
+
+    public void recurse_22(List<String> res, int left, int right, String s, int n) {
+        if (s.length() == n * 2) {
+            res.add(s);
+            return;
+        }
+
+        if (left < n) {
+            recurse_22(res, left + 1, right, s + "(", n);
+        }
+
+        if (right < left) {
+            recurse_22(res, left, right + 1, s + ")", n);
+        }
+    }
+
+    public List<String> generateParenthesis_22(int n) {
+        List<String> res = new ArrayList<String>();
+        recurse_22(res, 0, 0, "", n);
+        return res;
+    }
+
+    int mod = (int) 1e9 + 7;
+
+    //https://leetcode.com/problems/count-good-numbers/submissions/973776379/
+    public int countGoodNumbers_1922(long n) {
+        //deciding n/2 or n/2+1 depending on n is even or odd
+        long powerOf5 = (n % 2 == 0 ? (n / 2) : (n / 2) + 1);
+
+        //second power would be n/2 only irrespective of even or odd
+        long powerOf4 = n / 2;
+
+        return (int) (pow_1922(5,powerOf5)*pow_1922(4,powerOf4) % mod);
+    }
+
+    public long pow_1922(int base, long power) {
+        if (power == 0) return 1;
+        if (power == 1) return base;
+        long temp = pow_1922(base, power / 2);
+        if (power % 2 == 0) return (temp * temp) % mod;
+        else return (base * temp * temp) % mod;
+    }
 }
