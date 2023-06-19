@@ -1,0 +1,405 @@
+============================================Create database==========================================
+CREATE DATABASE restaurantmanagement;
+
+
+============================================Create tables==========================================
+USE restaurantmanagement;
+
+Create Table tbl_roles (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name varchar (50),
+  roleKey varchar (20),
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+Create Table tbl_status (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name varchar (50),
+  statusKey varchar (20),
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+Create Table tbl_users (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name varchar (50),
+  email varchar (50) unique,
+  role_id int,
+  password varchar (20),
+  phone varchar (20),
+  gender int,
+  birthDate TIMESTAMP NULL,
+  personalID varchar (20) unique,
+  address varchar (255),
+  status_id int,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+Create Table tbl_ratings (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  customer_id int,
+  restaurant_id int,
+  star int,
+  comment varchar (255),
+  status_id int,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+Create Table tbl_categories (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name varchar (50),
+  description varchar (255),
+  image varchar (255),
+  status_id int,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+Create Table tbl_products (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name varchar (50),
+  description varchar (255),
+  price float,
+  image varchar (255),
+  status_id int,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+Create Table tbl_posts (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name varchar (50),
+  description varchar (255),
+  content text,
+  image varchar (255),
+  category_id int,
+  restaurant_id int,
+  status_id int,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+Create Table tbl_postDetails (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  post_id int,
+  product_id int,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL 
+)
+;
+Create Table tbl_reservations (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  customer_id int,
+  restaurant_id int,
+  numberOfPerson int,
+  scheduledTime TIMESTAMP,
+  note varchar (255),
+  status_id int,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL 
+)
+;
+Create Table tbl_chats(
+  id int PRIMARY KEY AUTO_INCREMENT,
+  admin_id int,
+  user_id int,
+  content text,
+  image varchar (255),
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL 
+)
+
+============================================Set relationships==========================================
+
+ALTER TABLE tbl_users
+ADD CONSTRAINT fk_users_roles
+FOREIGN KEY (role_id) REFERENCES tbl_roles(id);
+
+ALTER TABLE tbl_users
+ADD CONSTRAINT fk_users_status
+FOREIGN KEY (status_id) REFERENCES tbl_status(id);
+
+ALTER TABLE tbl_ratings
+ADD CONSTRAINT fk_ratings_customers
+FOREIGN KEY (customer_id) REFERENCES tbl_users(id);
+
+ALTER TABLE tbl_ratings
+ADD CONSTRAINT fk_ratings_restaurants
+FOREIGN KEY (restaurant_id) REFERENCES tbl_users(id);
+
+ALTER TABLE tbl_ratings
+ADD CONSTRAINT fk_ratings_status
+FOREIGN KEY (status_id) REFERENCES tbl_status(id);
+
+ALTER TABLE tbl_posts
+ADD CONSTRAINT fk_posts_categories
+FOREIGN KEY (category_id) REFERENCES tbl_categories(id);
+
+ALTER TABLE tbl_posts
+ADD CONSTRAINT fk_posts_restaurants
+FOREIGN KEY (restaurant_id) REFERENCES tbl_users(id);
+
+ALTER TABLE tbl_posts
+ADD CONSTRAINT fk_posts_status
+FOREIGN KEY (status_id) REFERENCES tbl_status(id);
+
+ALTER TABLE tbl_categories
+ADD CONSTRAINT fk_categories_status
+FOREIGN KEY (status_id) REFERENCES tbl_status(id);
+
+ALTER TABLE tbl_products
+ADD CONSTRAINT fk_products_status
+FOREIGN KEY (status_id) REFERENCES tbl_status(id);
+
+ALTER TABLE tbl_postdetails
+ADD CONSTRAINT fk_postdetails_posts
+FOREIGN KEY (post_id) REFERENCES tbl_posts(id);
+
+ALTER TABLE tbl_postdetails
+ADD CONSTRAINT fk_postdetails_products
+FOREIGN KEY (product_id) REFERENCES tbl_products(id);
+
+ALTER TABLE tbl_reservations
+ADD CONSTRAINT fk_reservations_customers
+FOREIGN KEY (customer_id) REFERENCES tbl_users(id);
+
+ALTER TABLE tbl_reservations
+ADD CONSTRAINT fk_reservations_restaurant
+FOREIGN KEY (restaurant_id) REFERENCES tbl_users(id);
+
+ALTER TABLE tbl_reservations
+ADD CONSTRAINT fk_reservations_status
+FOREIGN KEY (status_id) REFERENCES tbl_status(id);
+
+ALTER TABLE tbl_chats
+ADD CONSTRAINT fk_chats_admins
+FOREIGN KEY (admin_id) REFERENCES tbl_users(id);
+
+ALTER TABLE tbl_chats
+ADD CONSTRAINT fk_chats_users
+FOREIGN KEY (user_id) REFERENCES tbl_users(id);
+
+============================================Add comments==========================================
+
+ALTER TABLE tbl_roles
+CHANGE roleKey roleKey varchar(20) COMMENT 'customer, admin, restaurant, user'  
+
+ALTER TABLE tbl_status
+CHANGE statusKey statusKey varchar(20) COMMENT 'reservations: pending, active, closed; users: active, inactive; products: active, inactive; posts: active, inactive'
+
+============================================Add records==========================================
+
+INSERT INTO tbl_roles (name, roleKey)
+VALUES
+('Customer', 'customer'),
+('Admin', 'admin'),
+('Restaurant', 'restaurant')
+
+INSERT INTO tbl_status (name, statusKey)
+VALUES
+('Pending', 'reservationsPending'),
+('Active', 'reservationsActive'),
+('Closed', 'reservationsClosed'),
+('Active', 'usersActive'),
+('Inactive', 'usersInactive'),
+('Active', 'productsActive'),
+('Inactive', 'productsInactive'),
+('Active', 'postsActive'),
+('Inactive', 'postsInactive'),
+('Active', 'categoriesActive'),
+('Inactive', 'categoriesInactive'),
+('Pending', 'ratingPending'),
+('Active', 'ratingActive')
+
+INSERT INTO tbl_users (name, email, role_id, password, phone, gender, birthDate, personalID, address, status_id, created_at, updated_at)
+VALUES
+('John Doe', 'johndoe@gmail.com', 1, 'password123', '1234567890', 1, '1990-01-01 00:00:00', '1234567890', '123 Main St', 1, NOW(), NOW()),
+('Jane Smith', 'janesmith@gmail.com', 2, 'password456', '0987654321', 2, '1995-05-05 00:00:00', '0987654321', '456 Elm St', 2, NOW(), NOW()),
+('Bob Johnson', 'bobjohnson@gmail.com', 3, 'password789', '5555555554', 1, '1985-12-31 00:00:00', '5555555554', '789 Oak St', 1, NOW(), NOW()),
+('Amy Lee', 'amylee@gmail.com', 1, 'passwordabc', '1111111111', 2, '1987-07-07 00:00:00', '1111111111', '321 Maple St', 2, NOW(), NOW()),
+('Tom Smith', 'tomsmith@gmail.com', 2, 'passworddef', '2222222222', 1, '1993-03-03 00:00:00', '2222222222', '654 Pine St', 1, NOW(), NOW()),
+('Emily Davis', 'emilydavis@gmail.com', 3, 'passwordegh', '3333333333', 2, '1989-09-09 00:00:00', '3333333333', '987 Cedar St', 2, NOW(), NOW()),
+('Steve Johnson', 'stevejohnson@gmail.com', 1, 'passwordijk', '4444444444', 1, '1991-11-11 00:00:00', '4444444444', '369 Oak St', 1, NOW(), NOW()),
+('Megan Brown', 'meganbrown@gmail.com', 2, 'passwordlmn', '5555555555', 2, '1990-02-02 00:00:00', '5555555555', '258 Pine St', 2, NOW(), NOW()),
+('David Lee', 'davidlee@gmail.com', 3, 'passwordopq', '6666666666', 1, '1995-08-08 00:00:00', '6666666666', '753 Cedar St', 1, NOW(), NOW()),
+('Samantha Smith', 'samanthasmith@gmail.com', 1, 'passwordrst', '7777777777', 2, '1992-04-04 00:00:00', '7777777777', '852 Maple St', 2, NOW(), NOW()),
+('James Johnson', 'jamesjohnson@gmail.com', 2, 'passworduvw', '8888888888', 1, '1990-10-10 00:00:00', '8888888888', '456 Pine St', 1, NOW(), NOW()),
+('Jessica Williams', 'jessicawilliams@gmail.com', 3, 'passwordxyz', '9999999999', 2, '1988-06-06 00:00:00', '9999999999', '987 Oak St', 2, NOW(), NOW()),
+('Michael Davis', 'michaeldavis@gmail.com', 1, 'password1234', '1111111112', 1, '1993-01-01 00:00:00', '1111111112', '369 Cedar St', 1, NOW(), NOW()),
+('Lauren Smith', 'laurensmith@gmail.com', 2, 'password5678', '2222222223', 2, '1986-05-05 00:00:00', '2222222223', '753 Pine St', 2, NOW(), NOW()),
+('Kevin Johnson', 'kevinjohnson@gmail.com', 3, 'password9012', '3333333334', 1, '1984-12-12 00:00:00:00', '3333333334', '852 Cedar St', 1, NOW(), NOW()),
+('Rachel Lee', 'rachellee@gmail.com', 1, 'password3456', '4444444445', 2, '1994-03-03 00:00:00', '4444444445', '456 Oak St', 2, NOW(), NOW()),
+('Mark Smith', 'marksmith@gmail.com', 2, 'password7890', '5555555556', 1, '1983-09-09 00:00:00', '5555555556', '987 Pine St', 1, NOW(), NOW()),
+('Sarah Davis', 'sarahdavis@gmail.com', 3, 'password12345', '6666666667', 2, '1991-07-07 00:00:00', '6666666667', '369 Maple St', 2, NOW(), NOW()),
+('Chris Johnson', 'chrisjohnson@gmail.com', 1, 'password67890', '7777777778', 1, '1992-11-11 00:00:00', '7777777778', '753 Oak St', 1, NOW(), NOW()),
+('Kelly Brown', 'kellybrown@gmail.com', 2, 'passwordabcde', '8888888889', 2, '1989-04-04 00:00:00', '8888888889', '852 Cedar St', 2, NOW(), NOW());
+
+
+INSERT INTO tbl_reservations (customer_id, restaurant_id, numberOfPerson, scheduledTime, note, status_id)
+VALUES
+(61, 63, 2, '2023-06-20 19:00:00', 'Table by the window', 1),
+(61, 66, 4, '2023-06-25 18:30:00', 'Anniversary dinner', 2),
+(61, 69, 3, '2023-07-01 20:00:00', 'Pre-show dinner', 1),
+(61, 72, 5, '2023-07-05 19:30:00', 'Family celebration', 2),
+(61, 75, 2, '2023-07-08 18:00:00', 'Quick dinner before the game', 1),
+(61, 78, 4, '2023-07-10 19:00:00', 'Friends gathering', 2),
+(64, 63, 2, '2023-06-22 19:30:00', 'Date night', 2),
+(64, 66, 3, '2023-06-28 20:00:00', 'Birthday dinner', 1),
+(64, 69, 4, '2023-07-02 18:30:00', 'Pre-concert dinner', 2),
+(64, 72, 5, '2023-07-06 19:00:00', 'Family reunion', 1),
+(64, 75, 2, '2023-07-09 18:00:00', 'Dinner before the game', 2),
+(64, 78, 4, '2023-07-11 20:00:00', 'Class reunion', 1),
+(67, 63, 3, '2023-06-23 18:00:00', 'Business dinner', 1),
+(67, 66, 2, '2023-06-26 19:00:00', 'Date night', 2),
+(67, 69, 4, '2023-07-03 20:00:00', 'Pre-fireworks dinner', 1),
+(67, 72, 5, '2023-07-07 19:30:00', 'Family dinner', 2),
+(67, 75, 3, '2023-07-08 18:30:00', 'Dinner before the game', 1),
+(67, 78, 2, '2023-07-12 19:00:00', 'Romantic dinner', 2),
+(70, 63, 4, '2023-06-24 19:00:00', 'Group dinner', 2),
+(70, 66, 3, '2023-06-27 18:30:00', 'Family dinner', 1);
+
+INSERT INTO tbl_products (name, description, price, image, status_id)
+VALUES
+('Amazing Widget', 'This amazing widget will change your life!', 19.99, 'https://picsum.photos/200/300.jpg', 6),
+('Dynamic Gadget', 'Get more out of life with this dynamic gadget!', 29.99, 'https://picsum.photos/200/300.jpg', 7),
+('Incredible Gizmo', 'Experience the power of the incredible gizmo!', 39.99, 'https://picsum.photos/200/300.jpg', 6),
+('Revolutionary Thingamajig', 'Revolutionize your life with the revolutionary thingamajig!', 49.99, 'https://picsum.photos/200/300.jpg', 7),
+('Ultimate Doohickey', 'Get the ultimate doohickey for all your needs!', 59.99, 'https://picsum.photos/200/300.jpg', 6),
+('Innovative Whatchamacallit', 'Discover the innovation of the whatchamacallit!', 69.99, 'https://picsum.photos/200/300.jpg', 7),
+('Fantastic Whatsit', 'The fantastic whatsit will amaze and delight!', 79.99, 'https://picsum.photos/200/300.jpg', 6),
+('Sensational Doodad', 'Experience the sensation of the top-of-the-line doodad!', 89.99, 'https://picsum.photos/200/300.jpg', 7),
+('Premium Thingummy', 'Upgrade your life with the premium thingummy!', 99.99, 'https://picsum.photos/200/300.jpg', 6),
+('State-of-the-Art Contraption', 'Get the state-of-the-art contraption for all your needs!', 109.99, 'https://picsum.photos/200/300.jpg', 7),
+('Advanced Gismo', 'Take your life to the next level with the advanced gismo!', 119.99, 'https://picsum.photos/200/300.jpg', 6),
+('Cutting-Edge Widget', 'Stay ahead of the curve with the cutting-edge widget!', 129.99, 'https://picsum.photos/200/300.jpg', 7),
+('High-Tech Doodad', 'Experience the latest in high-tech with the top-of-the-line doodad!', 139.99, 'https://picsum.photos/200/300.jpg', 6),
+('Top-of-the-Line Gizmo', 'Get the top-of-the-line gizmo for all your needs!', 149.99, 'https://picsum.photos/200/300.jpg', 7),
+('Advanced Thingamajig', 'Take your life to the next level with the advanced thingamajig!', 159.99, 'https://picsum.photos/200/300.jpg', 6),
+('Innovative Gadget', 'Discover the innovation of the top-of-the-line gadget!', 169.99, 'https://picsum.photos/200/300.jpg', 7),
+('State-of-the-Art Widget', 'Get the state-of-the-art widget for all your needs!', 179.99, 'https://picsum.photos/200/300.jpg', 6),
+('Premium Gizmo', 'Upgrade your life with the premium gizmo!', 189.99, 'https://picsum.photos/200/300.jpg', 7),
+('Advanced Doohickey', 'Take your life to the next level with the advanced doohickey!', 199.99, 'https://picsum.photos/200/300.jpg', 6),
+('Cutting-Edge Gismo', 'Stay ahead of the curve with the cutting-edge gismo!', 209.99, 'https://picsum.photos/200/300.jpg', 7);
+
+
+INSERT INTO tbl_categories (name, description, image, status_id)
+VALUES 
+('Sports Equipment', 'Get your game on with the latest sports equipment!', 'https://picsum.photos/200/300.jpg', 10),
+('Outdoor Gear', 'Explore the great outdoors with top-of-the-line gear!', 'https://picsum.photos/200/300.jpg', 11),
+('Home Decor', 'Make your house a home with stylish decor!', 'https://picsum.photos/200/300.jpg', 10),
+('Gourmet Food', 'Indulge in the finest gourmet food and drink!', 'https://picsum.photos/200/300.jpg', 11),
+('Fashion Accessories', 'Step up your style game with the latest fashion accessories!', 'https://picsum.photos/200/300.jpg', 10),
+('Pet Supplies', 'Keep your furry friends happy and healthy with top-quality pet supplies!', 'https://picsum.photos/200/300.jpg', 11),
+('Health and Beauty', 'Look and feel your best with the latest health and beauty products!', 'https://picsum.photos/200/300.jpg', 10),
+('Electronics', 'Stay connected with the latest electronics and gadgets!', 'https://picsum.photos/200/300.jpg', 11),
+('Toys and Games', 'Have fun and let your imagination run wild with the latest toys and games!', 'https://picsum.photos/200/300.jpg', 10),
+('Books and Media', 'Expand your mind and enrich your life with the latest books and media!', 'https://picsum.photos/200/300.jpg', 11);
+
+
+INSERT INTO tbl_ratings (customer_id, restaurant_id, star, comment, status_id)
+VALUES 
+(61, 63, 4, 'The food was amazing!', 12),
+(64, 66, 3, 'Decent food, but nothing special.', 13),
+(67, 69, 5, 'Absolutely fantastic experience!', 12),
+(70, 72, 2, 'Disappointing food and service.', 13),
+(73, 75, 4, 'Great food and atmosphere!', 12),
+(76, 78, 5, 'Best dining experience ever!', 12),
+(79, 63, 3, 'Good food, but service was lacking.', 13),
+(61, 66, 4, 'Excellent food and service!', 12),
+(64, 69, 5, 'Incredible experience from start to finish!', 12),
+(67, 72, 2, 'Disappointing food and atmosphere.', 13),
+(70, 75, 4, 'Great food and service!', 12),
+(73, 78, 5, 'Absolutely amazing in every way!', 12),
+(76, 63, 4, 'Solid food and service, but nothing exceptional.', 13),
+(79, 66, 3, 'Decent food, but not worth the price.', 13),
+(61, 69, 5, 'Unforgettable experience!', 12);
+
+INSERT INTO tbl_posts (name, description, content, image, category_id, restaurant_id, status_id)
+VALUES 
+('Post 1', 'This is the description for post 1', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fringilla, sapien ac malesuada egestas, mauris metus tristique diam, vel aliquet libero ex quis nulla. Morbi blandit, dui vel semper faucibus, quam ipsum tempor elit, et blandit ligula risus sed turpis. Sed ut felis risus. Sed justo neque, fermentum vel est vel, ultricies tincidunt elit. Donec ac metus at enim ultrices sagittis. Sed sit amet semper magna.', 'https://picsum.photos/200/300.jpg', 1, 63, 8),
+('Post 2', 'This is the description for post 2', 'Suspendisse potenti. Nulla facilisi. Suspendisse potenti. Nulla facilisi. Quisque non dolor in elit accumsan lobortis. Nunc quis congue risus. Nullam nec risus vel velit faucibus suscipit. Morbi nec lectus nec orci porttitor viverra in sit amet lectus. Sed sagittis, ipsum eget sollicitudin mattis, massa sapien ultrices diam, id hendrerit nibh augue vel risus. Aenean sit amet mauris purus.', 'https://picsum.photos/200/300.jpg', 2, 66, 9),
+('Post 3', 'This is the description for post 3', 'Vestibulum tincidunt, arcu vel pharetra accumsan, quam orci hendrerit urna, nec malesuada velit quam sed nisi. Nulla facilisi. Phasellus euismod posuere lobortis. Donec vel lorem eget nibh consectetur blandit. Pellentesque sed finibus velit. Vestibulum eu semper tellus, a aliquam ante. Sed ut est vel ipsum elementum imperdiet. Duis vel aliquam turpis. Donec pharetra nisl at tempor varius.', 'https://picsum.photos/200/300.jpg', 3, 69, 8),
+('Post 4', 'This is the description for post 4', 'Vestibulum dignissim lacinia fermentum. Ut bibendum placerat lacus, a gravida erat iaculis eget. Maecenas vestibulum, augue eu placerat consequat, purus tortor malesuada risus, sed accumsan mauris eros ut urna. Donec sed sapien eu mauris luctus gravida sit amet quis dolor. Curabitur eget interdum ipsum. Nam euismod hendrerit turpis a auctor. Curabitur blandit ligula vitae hendrerit bibendum. Sed euismod arcu vel massa efficitur, ac tincidunt velit molestie. ', 'https://picsum.photos/200/300.jpg', 4, 72, 9),
+('Post 5', 'This is the description for post 5', 'Praesent eu magna euismod, condimentum mi eget, faucibus nulla. Suspendisse ut sapien in erat placerat iaculis. In hac habitasse platea dictumst. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec accumsan, felis sit amet posuere maximus, ligula arcu bibendum nibh, sit amet egestas libero elit id turpis. Proin sit amet libero vestibulum, posuere orci vel, bibendum quam.', 'https://picsum.photos/200/300.jpg', 5, 75, 8),
+('Post 6', 'This is the description for post 6', 'Morbi auctor euismod enim, non ultrices augue bibendum id. Donec bibendum, elit in fringilla ultrices, ex mi scelerisque nulla, id dictum velit sapien sit amet mauris. Suspendisse potenti. Morbi dignissim, nisi id molestie dapibus, nisl eros dictum nunc, ut pulvinar libero sapien vel eros. Praesent ac quam nec enim posuere suscipit eu ut velit. Integer auctor at ligula vel dictum. Fusce sit amet quam sed odio ullamcorper feugiat. ', 'https://picsum.photos/200/300.jpg', 6, 78, 9),
+('Post 7', 'This is the description for post7', 'Nulla ut sagittis velit, ac hendrerit enim. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed vitae erat eget nibh commodo lacinia. Vestibulum vel cursus quam. Sed auctor, quam eu lacinia ornare, quam tellus bibendum diam, sit amet bibendum enim elit a ipsum. Maecenas vel ex eros. Aliquam erat volutpat. ', 'https://picsum.photos/200/300.jpg', 7, 63, 8),
+('Post 8', 'This is the description for post 8', 'Donec feugiat blandit felis, vel bibendum justo cursus in. Curabitur ultricies lobortis mi, eu consectetur sapien lacinia sit amet. Sed eget lacinia nisi. Duis eu luctus nunc. In ut blandit quam. Pellentesque sed elit eget nulla iaculis sagittis. Aliquam interdum porttitor lorem, ac ultrices magna. Maecenas condimentum lorem libero, vel semper est sodales non. ', 'https://picsum.photos/200/300.jpg', 8, 66, 9),
+('Post 9', 'This is the description for post 9', 'In euismod dui turpis, eu sagittis nulla vulputate ut. Cras bibendum, tellus eget varius auctor, magna nulla vestibulum nulla, non venenatis libero augue sit amet lorem. Sed in tincidunt odio. Nulla facilisi. Nullam auctor varius sapien vel accumsan. Etiam auctor metus non commodo cursus. Suspendisse non urna ac quam consectetur tempor. ', 'https://picsum.photos/200/300.jpg', 9, 69, 8),
+('Post 10', 'This is the description for post 10', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed quis nibh id quam dignissim finibus. Ut lobortis malesuada tellus, ac consectetur velit viverra sed. Donec lobortis, tortor nec venenatis feugiat, neque felis congue diam, at lacinia lectus sapien eget elit. Suspendisse potenti. Etiam maximus dui nec eleifend dignissim. ', 'https://picsum.photos/200/300.jpg', 10, 72, 9),
+('Post 11', 'This is the description for post 11', 'Cras bibendum, nisl vel lacinia tincidunt, massa ex dignissim lectus, eu consectetur odio turpis vel mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam id ligula ac velit auctor facilisis. Donec id nisi in magna placerat laoreet. Sed risus orci, vestibulum eget porta non, maximus id dui. Sed congue justo non sapien tristique hendrerit. ', 'https://picsum.photos/200/300.jpg', 1, 75, 8),
+('Post 12', 'This is the description for post 12', 'Curabitur posuere mollis dui, non tincidunt velit bibendum vel. Maecenas nec blandit ex. Fusce tempus nunc ac turpis consectetur, vel aliquam dolor sagittis. Etiam euismod ex eu lectus maximus, at hendrerit nibh maximus. Phasellus eget dui vitae est feugiat bibendum. Suspendisse sed sapien in quam lacinia venenatis. Ut tincidunt, tellus non laoreet volutpat, libero lorem scelerisque sapien, eget ultricies quam quam quis erat. ', 'https://picsum.photos/200/300.jpg', 2, 78, 9);
+
+INSERT INTO tbl_postDetails (post_id, product_id)
+VALUES 
+(1, 1),
+(1, 2),
+(3, 3),
+(3, 4),
+(3, 5),
+(4, 6),
+(5, 7),
+(6, 8),
+(6, 9),
+(7, 10),
+(7, 11),
+(7, 12),
+(7, 13),
+(8, 14),
+(8, 15),
+(9, 16),
+(10, 17),
+(10, 18),
+(10, 19),
+(11, 20),
+(12, 1),
+(12, 2),
+(12, 3),
+(12, 4),
+(2, 5),
+(2, 6),
+(11, 7),
+(1, 8),
+(3, 9),
+(5, 10);
+
+INSERT INTO tbl_chats (admin_id, user_id, content, image)
+VALUES
+(62, 61, 'Hi there!', 'https://random.com/image1.jpeg'),
+(62, 64, 'How can I help you?', 'https://random.com/image2.jpeg'),
+(62, 67, 'What brings you here?', 'https://random.com/image3.jpeg'),
+(65, 61, 'Do you have any questions?', 'https://random.com/image4.jpeg'),
+(65, 64, 'Im here to assist you.', 'https://random.com/image5.jpeg'),
+(65, 67, 'Let me know if you need anything.', 'https://random.com/image6.jpeg'),
+(68, 61, 'Welcome!', 'https://random.com/image7.jpeg'),
+(68, 64, 'How can I assist you today?', 'https://random.com/image8.jpeg'),
+(68, 67, 'What can I help you with?', 'https://random.com/image9.jpeg'),
+(71, 61, 'How can I assist you?', 'https://random.com/image10.jpeg'),
+(71, 64, 'What brings you here?', 'https://random.com/image11.jpeg'),
+(71, 67, 'Let me know if you need any assistance.', 'https://random.com/image12.jpeg'),
+(74, 61, 'Do you have any questions?', 'https://random.com/image13.jpeg'),
+(74, 64, 'How can I help you today?', 'https://random.com/image14.jpeg'),
+(74, 67, 'What can I assist you with?', 'https://random.com/image15.jpeg'),
+(77, 61, 'Hi there!', 'https://random.com/image16.jpeg'),
+(77, 64, 'What brings you here?', 'https://random.com/image17.jpeg'),
+(77, 67, 'Let me know if you need any assistance.', 'https://random.com/image18.jpeg'),
+(80, 61, 'How can I assist you today?', 'https://random.com/image19.jpeg'),
+(80, 64, 'Do you have any questions?', 'https://random.com/image20.jpeg');
+
+
+============================================Link to diagram==========================================
+
+https://dbdiagram.io/d/6490736002bd1c4a5eb88afd
+
