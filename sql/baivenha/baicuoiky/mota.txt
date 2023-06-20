@@ -1,0 +1,6 @@
+CSDL to chuc dua tren khoa hoc (classes). Moi khoa hoc co nhieu mon (subjects). Moi mon co nhieu bai hoc (lessons).
+users duoc chia thanh sinh vien, giang vien va 01 admin.
+sinh vien duoc gan voi nhieu mon hoc (moi khoa nhieu mon, co the sv do chi dang ky 1 so mon).
+giang vien duoc gan voi cac bai hoc (mot mon hoc co nhieu bai hoc va nhieu giang vien, moi bai hoc do 1 giang vien phu trach)
+cham diem sv dua tren BTVN, moi bai hoc tuong ung 01 BTVN.
+Diem danh ap dung cho ca giang vien va sv.

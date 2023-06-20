@@ -1,0 +1,649 @@
+============================================Create database==========================================
+CREATE DATABASE techmaster;
+
+============================================Create tables==========================================
+USE techmaster;
+
+Create Table tbl_roles (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name varchar (50),
+  roleKey varchar (50),
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+
+Create Table tbl_status (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name varchar (50),
+  statusKey varchar (50),
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+
+Create Table tbl_users (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name varchar (50),
+  email varchar (50) unique,
+  role_id int,
+  password varchar (20),
+  phone varchar (20),
+  gender int,
+  birthDate TIMESTAMP NULL,
+  personalID varchar (20) unique,
+  address varchar (255),
+  status_id int,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+
+
+Create Table tbl_classes (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name varchar (50),
+  status_id int Comment '1.Sap dien ra, 2.Dang dien ra, 3.Da ket thuc',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+
+
+Create Table tbl_subjects (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name varchar (50),
+  description varchar(255),
+  image varchar (255),
+  form_id int Comment '1.Offline, 2.Online',
+  status_id int Comment '1.Sap dien ra, 2.Dang dien ra, 3.Da ket thuc',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+
+
+Create Table tbl_forms (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name varchar (20) Comment '1.Offline, 2.Online',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+
+Create Table tbl_classDetails (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  class_id int,
+  subject_id int,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+
+
+Create Table tbl_studentDetails (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  student_id int,
+  subject_id int,
+  status_id int Comment '1.Active, 2.Postponded, 3.Dropout',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+
+Create Table tbl_lessonDetails (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  teacher_id int,
+  lesson_id int,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+
+
+Create Table tbl_homeworkDetails (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  student_id int,
+  teacher_id int,
+  lesson_id int,
+  score float,
+  handinStatus_id int Comment '1.Submitted, 2.Not submitted',
+  scoreStatus_id int Comment '1.Marked, 2.Not marked',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+
+Create Table tbl_lessons (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  subject_id int,
+  name varchar (50),
+  description varchar (255),
+  content text,
+  image varchar (255),
+  status_id int Comment '1.Active, 2.Inactive, 3.Done',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+
+
+Create Table tbl_homeworks (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  lesson_id int,
+  name varchar (50),
+  description varchar (255),
+  content text,
+  image varchar (255),
+  status_id int Comment '1.Open, 2.Expired',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+
+Create Table tbl_attendance (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  lesson_id int,
+  user_id int Comment 'Cham ca giao vien va hoc sinh',
+  status_id int Comment '1.Online, 2.Offline, 3.Absent',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  delete_at TIMESTAMP NULL DEFAULT NULL
+)
+;
+
+============================================Set relationships==========================================
+
+ALTER TABLE tbl_users
+ADD CONSTRAINT fk_users_roles
+FOREIGN KEY (role_id) REFERENCES tbl_roles(id);
+
+ALTER TABLE tbl_users
+ADD CONSTRAINT fk_users_status
+FOREIGN KEY (status_id) REFERENCES tbl_status(id);
+
+ALTER TABLE tbl_classes
+ADD CONSTRAINT fk_classes_status
+FOREIGN KEY (status_id) REFERENCES tbl_status(id);
+
+ALTER TABLE tbl_subjects
+ADD CONSTRAINT fk_subjects_status
+FOREIGN KEY (status_id) REFERENCES tbl_status(id);
+
+ALTER TABLE tbl_subjects
+ADD CONSTRAINT fk_subjects_form
+FOREIGN KEY (form_id) REFERENCES tbl_forms(id);
+
+ALTER TABLE tbl_lessons
+ADD CONSTRAINT fk_lessons_subjects
+FOREIGN KEY (subject_id) REFERENCES tbl_subjects(id);
+
+ALTER TABLE tbl_lessons
+ADD CONSTRAINT fk_lessons_status
+FOREIGN KEY (status_id) REFERENCES tbl_status(id);
+
+ALTER TABLE tbl_homeworks
+ADD CONSTRAINT fk_homeworks_status
+FOREIGN KEY (status_id) REFERENCES tbl_status(id);
+
+ALTER TABLE tbl_homeworks
+ADD CONSTRAINT fk_homeworks_lessons
+FOREIGN KEY (lesson_id) REFERENCES tbl_lessons(id);
+
+ALTER TABLE tbl_attendance
+ADD CONSTRAINT fk_attendance_lessons
+FOREIGN KEY (lesson_id) REFERENCES tbl_lessons(id);
+
+ALTER TABLE tbl_attendance
+ADD CONSTRAINT fk_attendance_users
+FOREIGN KEY (user_id) REFERENCES tbl_users(id);
+
+ALTER TABLE tbl_attendance
+ADD CONSTRAINT fk_attendance_status
+FOREIGN KEY (status_id) REFERENCES tbl_status(id);
+
+ALTER TABLE tbl_lessondetails
+ADD CONSTRAINT fk_lessondetails_teacher
+FOREIGN KEY (teacher_id) REFERENCES tbl_users(id);
+
+ALTER TABLE tbl_lessondetails
+ADD CONSTRAINT fk_lessondetails_lessons
+FOREIGN KEY (lesson_id) REFERENCES tbl_lessons(id);
+
+ALTER TABLE tbl_studentdetails
+ADD CONSTRAINT fk_studentdetails_students
+FOREIGN KEY (student_id) REFERENCES tbl_users(id);
+
+ALTER TABLE tbl_studentdetails
+ADD CONSTRAINT fk_studentdetails_subjects
+FOREIGN KEY (subject_id) REFERENCES tbl_subjects(id);
+
+ALTER TABLE tbl_studentdetails
+ADD CONSTRAINT fk_studentdetails_status
+FOREIGN KEY (status_id) REFERENCES tbl_status(id);
+
+ALTER TABLE tbl_classdetails
+ADD CONSTRAINT fk_classdetails_class
+FOREIGN KEY (class_id) REFERENCES tbl_classes(id);
+
+ALTER TABLE tbl_classdetails
+ADD CONSTRAINT fk_classdetails_subject
+FOREIGN KEY (subject_id) REFERENCES tbl_subjects(id);
+
+ALTER TABLE tbl_homeworkdetails
+ADD CONSTRAINT fk_homeworkdetails_lesson
+FOREIGN KEY (lesson_id) REFERENCES tbl_lessons(id);
+
+ALTER TABLE tbl_homeworkdetails
+ADD CONSTRAINT fk_homeworkdetails_student
+FOREIGN KEY (student_id) REFERENCES tbl_users(id);
+
+ALTER TABLE tbl_homeworkdetails
+ADD CONSTRAINT fk_homeworkdetails_teacher
+FOREIGN KEY (teacher_id) REFERENCES tbl_users(id);
+
+ALTER TABLE tbl_homeworkdetails
+ADD CONSTRAINT fk_homeworkdetails_handinstatus
+FOREIGN KEY (handinstatus_id) REFERENCES tbl_status(id);
+
+ALTER TABLE tbl_homeworkdetails
+ADD CONSTRAINT fk_homeworkdetails_scorestatus
+FOREIGN KEY (scorestatus_id) REFERENCES tbl_status(id);
+
+
+============================================Add comments==========================================
+
+ALTER TABLE tbl_status
+CHANGE statusKey statusKey varchar(20) COMMENT 'reservations: pending, active, closed; users: active, inactive; products: active, inactive; posts: active, inactive'
+
+============================================Add records==========================================
+
+INSERT INTO tbl_roles (name, roleKey)
+VALUES
+('Student', 'role1'),
+('Teacher', 'role2'),
+('Admin', 'role3')
+
+
+INSERT INTO tbl_status (name, statusKey)
+VALUES
+('Active', 'users1'),
+('Inactive', 'users2'),
+('Banned', 'users3'),
+('Pending', 'classes1'),
+('On Going', 'classes2'),
+('Finished', 'classes3'),
+('Pending', 'subjects1'),
+('On Going', 'subjects2'),
+('Finished', 'subjects3'),
+('Active', 'studentDetails1'),
+('Postponded', 'studentDetails2'),
+('Dropout', 'studentDetails3'),
+('Submitted', 'homeworksHandin1'),
+('Not submitted', 'homeworksHandin2'),
+('Marked', 'homeworksScore1'),
+('Not marked', 'homeworksScore2'),
+('Pending', 'lessons1'),
+('On Going', 'lessons2'),
+('Finished', 'lessons3'),
+('Open', 'homeworksStatus1'),
+('Expired', 'homeworksStatus2'),
+('Online', 'attendance1'),
+('Offline', 'attendance2'),
+('Absent', 'attendance3')
+;
+
+
+INSERT INTO tbl_users (name, email, role_id, password, phone, gender, birthDate, personalID, address, status_id)
+VALUES
+('John Doe', 'john.doe@example.com', 4, 'password1', '1234567890', 1, '1990-01-01 00:00:00', '1234567890', '123 Main St', 1),
+('Jane Doe', 'jane.doe@example.com', 4, 'password2', '0987654321', 2, '1995-01-01 00:00:00', '0987654321', '456 Elm St', 2),
+('Bob Smith', 'bob.smith@example.com', 4, 'password3', '5551234567', 1, '1985-01-01 00:00:00', '5551234567', '789 Oak St', 1),
+('Alice Johnson', 'alice.johnson@example.com', 5, 'password4', '5559876543', 2, '1992-01-01 00:00:00', '5559876333', '321 Pine St', 1),
+('Tom Wilson', 'tom.wilson@example.com', 5, 'password5', '5555551212', 1, '1988-01-01 00:00:00', '5555551111', '654 Maple St', 1),
+('Samantha Brown', 'samantha.brown@example.com', 5, 'password6', '5551239876', 2, '1998-01-01 00:00:00', '5551239888', '987 Cedar St', 1),
+('David Lee', 'david.lee@example.com', 6, 'password7', '5559871234', 1, '1970-01-01 00:00:00', '5559871239', '159 Willow St', 1),
+('Emily Chen', 'emily.chen@example.com', 4, 'password8', '5551234999', 2, '1980-01-01 00:00:00', '5551234999', '753 Birch St', 1),
+('Brian Davis', 'brian.davis@example.com', 5, 'password9', '5559876543', 1, '1990-01-01 00:00:00', '5559876543', '246 Oak St', 1),
+('Karen Wilson', 'karen.wilson@example.com', 5, 'password10', '5551234888', 2, '1995-01-01 00:00:00', '5551234888', '369 Pine St', 1),
+('Mark Johnson', 'mark.johnson@example.com', 5, 'password11', '5555551212', 1, '1985-01-01 00:00:00', '5555551212', '582 Maple St', 1),
+('Lisa Kim', 'lisa.kim@example.com', 4, 'password12', '5551239876', 2, '1992-01-01 00:00:00', '5551239876', '795 Cedar St', 1),
+('Eric Brown', 'eric.brown@example.com', 5, 'password13', '5559871234', 1, '1988-01-01 00:00:00', '5559871234', '918 Willow St', 2),
+('Amy Lee', 'amy.lee@example.com', 4, 'password14', '5551234777', 2, '1998-01-01 00:00:00', '5551234777', '147 Birch St', 2),
+('Kevin Davis', 'kevin.davis@example.com', 5, 'password15', '5559876543', 1, '1970-01-01 00:00:00', '5559876555', '258 Oak St', 1)
+;
+
+INSERT INTO tbl_classes (name, status_id)
+VALUES
+('Quantitative Finance', 4),
+('C++', 5),
+('MySQL', 6)
+;
+
+INSERT INTO tbl_subjects (name, description, image, form_id, status_id)
+VALUES
+('Programming in Python', 'Introduction to programming using Python language', 'https://picsum.photos/200/300', 1, 7),
+('Web Development', 'Introduction to web development using HTML, CSS and JavaScript', 'https://picsum.photos/200/300', 2, 7),
+('Database Management', 'Introduction to database management using MySQL', 'https://picsum.photos/200/300', 1, 8),
+('Software Engineering', 'Introduction to software engineering principles and practices', 'https://picsum.photos/200/300', 2, 7),
+('Artificial Intelligence', 'Introduction to artificial intelligence concepts and applications', 'https://picsum.photos/200/300', 1, 9),
+('Data Science', 'Introduction to data science using Python and R', 'https://picsum.photos/200/300', 2, 8),
+('Cybersecurity', 'Introduction to cybersecurity principles and practices', 'https://picsum.photos/200/300', 1, 7),
+('Mobile App Development', 'Introduction to mobile app development using Android and iOS', 'https://picsum.photos/200/300', 2, 9),
+('Cloud Computing', 'Introduction to cloud computing concepts and platforms', 'https://picsum.photos/200/300', 1, 8),
+('Network Administration', 'Introduction to network administration principles and practices', 'https://picsum.photos/200/300', 2, 9)
+;
+
+INSERT INTO tbl_forms (id, name)
+VALUES
+(1, 'Offline'),
+(2, 'Online')
+;
+
+INSERT INTO tbl_classDetails (class_id, subject_id)
+VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(2, 1),
+(2, 3),
+(2, 5),
+(2, 7),
+(2, 9),
+(3, 2),
+(3, 4),
+(3, 6),
+(3, 8),
+(3, 10),
+(1, 6),
+(1, 7),
+(2, 2),
+(2, 4),
+(3, 1);
+
+INSERT INTO tbl_studentDetails (student_id, subject_id, status_id)
+VALUES
+(106, 1, 10),
+(106, 2, 11),
+(106, 3, 10),
+(106, 4, 11),
+(106, 5, 10),
+(106, 6, 11),
+(106, 7, 10),
+(106, 8, 11),
+(106, 9, 10),
+(106, 10, 11),
+(107, 1, 11),
+(107, 2, 10),
+(107, 3, 11),
+(107, 4, 10),
+(107, 5, 11),
+(107, 6, 10),
+(107, 7, 11),
+(107, 8, 10),
+(107, 9, 11),
+(107, 10, 10),
+(108, 1, 10),
+(108, 2, 10),
+(108, 3, 11),
+(108, 4, 11),
+(108, 5, 10),
+(108, 6, 10),
+(108, 7, 11),
+(108, 8, 11),
+(108, 9, 10),
+(108, 10, 10),
+(113, 1, 10),
+(113, 2, 11),
+(113, 3, 10),
+(113, 4, 11),
+(113, 5, 10),
+(113, 6, 11),
+(113, 7, 10),
+(113, 8, 11),
+(113, 9, 10),
+(113, 10, 11),
+(117, 1, 11),
+(117, 2, 10),
+(117, 3, 11),
+(117, 4, 10),
+(117, 5, 11),
+(117, 6, 10),
+(117, 7, 11),
+(117, 8, 10),
+(117, 9, 11),
+(117, 10, 10),
+(119, 1, 10),
+(119, 2, 10),
+(119, 3, 11),
+(119, 4, 11),
+(119, 5, 10),
+(119, 6, 10),
+(119, 7, 11),
+(119, 8, 11),
+(119, 9, 10),
+(119, 10, 10)
+;
+
+INSERT INTO tbl_lessonDetails (teacher_id, lesson_id)
+VALUES
+(109, 1), (110, 2), (111, 3), (114, 4), (115, 5), (109, 6), (110, 7), (111, 8), (114, 9), (115, 10),
+(109, 11), (110, 12), (111, 13), (114, 14), (115, 15), (109, 16), (110, 17), (111, 18), (114, 19), (115, 20),
+(109, 21), (110, 22), (111, 23), (114, 24), (115, 25), (109, 26), (110, 27), (111, 28), (114, 29), (115, 30),
+(109, 31), (110, 32), (111, 33)
+;
+
+
+INSERT INTO tbl_homeworkDetails (student_id, teacher_id, lesson_id, score, handinStatus_id, scoreStatus_id)
+SELECT
+  t1.student_id,
+  t2.teacher_id,
+  t3.lesson_id,
+  ROUND(RAND() * 5 + 5, 1) AS score,
+  t4.handinStatus_id,
+  t5.scoreStatus_id
+FROM (
+  SELECT 106 AS student_id UNION SELECT 107 UNION SELECT 108 UNION SELECT 113 UNION SELECT 116 UNION SELECT 117 UNION SELECT 118 UNION SELECT 120
+) AS t1
+INNER JOIN (
+  SELECT 109 AS teacher_id UNION SELECT 110 UNION SELECT 111 UNION SELECT 114 UNION SELECT 115
+) AS t2
+INNER JOIN (
+  SELECT 1 AS lesson_id UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14 UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19 UNION SELECT 20 UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24 UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29 UNION SELECT 30 UNION SELECT 31 UNION SELECT 32 UNION SELECT 33
+) AS t3
+INNER JOIN (
+  SELECT 13 AS handinStatus_id UNION SELECT 14
+) AS t4
+INNER JOIN (
+  SELECT 15 AS scoreStatus_id UNION SELECT 16
+) AS t5
+;
+
+INSERT INTO tbl_lessons (subject_id, name, description, content, image, status_id)
+VALUES
+(1, 'Python Data Types', 'Introduction to Python data types', 'This lesson covers the various data types in Python, including integers, floats, strings, and booleans. It also covers type conversion and basic operators.', 'https://picsum.photos/200/300', 17),
+(1, 'Python Control Structures', 'Introduction to Python control structures', 'This lesson covers the use of control structures in Python, including if-else statements, loops, and functions. It also covers basic debugging techniques.', 'https://picsum.photos/200/300', 18),
+(1, 'Python Modules and Libraries', 'Introduction to Python modules and libraries', 'This lesson covers the use of modules and libraries in Python, including importing and using built-in and external modules and libraries. It also covers package management using pip.', 'https://picsum.photos/200/300', 19),
+(2, 'HTML Tags and Elements', 'Introduction to HTML tags and elements', 'This lesson covers the various HTML tags and elements used to create web pages, including headings, paragraphs, images, links, and lists. It also covers basic page structure and formatting.', 'https://picsum.photos/200/300', 17),
+(2, 'CSS Styling and Layout', 'Introduction to CSS styling and layout', 'This lesson covers the use of CSS to style and layout web pages, including basic selectors, properties, and values. It also covers box model and layout techniques.', 'https://picsum.photos/200/300', 18),
+(2, 'JavaScript Basics', 'Introduction to JavaScript basics', 'This lesson covers the basics of JavaScript, including variables, data types, operators, and control structures. It also covers basic debugging techniques and the use of the console.', 'https://picsum.photos/200/300', 19),
+(3, 'Database Design', 'Introduction to database design', 'This lesson covers the principles of database design, including entity-relationship models, normalization, and data modeling. It also covers basic SQL queries.', 'https://picsum.photos/200/300', 17),
+(3, 'MySQL Administration', 'Introduction to MySQL administration', 'This lesson covers the administration of MySQL databases, including installation, configuration, and backup and recovery. It also covers basic database security.', 'https://picsum.photos/200/300', 18),
+(3, 'Advanced SQL Queries', 'Introduction to advanced SQL queries', 'This lesson covers advanced SQL queries, including subqueries, joins, and aggregate functions. It also covers stored procedures and views.', 'https://picsum.photos/200/300', 19),
+(4, 'Software Development Lifecycle', 'Introduction to software development lifecycle', 'This lesson covers the software development lifecycle, including requirements gathering, design, implementation, testing, and deployment. It also covers project management techniques.', 'https://picsum.photos/200/300', 17),
+(4, 'Object-Oriented Programming Principles', 'Introduction to object-oriented programming principles', 'This lesson covers the principles of object-oriented programming, including classes, objects, inheritance, and polymorphism. It also covers basic design patterns.', 'https://picsum.photos/200/300', 18),
+(4, 'Version Control with Git', 'Introduction to version control with Git', 'This lesson covers version control with Git, including installation, configuration, and basic commands. It also covers basic collaboration using GitHub.', 'https://picsum.photos/200/300', 19),
+(5, 'Introduction to Artificial Intelligence', 'Introduction to artificial intelligence', 'This lesson covers the basics of artificial intelligence, including machine learning, deep learning, and natural language processing. It also covers ethical considerations.', 'https://picsum.photos/200/300', 17),
+(5, 'Data Preprocessing and Feature Engineering', 'Introduction to data preprocessing and feature engineering', 'This lesson covers data preprocessing and feature engineering techniques used in machine learning, including data cleaning, normalization, and feature selection. It also covers data visualization.', 'https://picsum.photos/200/300', 18),
+(5, 'Neural Networks and Deep Learning', 'Introduction to neural networks and deep learning', 'This lesson covers the basics of neural networks and deep learning, including feedforward, convolutional, and recurrent neural networks. It also covers regularization and optimization techniques.', 'https://picsum.photos/200/300', 19),
+(6, 'Introduction to Data Science', 'Introduction to data science', 'This lesson covers the basics of data science, including data acquisition, cleaning, and visualization. It also covers statistical analysis and machine learning techniques.', 'https://picsum.photos/200/300', 17),
+(6, 'Data Wrangling and EDA', 'Introduction to data wrangling and exploratory data analysis', 'This lesson covers data wrangling and exploratory data analysis techniques used in data science, including data cleaning, transformation, and visualization. It also covers hypothesis testing and statistical inference.', 'https://picsum.photos/200/300', 18),
+(6, 'Supervised Learning', 'Introduction to supervised learning', 'This lesson covers supervised learning techniques used in data science, including linear regression, logistic regression, decision trees, and random forests. It also covers model evaluation and selection.', 'https://picsum.photos/200/300', 19),
+(7, 'Introduction to Cloud Computing', 'Introduction to cloud computing', 'This lesson covers the basics of cloud computing, including cloud models, service models, and deployment models. It also covers cloud providers and security considerations.', 'https://picsum.photos/200/300', 17),
+(7, 'Cloud Infrastructure', 'Introduction to cloud infrastructure', 'This lesson covers cloud infrastructure components, including compute, storage, and networking. It also covers virtualization and containerization.', 'https://picsum.photos/200/300', 18),
+(7, 'Cloud Services and Applications', 'Introduction to cloud services and applications', 'This lesson covers cloud services and applications, including database as a service, platform as a service, and software as a service. It also covers deployment and scaling techniques.', 'https://picsum.photos/200/300', 19),
+(8, 'Introduction to Cybersecurity', 'Introduction to cybersecurity', 'This lesson covers the basics of cybersecurity, including threats, vulnerabilities, and risks. It also covers security policies and standards.', 'https://picsum.photos/200/300', 17),
+(8, 'Network Security', 'Introduction to network security', 'This lesson covers network security, including firewalls, intrusion detection and prevention systems, and virtual private networks. It also covers secure protocols and encryption.', 'https://picsum.photos/200/300', 18),
+(8, 'Web Application Security', 'Introduction to web application security', 'This lesson covers web application security, including authentication, authorization, and session management. It also covers common web application attacks and defenses.', 'https://picsum.photos/200/300', 19),
+(9, 'Introduction to Digital Marketing', 'Introduction to digital marketing', 'This lesson covers the basics of digital marketing, including search engine optimization, search engine marketing, and social media marketing. It also covers email marketing and content marketing.', 'https://picsum.photos/200/300', 17),
+(9, 'Web Analytics and ROI', 'Introduction to web analytics and return on investment', 'This lesson covers web analytics and return on investment in digital marketing, including website traffic analysis, conversion tracking, and revenue attribution. It also covers A/B testing and optimization strategies.', 'https://picsum.photos/200/300', 18),
+(9, 'Marketing Automation', 'Introduction to marketing automation', 'This lesson covers marketing automation, including lead generation, lead nurturing, and lead scoring. It also covers marketing automation tools and techniques.', 'https://picsum.photos/200/300', 19),
+(10, 'Introduction to Project Management', 'Introduction to project management', 'This lesson covers the basics of project management, including project planning, execution, monitoring, and control. It also covers project scope, schedule, and budget management.', 'https://picsum.photos/200/300', 17),
+(10, 'Agile Project Management', 'Introduction to agile project management', 'This lesson covers agile project management, including agile methodologies, such as Scrum and Kanban. It also covers agile project planning and estimation techniques.', 'https://picsum.photos/200/300', 18),
+(10, 'Project Management Tools', 'Introduction to project management tools', 'This lesson covers project management tools, including project management software, such as Microsoft Project and Jira. It also covers collaboration and communication tools.', 'https://picsum.photos/200/300', 19),
+(1, 'Python Functions', 'Introduction to Python functions', 'This lesson covers the use of functions in Python, including defining, calling, and passing arguments to functions. It also covers recursion and lambda functions.', 'https://picsum.photos/200/300', 17),
+(1, 'Python File Handling', 'Introduction to Python file handling', 'This lesson covers file handling in Python, including reading and writing files, and using file objects. It also covers exception handling.', 'https://picsum.photos/200/300', 18),
+(1, 'Python Web Scraping', 'Introduction to Python web scraping', 'This lesson covers web scraping in Python, including using libraries such as BeautifulSoup and Scrapy. It also covers web crawling and data extraction.', 'https://picsum.photos/200/300', 19)
+;
+
+
+INSERT INTO tbl_homeworks (lesson_id, name, description, content, image, status_id)
+VALUES
+(1, 'Homework for Lesson 1', 'Complete the assigned homework for this lesson', '', '', 20),
+(2, 'Homework for Lesson 2', 'Complete the assigned homework for this lesson', '', '', 21),
+(3, 'Homework for Lesson 3', 'Complete the assigned homework for this lesson', '', '', 20),
+(4, 'Homework for Lesson 4', 'Complete the assigned homework for this lesson', '', '', 21),
+(5, 'Homework for Lesson 5', 'Complete the assigned homework for this lesson', '', '', 20),
+(6, 'Homework for Lesson 6', 'Complete the assigned homework for this lesson', '', '', 21),
+(7, 'Homework for Lesson 7', 'Complete the assigned homework for this lesson', '', '', 20),
+(8, 'Homework for Lesson 8', 'Complete the assigned homework for this lesson', '', '', 21),
+(9, 'Homework for Lesson 9', 'Complete the assigned homework for this lesson', '', '', 20),
+(10, 'Homework for Lesson 10', 'Complete the assigned homework for this lesson', '', '', 21),
+(11, 'Homework for Lesson 11', 'Complete the assigned homework for this lesson', '', '', 20),
+(12, 'Homework for Lesson 12', 'Complete the assigned homework for this lesson', '', '', 21),
+(13, 'Homework for Lesson 13', 'Complete the assigned homework for this lesson', '', '', 20),
+(14, 'Homework for Lesson 14', 'Complete the assigned homework for this lesson', '', '', 21),
+(15, 'Homework for Lesson 15', 'Complete the assigned homework for this lesson', '', '', 20),
+(16, 'Homework for Lesson 16', 'Complete the assigned homework for this lesson', '', '', 21),
+(17, 'Homework for Lesson 17', 'Complete the assigned homework for this lesson', '', '', 20),
+(18, 'Homework for Lesson 18', 'Complete the assigned homework for this lesson', '', '', 21),
+(19, 'Homework for Lesson 19', 'Complete the assigned homework for this lesson', '', '', 20),
+(20, 'Homework for Lesson 20', 'Complete the assigned homework for this lesson', '', '', 21),
+(21, 'Homework for Lesson 21', 'Complete the assigned homework for this lesson', '', '', 20),
+(22, 'Homework for Lesson 22', 'Complete the assigned homework for this lesson', '', '', 21),
+(23, 'Homework for Lesson 23', 'Complete the assigned homework for this lesson', '', '', 20),
+(24, 'Homework for Lesson 24', 'Complete the assigned homework for this lesson', '', '', 21),
+(25, 'Homework for Lesson 25', 'Complete the assigned homework for this lesson', '', '', 20),
+(26, 'Homework for Lesson 26', 'Complete the assigned homework for this lesson', '', '', 21),
+(27, 'Homework for Lesson 27', 'Complete the assigned homework for this lesson', '', '', 20),
+(28, 'Homework for Lesson 28', 'Complete the assigned homework for this lesson', '', '', 21),
+(29, 'Homework for Lesson 29', 'Complete the assigned homework for this lesson', '', '', 20),
+(30, 'Homework for Lesson 30', 'Complete the assigned homework for this lesson', '', '', 21),
+(31, 'Homework for Lesson 31', 'Complete the assigned homework for this lesson', '', '', 20),
+(32, 'Homework for Lesson 32', 'Complete the assigned homework for this lesson', '', '', 21),
+(33, 'Homework for Lesson 33', 'Complete the assigned homework for this lesson', '', '', 20)
+;
+
+INSERT INTO tbl_attendance (lesson_id, user_id, status_id)
+VALUES
+  (1, 106, 22),
+  (1, 107, 23),
+  (1, 108, 24),
+  (1, 113, 22),
+  (1, 114, 23),
+  (1, 115, 24),
+  (2, 106, 23),
+  (2, 107, 24),
+  (2, 108, 22),
+  (2, 113, 23),
+  (2, 114, 24),
+  (2, 115, 22),
+  (3, 106, 24),
+  (3, 107, 22),
+  (3, 108, 23),
+  (3, 113, 24),
+  (3, 114, 22),
+  (3, 115, 23),
+  (4, 109, 22),
+  (4, 110, 23),
+  (4, 111, 24),
+  (4, 116, 22),
+  (4, 117, 23),
+  (4, 118, 24),
+  (5, 109, 23),
+  (5, 110, 24),
+  (5, 111, 22),
+  (5, 116, 23),
+  (5, 117, 24),
+  (5, 118, 22),
+  (6, 109, 24),
+  (6, 110, 22),
+  (6, 111, 23),
+  (6, 116, 24),
+  (6, 117, 22),
+  (6, 118, 23),
+  (7, 106, 22),
+  (7, 109, 23),
+  (7, 113, 24),
+  (7, 116, 22),
+  (7, 119, 23),
+  (7, 120, 24),
+  (8, 107, 23),
+  (8, 110, 24),
+  (8, 114, 22),
+  (8, 117, 23),
+  (8, 119, 24),
+  (8, 120, 22),
+  (9, 108, 24),
+  (9, 111, 22),
+  (9, 115, 23),
+  (9, 118, 24),
+  (9, 119, 22),
+  (9, 120, 23),
+  (10, 106, 22),
+  (10, 110, 23),
+  (10, 114, 24),
+  (10, 118, 22),
+  (10, 119, 23),
+  (10, 120, 24),
+  (11, 107, 23),
+  (11, 111, 24),
+  (11, 115, 22),
+  (11, 116, 23),
+  (11, 119, 24),
+  (11, 120, 22),
+  (12, 108, 24),
+  (12, 109, 22),
+  (12, 113, 23),
+  (12, 117, 24),
+  (12, 119, 22),
+  (12, 120, 23),
+  (13, 109, 23),
+  (13, 110, 24),
+  (13, 111, 22),
+  (13, 116, 23),
+  (13, 119, 24),
+  (13, 120, 22),
+  (14, 106, 24),
+  (14, 107, 22),
+  (14, 108, 23),
+  (14, 113, 24),
+  (14, 119, 22),
+  (14, 120, 23),
+  (15, 107, 22),
+  (15, 110, 23),
+  (15, 114, 24),
+  (15, 118, 22),
+  (15, 119, 23),
+  (15, 120, 24)
+;
+
+
+============================================Link to diagram==========================================
+
+https://dbdiagram.io/d/6491915302bd1c4a5ec58217
+
