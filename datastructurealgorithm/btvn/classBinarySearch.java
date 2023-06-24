@@ -96,4 +96,61 @@ public class classBinarySearch {
         return ans;
     }
 
+    public int[] sortArray(int[] nums) {
+
+
+        return mergeSort(nums, 0, nums.length - 1);
+    }
+
+    int[] mergeSort(int[] nums, int l, int r) {
+        if (l == r) {
+            return new int[]{nums[l]};
+        }
+
+        // chia va sort
+        int mid = l + (r - l)/2;
+        int[] a1 = mergeSort(nums, l, mid);
+        int[] a2 = mergeSort(nums, mid+1, r);
+
+        // merge
+        int[] result = merge(a1, a2);
+
+        return result;
+    }
+
+    int[] merge(int[] a1, int[] a2) {
+        int result[] = new int[a1.length + a2.length];
+        int i1 = 0, i2 = 0; //
+        int idx = 0;
+
+        while (idx < result.length) {
+            if(i1 < a1.length && i2 < a2.length) {
+                if(a1[i1] < a2[i2]) {
+                    result[idx] = a1[i1];
+                    idx++;
+                    i1++;
+                } else {
+                    result[idx] = a2[i2];
+                    idx++;
+                    i2++;
+                }
+            } else {
+                if(i1 < a1.length) {
+                    result[idx] = a1[i1];
+                    idx++;
+                    i1++;
+                } else {
+                    result[idx] = a2[i2];
+                    idx++;
+                    i2++;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    int[] quickSort(int[] nums, int l, int r) {
+
+    }
 }
