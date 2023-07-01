@@ -150,7 +150,4 @@ public class classBinarySearch {
         return result;
     }
 
-    int[] quickSort(int[] nums, int l, int r) {
-
-    }
 }
