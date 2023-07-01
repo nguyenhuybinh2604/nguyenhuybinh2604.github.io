@@ -99,4 +99,56 @@ public class BTVN_Buoi6 {
         }
         return sum;
     }
+
+    //bonus: fix bai sudoku
+    //https://leetcode.com/problems/valid-sudoku/submissions/978547200/
+    public boolean isValidSudoku(char[][] board) {
+        //To chuc kieu map de tang toc do kiem tra so da ton tai chua
+        //Chi can check theo 3 tieu chi: cot, hang, subBox
+        Map<Integer, Map<Integer, Boolean>> columns = new HashMap<>();
+        Map<Integer, Map<Integer, Boolean>> rows = new HashMap<>();
+        Map<Integer, Map<Integer, Boolean>> subBox = new HashMap<>();
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (board[i][j] != '.') {
+                    //Neu cot j da co so -> kiem tra board i,j da co tren cot j chua
+                    if (columns.containsKey(j)) {
+                        if (columns.get(j).containsKey(Character.getNumericValue(board[i][j]))) return false;
+                    } else {
+                        //Neu chua co so thi tao map va add
+                        columns.put(j, new HashMap<>());
+                    }
+                    columns.get(j).put(Character.getNumericValue(board[i][j]), true);
+                    //Neu hang i da co so -> kiem tra board i,j da co tren hang i chua
+                    if (rows.containsKey(i)) {
+                        if (rows.get(i).containsKey(Character.getNumericValue(board[i][j]))) return false;
+                    } else {
+                        //Neu chua co so thi tao map va add
+                        rows.put(i, new HashMap<>());
+                    }
+                    rows.get(i).put(Character.getNumericValue(board[i][j]), true);
+                    //Lam tuong tu voi subbox
+                    int subBoxIndex = getSubBoxIndex(i, j);
+                    if (subBox.containsKey(subBoxIndex)) {
+                        if (subBox.get(subBoxIndex).containsKey(Character.getNumericValue(board[i][j]))) return false;
+                    } else {
+                        subBox.put(subBoxIndex, new HashMap<>());
+                    }
+                    subBox.get(subBoxIndex).put(Character.getNumericValue(board[i][j]), true);
+                }
+            }
+        }
+        //Truong hop neu check het ma khong return giua chung thi dau vao dap ung
+        return true;
+    }
+
+    public int getSubBoxIndex(int row, int col) {
+        // Xac dinh thu tu row cua subBox 0, 3 hoac 6
+        int subBoxRow = 3 * (row / 3);
+
+        // Xac dinh thu tu cua subBox = cong them so cot
+        int subBoxIndex = subBoxRow + (col / 3);
+
+        return subBoxIndex;
+    }
 }
