@@ -87,10 +87,16 @@ public class BTVN_Buoi5 {
             int nIndex = recurse_35(arr2, arr1[i], 0, arr2.length - 1);
             if (nIndex == 0 && arr2[0] - arr1[i] > d) count++;
             else if (nIndex == arr2.length && arr1[i] - arr2[arr2.length - 1] > d) count++;
-            else if (nIndex != 0 && nIndex != arr2.length && arr1[i] - arr2[nIndex - 1] > d && arr2[nIndex] - arr1[i] > d) count++;
+            else if (nIndex != 0 && nIndex != arr2.length && arr1[i] - arr2[nIndex - 1] > d && arr2[nIndex] - arr1[i] > d)
+                count++;
         }
         return count;
     }
 
-
+    public int fib(int n) {
+        if (n == 0) return 0; // 2
+        else if (n == 1) return 1; // 2
+        else return fib(n - 1) + fib(n - 2); // O(n-1) + O(n-2)
+    }
+    // 2 + 2 + (4+2) + (6+2) + (10+2) + ...
 }

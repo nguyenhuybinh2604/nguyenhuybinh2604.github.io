@@ -150,4 +150,59 @@ public class classBinarySearch {
         return result;
     }
 
+    public int punishmentNumber(int n) {
+        int sum = 0;
+        for (int i = 1; i <= n; ++i) {
+            int square = i * i;
+            if (checkNumber(i, square)) {
+                sum = sum + (i * i);
+            }
+        }
+        return sum;
+    }
+
+    public boolean checkNumber(int target, int number) {
+        //Truong hop so can kiem tra bang dung so muc tieu thi khong can check them, tra ve true
+        if (number == target) return true;
+        //Neu so can kiem tra da nho hon muc tieu -> khi chia thanh cac digit -> tong digit chac chan tiep tuc nho hon -> Khong dap ung dkien tong digit = target
+        if (number < target) return false;
+        //Neu lan de quy (t-1) so digit cong vao da vuot qua target (t-1) dan den target (t) < 0 -> Khong co loi giai thoa man
+        if (target < 0) return false;
+        //Dung de quy tach dan tung chu so tu phai sang trai va dung de quy kiem tra tren phan con lai
+        //Thu tu tu phai sang trai la de tan dung phep chia mod
+        //Tach 01 chu so dau tien va kiem tra (...)x10 + x = target
+        boolean check1 = checkNumber(target - number % 10, number / 10);
+        //Tach 2 chu so dau tien va kiem tra (...)x100 + xx = target
+        boolean check2 = checkNumber(target - number % 100, number / 100);
+        //Tuong tu nhu tren va chi can chia toi da 3 lan vi sau lan de quy nay phan con lai toi da chi 3 chu so ( max n = 1 000, n^2 = 1 000 000)
+        boolean check3 = checkNumber(target - number % 1000, number / 1000);
+        //kiem tra xem co it nhat 01 truong hop nao dap ung khong
+        return check1 || check2 || check3;
+    }
+
+    public boolean isHappy(int n) {
+        //Map de kiem tra so da trai qua chua
+        Map<Integer, Integer> checkMap = new HashMap<>();
+        //Chay de quy
+        return recursive_202(n, checkMap) == 1;
+    }
+
+    public int recursive_202(int n, Map<Integer, Integer> checkMap) {
+        //Neu gap 1 tra ra ket qua
+        if (n == 1) return 1;
+        //Neu n da gap -> vong lap vo han -> khong phai happy number
+        if (checkMap.containsKey(n)) return -1;
+            //Neu chua gap add vao map de theo doi
+        else checkMap.put(n, 1);
+
+        //Tinh tong binh phuong cac chu so
+        int sum = 0;
+        while (n > 0) {
+            int digit = n % 10;
+            sum = sum + digit * digit;
+            n = n / 10;
+        }
+        //Dung de quy chay tiep cho ket qua
+        return recursive_202(sum, checkMap);
+    }
 }
