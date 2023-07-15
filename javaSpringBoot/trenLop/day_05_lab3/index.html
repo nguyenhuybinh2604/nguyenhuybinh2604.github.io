@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Lab 3</title>
+    <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+    <div class="container">
+        <h1>To do list app</h1>
+    </div>
+    <div class="container">
+        <input type="text" id="myInput" name="myInput" placeholder="Enter to do title ...">
+        <button type="submit" id="btnAdd">Add</button>
+    </div>
+    <div class="container" id="taskContainer">
+        <h1 id="announcement">Announce here</h1>
+        <ul id="taskUl">
+            <li style="list-style-type: circle;" >
+                <input type="checkbox" checked>
+                <span class="activeSpan"> item 1</span>
+                <button class="editBtn">Edit</button>
+                <button class="deleteBtn">Delete</button>
+            </li>
+            <li style="list-style-type: circle;">
+                <input type="checkbox">
+                List item 2
+                <button class="editBtn">Edit</button>
+                <button class="deleteBtn">Delete</button>
+            </li>
+            <li style="list-style-type: circle;">
+                <input type="checkbox">
+                List item 3
+                <button class="editBtn">Edit</button>
+                <button class="deleteBtn">Delete</button>
+            </li>
+        </ul>
+    </div>
+</body>
+
+<script src="./main.js"></script>
+
+</html>
