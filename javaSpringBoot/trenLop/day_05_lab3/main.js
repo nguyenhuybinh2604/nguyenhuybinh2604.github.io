@@ -1,4 +1,4 @@
-const taskList = [
+const tasks = [
     {
         status: "checked",
         title: "Task 1 here"
@@ -17,24 +17,27 @@ const taskList = [
     }
 ]
 
-const taskUl = document.querySelector("#taskUl");
-// console.log(taskUl);
+const taskList = document.querySelector("#taskUl");
+// console.log(taskList);
 
 const announcementHeader = document.querySelector("#announcement");
-// console.log(announcementHeader);
 
-announcementHeader.innerHTML = ``;
-
+// function de check neu ul con trong hay da co task
 const displayEmptyList = function (ulEl) {
-    if (ulEl.innerHTML === ``) {
+    if (ulEl.childElementCount==0) {
+        // neu con trong thi hien thi thong bao
         announcementHeader.innerHTML = "Danh sách công việc trống"
-    }
+        // neu khong thi thong bao = ``
+    } else announcementHeader.innerHTML = ``;
 }
 
-displayEmptyList(taskUl);
+// load lan dau
+displayEmptyList(taskList);
 
+
+// render cac task xay san trong list o tren
 const renderTaskList = list => {
-    taskUl.innerHTML = ``;
+    taskList.innerHTML = ``;
     let html = ``;
     list.forEach(e => {
         html += `
@@ -45,45 +48,60 @@ const renderTaskList = list => {
         <button class="deleteBtn">Delete</button>
         </li>`
     });
-    taskUl.innerHTML = html;
-    // console.log(html);
+    taskList.innerHTML = html;
+    displayEmptyList(taskList);
 }
 
-renderTaskList(taskList);
+renderTaskList(tasks);
 
 const addBtn = document.querySelector("#btnAdd");
 const inputEl = document.querySelector("#myInput");
-// console.log(inputEl);
 
+// tao the li (task) moi khi click vao btnAdd
 addBtn.onclick = function () {
     if (inputEl.value !== '') {
-        let ulHtml = taskUl.innerHTML;
-        // console.log(ulHtml);
-        ulHtml = ulHtml + `<li style="list-style-type: circle;">
+        let newList = document.createElement("li");
+        newList.style = "list-style-type: circle;";
+        newList.innerHTML = `
         <input type="checkbox">
         <span > ${inputEl.value}</span> 
         <button class="editBtn">Edit</button>
-        <button class="deleteBtn">Delete</button>
-        </li>`;
-        taskUl.innerHTML = ulHtml;
-        checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        console.log(checkboxes);
-    }
+        <button class="deleteBtn">Delete</button>`;
+        taskList.append(newList);
+        displayEmptyList(taskList);
+        // canh bao neu nhap vao ``
+    } else alert("Tên công việc không được để trống");
 }
 
-let checkboxes = document.querySelectorAll('input[type="checkbox"]');
-console.log(checkboxes);
-
-checkboxes.forEach(function (checkbox) {
-    checkbox.addEventListener("change", function (event) {
-        let parentList = event.target.parentNode;
-        let span = parentList.querySelector("span");
-        // console.log(parentList);
+// check cac thao tac voi task list
+taskList.addEventListener('click', function (event) {
+    // neu an vao check box (input) -> switch class cua span
+    if (event.target.nodeName === 'INPUT') {
+        let span = event.target.nextSibling.nextSibling;
         if (event.target.checked) {
             span.classList.add("activeSpan");
         } else {
             span.classList.remove("activeSpan");
-            // console.log("Checkbox " + event.target.value + " is not checked");
         }
-    });
+        // neu an vao nut edit -> promt nhap vao ten task moi, thong bao neu empty
+    } else if (event.target.nodeName === 'BUTTON' && event.target.classList.contains("editBtn")) {
+        let span = event.target.previousSibling.previousSibling;
+        const inputValue = prompt('Nhập tiêu đề công việc mới:');
+        if (inputValue == ``) alert("Tên công việc không được để trống");
+        else {
+            span.innerText = inputValue;
+        };
+        // neu an vao delete -> hien thi confirmation dialog -> xoa neu chon OK
+    } else if (event.target.nodeName === 'BUTTON' && event.target.classList.contains("deleteBtn")) {
+        const confirmed = confirm('Bạn chắc chắn muốn xóa?');
+        if (confirmed) {
+            const parent = event.target.parentNode;
+            parent.remove();
+        } else {
+        }
+        // console.log(taskList.childElementCount);
+        if (taskList.childElementCount==0) displayEmptyList(taskList);
+    }
+
 });
+
