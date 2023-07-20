@@ -48,9 +48,24 @@ public class BTVN_Buoi9 {
             // add vao ket qua neu lan +1 nums[i] vua du vuot qua n/3
             if (countMap.getOrDefault(nums[i], 0) - 1 <= nums.length / 3 && countMap.getOrDefault(nums[i], 0) > nums.length / 3)
                 ans.add(nums[i]);
-            if (ans.size()==2) return ans;
+            if (ans.size() == 2) return ans;
         }
         return ans;
     }
 
+    public String removeDuplicateLetters_319(String s) {
+
+        return null;
+    }
+
+    public long subArrayRanges_2104(int[] nums) {
+        Arrays.sort(nums);
+        long ans = 0;
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i; j < nums.length; j++) {
+                ans += (nums[j] - nums[i]);
+            }
+        }
+        return ans;
+    }
 }
