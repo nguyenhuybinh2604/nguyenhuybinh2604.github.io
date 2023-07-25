@@ -40,7 +40,7 @@ function createBox(colorIndex) {
     boxFrame.appendChild(newBox);
 }
 
-// tao 05 box dau tien
+// tao 05 box dau tien;lpp;
 for (let i = 0; i < 5; i++) {
     createBox(i);
 }

@@ -53,9 +53,42 @@ public class BTVN_Buoi9 {
         return ans;
     }
 
+    //https://leetcode.com/problems/remove-duplicate-letters/submissions/1002828845/
     public String removeDuplicateLetters_319(String s) {
+        // luu lan xuat hien cuoi cung cua s[i] trong chuoi
+        // size = 26 do chi co 26 chu cai in thuong
+        Integer[] lastIndex = new Integer[26];
+        // chay tu dau den cuoi s -> cac index dai hon ghi de len index cu -> cuoi cung la index xa nhat
+        for (int i = 0; i < s.length(); i++) lastIndex[s.charAt(i) - 'a'] = i;
+        Stack<Integer> ansStack = new Stack<>();
+        // array de theo doi ki tu da duoc duyet chua
+        boolean[] checked = new boolean[26];
 
-        return null;
+        for (int i = 0; i < s.length(); i++) {
+            // moi ki tu duoc dai dien boi 1 stt tuong ung tu 0-26
+            int curr = s.charAt(i) - 'a';
+            // neu gap ki tu da duoc duyet thi bo qua (moi ki tu chi lay 1 lan)
+            if (checked[curr]) continue;
+            // neu ki tu dang duyet be hon ki tu duoc sap trong stack, dong thoi ki tu trong stack chua phai la ki tu cung loai cuoi cung
+            // thi go het tat ca cac ki tu da sap (dap ung dieu kien) de lay ki tu dang duyet
+            while (!ansStack.isEmpty() && curr < ansStack.peek() && i < lastIndex[ansStack.peek()]) {
+                // neu 1 ki tu bi go thi xem nhu chua duoc duyet
+                checked[ansStack.peek()] = false;
+                // thuc hien go khoi stack
+                ansStack.pop();
+            }
+            // day ki tu moi vao
+            ansStack.push(curr);
+            // danh dau la da duyet
+            checked[curr] = true;
+        }
+        StringBuilder ansStr = new StringBuilder();
+        while (!ansStack.isEmpty()) {
+            // noi lai chuoi dap an, dung so da convert + 'a' de chuyen nguoc thanh ki tu
+            ansStr.append((char) (ansStack.pop() + 'a'));
+        }
+        // dao nguoc chuoi do go stack tu cuoi len
+        return ansStr.reverse().toString();
     }
 
     public long subArrayRanges_2104(int[] nums) {
@@ -68,4 +101,9 @@ public class BTVN_Buoi9 {
         }
         return ans;
     }
+
+//    public int lengthLongestPath_388(String input) {
+//
+//    }
+
 }
