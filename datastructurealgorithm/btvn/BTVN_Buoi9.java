@@ -102,8 +102,78 @@ public class BTVN_Buoi9 {
         return ans;
     }
 
-//    public int lengthLongestPath_388(String input) {
-//
-//    }
+    public int lengthLongestPath_388(String input) {
+        // stack de luu vet do dai cua parent folder
+        Deque<Integer> stack = new ArrayDeque<>();
+
+        // bien ket qua
+        int maxLength = 0;
+
+        // feed vao do dai truoc file/folder dau tien
+        stack.push(0);
+
+        // chia chuoi thanh cac folder/file
+        String[] strArray = input.split("\n");
+
+        // duyet tung chuoi folder/file
+        for (String s : strArray) {
+            System.out.println(stack.peek());
+            System.out.println(s);
+
+            // so lan lui vao, neu khong lui vao -> lastIndex tra ve -1 -> so lan = 0;
+            int noOfTabs = s.lastIndexOf("\t") + 1;
+
+            // level cua folder, neu khong lui vao -> level 1;
+            int level = noOfTabs + 1;
+
+            // back ve parent folder cua folder/file hien tai
+            while (level < stack.size()) stack.pop();
+
+            // do dai cua link hien tai = do dai tinh den parent folder + ten file (tru di so lan tab) + 1;
+            int currentLength = stack.peek() + s.length() - level + 1;
+
+            System.out.println(currentLength);
+
+            // neu chuoi co chua file
+            if (s.contains(".")) {
+                // update do dai lon nhat tim duoc
+                maxLength = Math.max(currentLength, maxLength);
+                // neu khong phai la file -> la folder -> day do dai cua folder vao stack
+            } else stack.push(currentLength);
+        }
+        return maxLength;
+    }
+
+    public long continuousSubarrays_2762(int[] nums) {
+        Deque<Integer> maxQ = new ArrayDeque<>();
+        Deque<Integer> minQ = new ArrayDeque<>();
+        int left = 0;
+        long res = 0;
+
+        for (int right = 0; right < nums.length; right++) {
+            while (!maxQ.isEmpty() && nums[maxQ.peekLast()] < nums[right]) {
+                maxQ.pollLast();
+            }
+            maxQ.offerLast(right);
+
+            while (!minQ.isEmpty() && nums[minQ.peekLast()] > nums[right]) {
+                minQ.pollLast();
+            }
+            minQ.offerLast(right);
+
+            while (!maxQ.isEmpty() && !minQ.isEmpty() && nums[maxQ.peekFirst()] - nums[minQ.peekFirst()] > 2) {
+                if (maxQ.peekFirst() < minQ.peekFirst()) {
+                    left = maxQ.peekFirst() + 1;
+                    maxQ.pollFirst();
+                } else {
+                    left = minQ.peekFirst() + 1;
+                    minQ.pollFirst();
+                }
+            }
+
+            res += right - left + 1;
+        }
+        return res;
+    }
 
 }
