@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-public class BTVN_Buoi5 {
+public class BTVN_Buoi5_BinarySearch {
 
     //https://leetcode.com/problems/binary-search/submissions/973336446/
     public int binarySearch_704(int[] arr, int k, int begin, int end) {

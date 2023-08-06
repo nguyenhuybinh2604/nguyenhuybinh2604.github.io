@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class BTVN_Buoi7 {
+public class BTVN_Buoi7_BigO {
 
     // https://leetcode.com/problems/fibonacci-number/submissions/984266332/
     // Bo nho: tao 1 mang n+1, ngoai ra chi su dung them bien n => O(n)

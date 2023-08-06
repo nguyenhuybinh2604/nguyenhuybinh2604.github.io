@@ -1,15 +1,16 @@
 
 public class Main {
     public static void main(String[] args) {
-        int[] myArray = {5,4,2,4};
-        BTVN_Buoi10_Hashing btvnBuoi10Hashing = new BTVN_Buoi10_Hashing();
-        BTVN_Buoi9 btvnBuoi9 = new BTVN_Buoi9();
-//        System.out.println(btvnBuoi9.continuousSubarrays_2762(myArray));
-        String testStr ="dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext";
-        String[] testArr = testStr.split("\n");
-        for (String str:testArr) {
-            System.out.println(str + " " + str.length());
-        }
-        System.out.println(btvnBuoi9.lengthLongestPath_388(testStr));
+        TreeNode node3 = new TreeNode(3);
+        TreeNode node9 = new TreeNode(9);
+        TreeNode node20 = new TreeNode(20);
+        TreeNode node15 = new TreeNode(15);
+        TreeNode node7 = new TreeNode(7);
+        node3.left = node9;
+        node3.right = node20;
+        node20.left = node15;
+        node20.right = node7;
+        BTVN_Buoi11_BinaryTree btvn_buoi11_binaryTree = new BTVN_Buoi11_BinaryTree();
+        System.out.println(btvn_buoi11_binaryTree.maxDepth_104(node3));
     }
 }

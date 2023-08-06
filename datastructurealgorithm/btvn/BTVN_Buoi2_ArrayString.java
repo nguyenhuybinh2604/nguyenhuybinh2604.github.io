@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-public class BTVN_Buoi2 {
+public class BTVN_Buoi2_ArrayString {
 
     //https://leetcode.com/problems/find-numbers-with-even-number-of-digits/submissions/958275448/
     public int findNumbers_1295(int[] nums) {

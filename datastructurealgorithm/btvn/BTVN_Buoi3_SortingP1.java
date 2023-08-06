@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class BTVN_Buoi3 {
+public class BTVN_Buoi3_SortingP1 {
     //https://leetcode.com/problems/third-maximum-number/submissions/963019487/
     public int thirdMax(int[] nums) {
         Arrays.sort(nums);

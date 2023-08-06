@@ -2,7 +2,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BTVN_Buoi6 {
+public class BTVN_Buoi6_SortingP2 {
 
     //https://leetcode.com/problems/neither-minimum-nor-maximum/submissions/978413943/
     public int findNonMinOrMax(int[] nums) {

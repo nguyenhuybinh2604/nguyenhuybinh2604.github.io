@@ -1,9 +1,4 @@
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-public class BTVN_Buoi8 {
+public class BTVN_Buoi8_LinkedList {
 
     // https://leetcode.com/problems/reverse-linked-list/submissions/993678904/
     public ListNode reverseList_206(ListNode head) {

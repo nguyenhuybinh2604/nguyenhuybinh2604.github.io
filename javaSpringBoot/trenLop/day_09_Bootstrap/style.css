@@ -1,0 +1,26 @@
+#header {
+    height: 60px;
+    background-color: #30598c;
+}
+
+#footer {
+    background-color: #30598c;
+}
+
+#footer .footer-item h5 {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+#footer .footer-item ul li {
+    font-size: 14px;
+    margin: 8px 0px;
+}
+
+#courses {
+    background-color: #f5faff;
+}
+
+#courses h4 {
+    color: #757575;
+}

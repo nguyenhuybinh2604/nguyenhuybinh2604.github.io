@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class BTVN_Buoi9 {
+public class BTVN_Buoi9_StackQueue {
 
     // https://leetcode.com/problems/valid-parentheses/submissions/996840884/
     public boolean isValid_20(String s) {
@@ -102,6 +102,7 @@ public class BTVN_Buoi9 {
         return ans;
     }
 
+    // https://leetcode.com/problems/longest-absolute-file-path/submissions/1011074733/
     public int lengthLongestPath_388(String input) {
         // stack de luu vet do dai cua parent folder
         Deque<Integer> stack = new ArrayDeque<>();
@@ -117,9 +118,6 @@ public class BTVN_Buoi9 {
 
         // duyet tung chuoi folder/file
         for (String s : strArray) {
-            System.out.println(stack.peek());
-            System.out.println(s);
-
             // so lan lui vao, neu khong lui vao -> lastIndex tra ve -1 -> so lan = 0;
             int noOfTabs = s.lastIndexOf("\t") + 1;
 
@@ -129,15 +127,14 @@ public class BTVN_Buoi9 {
             // back ve parent folder cua folder/file hien tai
             while (level < stack.size()) stack.pop();
 
-            // do dai cua link hien tai = do dai tinh den parent folder + ten file (tru di so lan tab) + 1;
-            int currentLength = stack.peek() + s.length() - level + 1;
-
-            System.out.println(currentLength);
+            // do dai cua link hien tai = do dai tinh den parent folder + ten file (tru di so lan tab) + "\";
+            int currentLength = stack.peek() + s.length() - noOfTabs + 1;
 
             // neu chuoi co chua file
             if (s.contains(".")) {
-                // update do dai lon nhat tim duoc
-                maxLength = Math.max(currentLength, maxLength);
+                // update do dai lon nhat tim duoc, do la file nen bo di "\" add o tren
+                maxLength = Math.max(currentLength - 1, maxLength);
+
                 // neu khong phai la file -> la folder -> day do dai cua folder vao stack
             } else stack.push(currentLength);
         }
