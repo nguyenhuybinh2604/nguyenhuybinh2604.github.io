@@ -44,29 +44,66 @@ btnRGBCode.addEventListener("click", function () {
     changeBackGround(color);
 });
 
-let bmi;
+heightInput = document.getElementById("heightInput");
+weightInput = document.getElementById("weightInput");
+
+const btnGetBMI = document.getElementById("btnGetBMI");
+const btnPostBMI = document.getElementById("btnPostBMI");
+
+let bmi = {
+    "height": heightInput.value,
+    "weight": weightInput.value
+  };
 
 const getBMI = (height, weight) => {
     fetch("http://localhost:8080/bmi?height=" + height + "&weight=" + weight + "")
         .then(rs => rs.json())
         .then(data => {
-            bmi = data;
+            // bmi = data;
             console.log(data);
             // console.log(color);
         })
         .catch(err => console.log(err))
 }
 
-heightInput = document.getElementById("heightInput");
-weightInput = document.getElementById("weightInput");
+function postBMI(height, weight) {
+    var bmiData = {
+      "height": height,
+      "weight": weight
+    };
+  
+    fetch('http://localhost:8080/bmi', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(bmiData)
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Error: ' + response.status);
+      }
+    })
+    .then(responseData => {
+      console.log('BMI created successfully:', responseData);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  }
 
-const btnGetBMI = document.getElementById("btnGetBMI");
 
 // Add a click event listener to the button
 btnGetBMI.addEventListener("click", function () {
     // Code to execute when the button is clicked
-    console.log(heightInput.value);
-    console.log(weightInput.value);
     getBMI(heightInput.value, weightInput.value);
+});
+
+// Add a click event listener to the button
+btnPostBMI.addEventListener("click", function () {
+    // Code to execute when the button is clicked
+    postBMI(bmi.height,bmi.weight);
 });
 

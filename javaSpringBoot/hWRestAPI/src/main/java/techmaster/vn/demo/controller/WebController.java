@@ -14,6 +14,8 @@ import java.util.*;
 @RestController
 
 public class WebController {
+
+    public static List<BMI> bmiList = new ArrayList<>();
     private List<BMI> listBMI;
 
     public WebController() {
@@ -91,5 +93,19 @@ public class WebController {
         }
     }
 
+    @PostMapping(value = "/bmi")
+    public ResponseEntity<?> postBMI(@RequestBody BMI request) {
+        return new ResponseEntity<>(createBMI(request), HttpStatus.CREATED); // Status 201
+    }
+
+    public BMI createBMI(BMI request) {
+        BMI bmi = new BMI();
+        Random rd = new Random();
+        bmi.setHeight(request.getHeight());
+        bmi.setWeight(request.getWeight());
+
+        bmiList.add(bmi);
+        return bmi;
+    }
 
 }
