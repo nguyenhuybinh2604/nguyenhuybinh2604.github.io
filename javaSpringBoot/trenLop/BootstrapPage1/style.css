@@ -1,0 +1,28 @@
+#header {
+    height: 70px;
+}
+
+.highlighted {
+    background-color: #c1d8f0;
+}
+
+.selected {
+    background-color: #4663ac;
+}
+
+.container h2 {
+    min-width: 240px;
+}
+
+.service-item {
+    min-width: 240px;
+}
+
+.service-item img {
+    height: 48px;
+}
+
+#footer {
+    
+}
+

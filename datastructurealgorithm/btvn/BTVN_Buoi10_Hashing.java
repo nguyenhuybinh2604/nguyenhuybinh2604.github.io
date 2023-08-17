@@ -89,4 +89,25 @@ public class BTVN_Buoi10_Hashing {
         return maxCount;
     }
 
+    public int minExtraChar_2707(String s, String[] dictionary) {
+        int[] dp = new int[s.length() + 1];
+        //dp[i] = so luong extra character tinh tu vi tri thu i den cuoi xau s
+
+        for (int i = s.length() - 1; i >= 0; i--) {
+            dp[i] = dp[i + 1] + 1;
+
+            for (String w : dictionary) {
+                if (i + w.length() <= s.length()) {
+                    String subS = s.substring(i, i + w.length());
+
+                    if (w.equals(subS)) {
+                        dp[i] = Math.min(dp[i], dp[i + w.length()]);
+                    }
+                }
+            }
+        }
+
+        return dp[0];
+    }
+
 }
