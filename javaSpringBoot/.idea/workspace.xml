@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="f8ae62ef-6b80-4a9f-a99a-27b270a23b4a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/hWAPITodo/src/main/java/techmaster/vn/demo/model/ToDo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hWAPITodo/src/main/java/techmaster/vn/demo/utils/ExcelReader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hWAPITodo/src/main/java/techmaster/vn/demo/utils/IFileReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../datastructurealgorithm/btvn/BTVN_Buoi12_Graph.java" beforeDir="false" afterPath="$PROJECT_DIR$/../datastructurealgorithm/btvn/BTVN_Buoi12_Graph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../datastructurealgorithm/btvn/KiemTraCuoiKhoa.java" beforeDir="false" afterPath="$PROJECT_DIR$/../datastructurealgorithm/btvn/KiemTraCuoiKhoa.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../datastructurealgorithm/btvn/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../datastructurealgorithm/btvn/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../datastructurealgorithm/btvn/out/production/btvn/KiemTraCuoiKhoa.class" beforeDir="false" afterPath="$PROJECT_DIR$/../datastructurealgorithm/btvn/out/production/btvn/KiemTraCuoiKhoa.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../datastructurealgorithm/btvn/out/production/btvn/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/../datastructurealgorithm/btvn/out/production/btvn/Main.class" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 0
+}]]></component>
+  <component name="ProjectId" id="2UL3lFbyL5XVKHCWl2GRRnTjMoS" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/user/Documents/GitHub/nguyenhuybinh2604.github.io/javaSpringBoot",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f8ae62ef-6b80-4a9f-a99a-27b270a23b4a" name="Changes" comment="" />
+      <created>1692705182640</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1692705182640</updated>
+      <workItem from="1692705183699" duration="3000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

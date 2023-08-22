@@ -229,4 +229,108 @@ public class BTVN_Buoi12_Graph {
         }
     }
 
+    // 1091
+    // https://leetcode.com/problems/shortest-path-in-binary-matrix/submissions/1026645922/
+    public int shortestPathBinaryMatrix(int[][] grid) {
+        // lay do dai cua grid
+        int n = grid.length;
+
+        if (n == 1 && grid[0][0] == 0) return 1;
+
+        // neu 1 trong 2 diem dau & cuoi !=0 -> tra luon -1
+        if (grid[0][0] != 0 || grid[n - 1][n - 1] != 0) return -1;
+
+        // matrix de theo doi cell da duoc duyet qua chua
+        boolean[][] visited = new boolean[n][n];
+
+        // queue dung cho BFS
+        Queue<int[]> queue = new ArrayDeque<>();
+
+        // matrix 08 huong di chuyen
+        int[][] directions = new int[][]{{-1, -1}, {0, -1}, {1, -1}, {-1, 0}, {1, 0}, {-1, 1}, {0, 1}, {1, 1}};
+
+        // bat dau dem do dai quang duong tu cell goc = 1
+        int count = 1;
+        int x, y, qSize;
+
+        // day vao cell goc
+        queue.offer(new int[]{0, 0});
+        visited[0][0] = true;
+
+        // bat dau duyet BFS
+        while (!queue.isEmpty()) {
+
+            // sau moi lan loang -> cong 1 vao quang duong
+            count++;
+
+            // lay so luong node can duyet qua truoc moi luot BFS
+            qSize = queue.size();
+
+            // bat dau duyet tung luot
+            for (int i = 0; i < qSize; i++) {
+                int[] currentCell = queue.poll();
+
+                for (int j = 0; j < 8; j++) {
+                    x = currentCell[0] + directions[j][0];
+                    y = currentCell[1] + directions[j][1];
+
+                    // neu ra ngoai bien -> bo qua
+                    if (x < 0 || x >= n || y < 0 || y >= n) continue;
+
+                    // neu da duyet hoac cell khong di qua duoc -> bo qua
+                    if (grid[x][y] == 1 || visited[x][y]) continue;
+
+                    // neu khi duyet gap dung cell target lan dau -> tra ve count chinh la quang duong ngan nhat
+                    if (x == n - 1 && y == n - 1) return count;
+
+                    // neu chua gap target ma gap 1 cell duong di thong thuong ->
+                    if (grid[x][y] == 0) {
+
+                        // add vao queue de duyet o vong sau
+                        queue.offer(new int[]{x, y});
+
+                        // danh dau da di qua
+                        visited[x][y] = true;
+                    }
+                }
+            }
+        }
+
+        // neu duyet het ma khong tra duoc ket qua -> khong gap duoc target -> tra ve -1
+        return -1;
+    }
+
+    // 797
+    public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> path = new ArrayList();
+        int n = graph.length;
+        int target = n - 1;
+        boolean[] visited = new boolean[n];
+
+        visited[0] = true;
+
+        Deque<Integer> listNode = new ArrayDeque<>();
+
+        listNode.add(0);
+        path.add(0);
+
+        while (!listNode.isEmpty()) {
+
+            int currentNode = listNode.pop();
+            if (currentNode == n - 1) {
+                ans.add(new ArrayList<>(path));
+            }
+
+            int[] nextNodes = graph[currentNode];
+            for (int i = 0; i < nextNodes.length; i++) {
+                
+
+            }
+
+        }
+
+    }
+
+
 }

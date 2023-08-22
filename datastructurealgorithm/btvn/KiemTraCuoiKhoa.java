@@ -1,12 +1,14 @@
 import java.util.*;
 
 public class KiemTraCuoiKhoa {
+    // https://leetcode.com/problems/flood-fill/submissions/1025760103/
     // 2 array de duyet 4 diem xung quanh diem hien tai
     static int[] deltaRow = {0, -1, 0, 1};
     static int[] deltaColummn = {-1, 0, 1, 0};
 
     // 733
-    //
+    // Toc do: O(mxnx4)
+    // Bo nho: O(mxn)
     public int[][] floodFill(int[][] image, int sr, int sc, int color) {
 
         // luu lai mau goc
@@ -38,8 +40,10 @@ public class KiemTraCuoiKhoa {
         }
     }
 
+    // https://leetcode.com/problems/sum-of-unique-elements/submissions/1025755396/
     // 1748
-
+    // Toc do: O(2n)
+    // Bo nho: O(n)
     public int sumOfUnique(int[] nums) {
         // luu data dang set -> lay unique number
         HashSet<Integer> countSet = new HashSet<>();
@@ -66,8 +70,10 @@ public class KiemTraCuoiKhoa {
         return count;
     }
 
+    // https://leetcode.com/problems/backspace-string-compare/submissions/1025752466/
     // 844
-
+    // Toc do: O(m+n)
+    // Bo nho: O(m+n)
     public boolean backspaceCompare(String s, String t) {
         // tra ve ket qua so sanh 2 chuoi moi sau khi xoa
         return buildString(s).equals(buildString(t));
@@ -149,65 +155,72 @@ public class KiemTraCuoiKhoa {
     // Toc do: O(mxn x (so phep tinh tai moi cell x4 huong)) ~O(52xmxn), m,n ~100;
     // Memory: O(2x(mxn)), chu yeu dung 2 array maze va currLength
     // dat bien static de doc lap voi de quy
-    static int minLength;
 
     public int nearestExit(char[][] maze, int[] entrance) {
 
-        // do di tim min nen khoi tao minLength ban dau = max;
-        minLength = Integer.MAX_VALUE;
+        // dung queue cho BFS
+        Queue<int[]> queue = new ArrayDeque<>();
 
-        // matrix de danh dau khoang cach tu entrance den ij
-        int[][] currLength = new int[maze.length][maze[0].length];
+        // khoi tao cac bien size cua maze + cua queue dung de duyet tung luot
+        int m = maze.length;
+        int n = maze[0].length;
+        int queueSize;
 
-        // bat dau duyet tu entrance
-        BFS_1926(maze, currLength, entrance[0], entrance[1]);
+        // matrix danh dau visited
+        boolean[][] visited = new boolean[maze.length][maze[0].length];
 
-        // tra ket qua, neu van con o maxInt -> tra -1
-        if (minLength == Integer.MAX_VALUE) return -1;
-        else return minLength;
-    }
+        // danh dau da visit tai entrance
+        visited[entrance[0]][entrance[1]] = true;
 
-    private void BFS_1926(char[][] maze, int[][] currLength, int row, int col) {
+        int[][] deltaCoordinates = new int[][]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
 
-        // danh dau cell da duoc duyet (bien thanh tuong)
-        maze[row][col] = '+';
+        queue.offer(entrance);
 
-        // duyet tiep cac cell lien ke theo 2 truc x&y
-        for (int i = 0; i < 4; i++) {
+        int minLength = 0;
+        int newRow, newCol;
 
-            // lay toa do cua 4 cell ke can theo x&y
-            int rowNew = row + deltaRow[i];
-            int colNew = col + deltaColummn[i];
+        while (!queue.isEmpty()) {
 
-            // chi loang sang neu cell ke can nam trong maze && la duong di
-            // voi logic nay khong can tao them array visited size mxn
-            if (rowNew >= 0 && rowNew < maze.length && colNew >= 0 && colNew < maze[0].length && maze[rowNew][colNew] == '.') {
+            // lay so luong cell can duyet cho luot hien tai
+            queueSize = queue.size();
 
-                // dat min length la gia tri hien tai + 1
-                int minVal = currLength[row][col] + 1;
+            // truoc moi luot duyet -> loang ra them 1 lop -> tang so buoc len 1
+            minLength++;
 
-                // tim tiep xung quanh target cell de xem do co phai min chua
+            // duyet het lop cell dang co san tren queue
+            for (int i = 0; i < queueSize; i++) {
+
+                // duyet den cell nao thi pop cell do ra
+                int[] curr = queue.poll();
+
+                // duyet 4 cell ke can theo chieu x-y
                 for (int j = 0; j < 4; j++) {
-                    int row2 = rowNew + deltaRow[j];
-                    int col2 = colNew + deltaColummn[j];
 
-                    // check xung quanh target cell co phai valid cell ko
-                    if (row2 >= 0 && row2 < maze.length && col2 >= 0 && col2 < maze[0].length)
-                        minVal = Math.min(minVal, currLength[row2][col2]+1);
+                    // lay toa do cua 4 cell ke can
+                    newRow = curr[0] + deltaCoordinates[j][0];
+                    newCol = curr[1] + deltaCoordinates[j][1];
+
+                    // neu gap cell ngoai bien thi bo qua
+                    if (newRow < 0 || newCol < 0 || newRow >= m || newCol >= n) continue;
+
+                    // neu gap cell da duyet hoac gap tuong thi bo qua
+                    if (visited[newRow][newCol] || maze[newRow][newCol] == '+') continue;
+
+                    // neu gap cell dung o bien thi tra luon ket qua, chinh la so buoc toi thieu
+                    // do ap dung phuong phap loang BFS
+                    if (newRow == 0 || newCol == 0 || newRow == m - 1 || newCol == n - 1) return minLength;
+
+                    // neu la 1 cell duong di binh thuogn thi add vao queue de duyet o luot sau
+                    queue.offer(new int[]{newRow, newCol});
+
+                    // danh dau da di qua
+                    visited[newRow][newCol] = true;
                 }
-                currLength[rowNew][colNew] = minVal;
-
-                // check xem co phai la cell nam o duong bien khong
-                // luu y chi can check 1 dieu kien ve row/col vi logic code dam bao khong duyet den cac cell ngoai bien
-                if (rowNew == 0 || rowNew == maze.length - 1 || colNew == 0 || colNew == maze[0].length - 1) {
-
-                    // neu dung o duong bien thi update minLength
-                    minLength = Math.min(minLength, currLength[rowNew][colNew]);
-                }
-
-                // goi de quy voi cell tiep theo
-                BFS_1926(maze, currLength, rowNew, colNew);
             }
         }
+
+        // neu da duyet het ma chua gap border -> khong tim thay border -> tra ve -1
+        return -1;
     }
+
 }
