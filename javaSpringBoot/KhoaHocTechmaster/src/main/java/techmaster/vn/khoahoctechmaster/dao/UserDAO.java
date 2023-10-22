@@ -1,4 +1,4 @@
 package techmaster.vn.khoahoctechmaster.dao;
 
-public class CourseDAOImpl {
+public interface UserDAO {
 }

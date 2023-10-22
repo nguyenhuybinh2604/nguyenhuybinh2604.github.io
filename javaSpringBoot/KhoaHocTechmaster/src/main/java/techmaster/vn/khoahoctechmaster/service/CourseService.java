@@ -5,7 +5,7 @@ import techmaster.vn.khoahoctechmaster.model.Course;
 import java.util.List;
 
 public interface CourseService {
-    List<Course> getAllCourses(String type, String name, String topic);
+    public List<Course> getAllCourses(String type, String name, String topic);
 
-    Course getCourseById(Integer id);
+    public Course getCourseById(Integer id);
 }

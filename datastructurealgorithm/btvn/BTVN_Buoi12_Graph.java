@@ -301,36 +301,36 @@ public class BTVN_Buoi12_Graph {
     }
 
     // 797
-    public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
-        List<List<Integer>> ans = new ArrayList<>();
-        List<Integer> path = new ArrayList();
-        int n = graph.length;
-        int target = n - 1;
-        boolean[] visited = new boolean[n];
-
-        visited[0] = true;
-
-        Deque<Integer> listNode = new ArrayDeque<>();
-
-        listNode.add(0);
-        path.add(0);
-
-        while (!listNode.isEmpty()) {
-
-            int currentNode = listNode.pop();
-            if (currentNode == n - 1) {
-                ans.add(new ArrayList<>(path));
-            }
-
-            int[] nextNodes = graph[currentNode];
-            for (int i = 0; i < nextNodes.length; i++) {
-                
-
-            }
-
-        }
-
-    }
+//    public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
+//        List<List<Integer>> ans = new ArrayList<>();
+//        List<Integer> path = new ArrayList();
+//        int n = graph.length;
+//        int target = n - 1;
+//        boolean[] visited = new boolean[n];
+//
+//        visited[0] = true;
+//
+//        Deque<Integer> listNode = new ArrayDeque<>();
+//
+//        listNode.add(0);
+//        path.add(0);
+//
+//        while (!listNode.isEmpty()) {
+//
+//            int currentNode = listNode.pop();
+//            if (currentNode == n - 1) {
+//                ans.add(new ArrayList<>(path));
+//            }
+//
+//            int[] nextNodes = graph[currentNode];
+//            for (int i = 0; i < nextNodes.length; i++) {
+//
+//
+//            }
+//
+//        }
+//
+//    }
 
 
 }
